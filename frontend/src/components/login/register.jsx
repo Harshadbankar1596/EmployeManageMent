@@ -3,10 +3,11 @@ import { useCreateUserMutation } from "../../redux/apislice";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/userslice/userslice";
 import { Link } from "react-router-dom";
-import { RegisterSuccess, RegisterExist, RegisterFail } from "../modals/modal";
+import { RegisterSuccess, RegisterExist, RegisterFail} from "../modals/modal";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  
   const dispatch = useDispatch();
   const [createUser] = useCreateUserMutation();
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.terms) return alert("Please accept the terms and conditions.");
+    
 
     const userData = {
       name: form.name,
@@ -91,7 +92,6 @@ const Register = () => {
       {success && <RegisterSuccess />}
       {existuser && <RegisterExist />}
       {fail && <RegisterFail />}
-
       <div className="lg:w-1/2 w-full bg-blue-900 flex items-center justify-center text-white p-4 sm:p-6 lg:p-10 relative overflow-hidden min-h-[300px] lg:min-h-screen">
         <div className="absolute inset-0">
           <img
@@ -193,6 +193,7 @@ const Register = () => {
                 checked={form.terms}
                 onChange={handleChange}
                 className="mr-2 mt-1"
+                
               />
               <label className="text-sm text-gray-600">
                 I agree to the terms and privacy policy

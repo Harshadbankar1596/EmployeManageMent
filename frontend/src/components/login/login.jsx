@@ -1,12 +1,14 @@
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/userslice/userslice";
 import { useLoginUserMutation } from "../../redux/apislice";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Login = () => {
+  const mail = useSelector((state) => state.user.email);
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", remember: false });
   const dispatch = useDispatch();
@@ -46,8 +48,14 @@ const Login = () => {
     })
   };
 
+  useEffect(() => {
+    if (!mail === '') {
+      navigate("/");
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className=" min-h-screen flex flex-col lg:flex-row">
       {success && <div className="fixed z-40 top-10 w-full h-full flex justify-center items-start pt-4">
         <div className="z-50 max-w-sm sm:max-w-md w-full mx-4 bg-gray-900 rounded-xl overflow-hidden">
           <div className="max-w-md mx-auto pt-8 sm:pt-12 pb-10 sm:pb-14 px-4 sm:px-5 text-center">

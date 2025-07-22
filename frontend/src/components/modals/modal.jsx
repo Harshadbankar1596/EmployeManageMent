@@ -120,3 +120,20 @@ export const RegisterFail = () => {
         </div>
     );
 };
+
+
+export const checkbox = () =>{
+    <div className="fixed z-40 top-10 w-full h-full flex justify-center items-start pt-4">
+            <div className="z-50 max-w-sm sm:max-w-md w-full mx-4 bg-gray-900 rounded-xl overflow-hidden">
+                <div className="max-w-md mx-auto pt-8 sm:pt-12 pb-10 sm:pb-14 px-4 sm:px-5 text-center">
+                    <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 mb-4 sm:mb-5 rounded-full">
+                        <img src="/cross.webp" alt="" />
+                    </div>
+                    <h4 className="text-lg sm:text-xl text-gray-100 font-semibold mb-4 sm:mb-5">Please Cheak Terms and Conditions</h4>
+                    <p className="text-gray-300 font-medium text-sm sm:text-base">
+                        Please check the terms and conditions.
+                    </p>
+                </div>
+            </div>
+        </div>
+}
