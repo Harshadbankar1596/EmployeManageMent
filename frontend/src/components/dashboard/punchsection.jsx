@@ -175,13 +175,13 @@ const Punchsection = () => {
       setPunchs(punches);
       setIsClockedIn(punches.length % 2 !== 0);
     }
-     if (isLoading) {
+    if (isLoading) {
       console.log("loading in veryfy user ", isLoading);
     }
     else {
-        setTimeout(()=>{
-         if(isError) navigate('/login');
-        },5000)
+      setTimeout(() => {
+        if (isError) navigate('/login');
+      }, 5000)
     }
   }, [user, isLoading]);
 
@@ -214,18 +214,18 @@ const Punchsection = () => {
   const liveTime = formatTime(totalSeconds);
 
   return (
-    <div className='flex flex-wrap gap-4 justify-center items-center'>
-      <div className='bg-white h-96 rounded-lg shadow-lg w-full max-w-xl p-6 flex flex-col'>
-        <div className='flex justify-between items-center text-gray-500'>
-          <p className='text-xl font-bold'>Today Activity</p>
-          <p>{new Date().toLocaleDateString()}</p>
+    <div className="flex flex-col w-full gap-4 justify-center items-center lg:flex-row lg:flex-nowrap">
+      <div className="bg-white rounded-lg shadow-2xl w-full p-4 sm:p-6 flex flex-col h-80 sm:h-80 mb-4 lg:mb-0 lg:max-w-xl">
+        <div className="flex justify-between items-center text-gray-500">
+          <p className="text-lg sm:text-xl font-bold">Today Activity</p>
+          <p className="text-sm sm:text-base">{new Date().toLocaleDateString()}</p>
         </div>
 
-        <div className='flex items-center justify-center m-auto relative'>
-          <div className='relative h-56 w-56'>
-            <div className='absolute inset-0 rounded-full bg-gray-200'></div>
+        <div className="flex items-center justify-center m-auto relative flex-1">
+          <div className="relative h-40 w-40 sm:h-56 sm:w-56 mx-auto">
+            <div className="absolute inset-0 rounded-full bg-gray-200"></div>
             <div
-              className='absolute inset-0 rounded-full'
+              className="absolute inset-0 rounded-full"
               style={{
                 background: `conic-gradient(
                   #10B981 0%, 
@@ -235,9 +235,9 @@ const Punchsection = () => {
                 )`
               }}
             ></div>
-            <div className='absolute top-4 left-4 right-4 bottom-4 bg-white rounded-full flex flex-col justify-center items-center text-2xl font-bold z-10'>
-              <span className="text-3xl">{liveTime}</span>
-              <span className="text-sm text-gray-500 mt-2">
+            <div className="absolute top-3 left-3 right-3 bottom-3 sm:top-4 sm:left-4 sm:right-4 sm:bottom-4 bg-white rounded-full flex flex-col justify-center items-center text-xl sm:text-2xl font-bold z-10">
+              <span className="text-2xl sm:text-3xl">{liveTime}</span>
+              <span className="text-xs sm:text-sm text-gray-500 mt-2">
                 {isClockedIn ? 'Currently Clocked In' : 'Clocked Out'}
               </span>
             </div>
@@ -245,25 +245,25 @@ const Punchsection = () => {
         </div>
       </div>
 
-      <div className="bg-white h-96 rounded-lg shadow-lg w-full max-w-xl p-6 flex flex-col">
-        <div className="flex justify-between items-center mb-4">
-          <p className="text-2xl font-bold text-gray-700">Today's Updates</p>
+      <div className="bg-white rounded-lg shadow-2xl w-full p-4 sm:p-6 flex flex-col h-80 sm:h-80 lg:max-w-xl">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+          <p className="text-xl sm:text-2xl font-bold text-gray-700">Today's Updates</p>
           <Switch onClick={handlePunch} punchs={punchs} />
         </div>
 
-        <div className="flex flex-col overflow-scroll scrollbar-hide gap-2 mt-4 w-full">
+        <div className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full flex-1">
           {punchs.length === 0 && (
             <div className="text-center text-gray-400">No punches yet today.</div>
           )}
           {punchs.map((punch, index) => (
             <div
               key={index}
-              className='flex justify-between bg-blue-100 px-5 py-5 rounded-sm items-center'
+              className="flex justify-between bg-blue-100 px-3 sm:px-5 py-3 sm:py-5 rounded-sm items-center"
             >
-              <p className="font-semibold text-gray-700">
+              <p className="font-semibold text-gray-700 text-sm sm:text-base">
                 {index % 2 === 0 ? 'Punch In' : 'Punch Out'}
               </p>
-              <p className={`${index % 2 === 0 ? 'bg-green-500' : 'bg-red-500'} px-2 py-2 rounded-sm text-white`}>
+              <p className={`${index % 2 === 0 ? 'bg-green-500' : 'bg-red-500'} px-2 py-2 rounded-sm text-white text-xs sm:text-base`}>
                 {fixTime(punch)}
               </p>
             </div>
