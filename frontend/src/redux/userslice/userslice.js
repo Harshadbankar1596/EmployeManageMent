@@ -22,6 +22,10 @@ const userSlice = createSlice({
             state.password = action.payload.password;
             state.role = action.payload.role;
             state.id = action.payload._id;
+        },
+
+        logoutuser : ()=>{
+            return initialState;
         }
     },
     extraReducers : (builder)=>{
@@ -36,5 +40,10 @@ const userSlice = createSlice({
     }
 })
 
-export const { setUser } = userSlice.actions;
+export const { setUser , logoutuser} = userSlice.actions;
 export default userSlice.reducer;
+
+
+
+
+

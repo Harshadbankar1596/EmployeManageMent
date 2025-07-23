@@ -11,7 +11,7 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", remember: false });
   const dispatch = useDispatch();
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, {refetch}] = useLoginUserMutation();
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const navigate = useNavigate();
@@ -39,15 +39,16 @@ const Login = () => {
     setSubmitError("");
     try {
       // Only send email and password to API, not remember
+      setTimeout(() => {
+        navigate("/");
+        refetch();
+        setSuccess(false);
+      }, 1000);
       const { email, password } = form;
       const res = await loginUser({ email, password }).unwrap();
       dispatch(setUser(res.user));
       setSuccess(true);
       setForm({ email: "", password: "", remember: false });
-      setTimeout(() => {
-        setSuccess(false);
-        navigate("/");
-      }, 1000);
     } catch (err) {
       // Fix: Show error only for wrong credentials, not always
       setErrors({
@@ -59,11 +60,11 @@ const Login = () => {
   };
 
   // Fix: useEffect logic for redirect if already logged in
-  useEffect(() => {
-    if (mail && mail !== "") {
-      navigate("/");
-    }
-  }, [mail, navigate]);
+  // useEffect(() => {
+  //   if (mail && mail !== "") {
+  //     navigate("/");
+  //   }
+  // }, [mail, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">

@@ -1,7 +1,8 @@
 import User from "../model/userschema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import dotenv from "dotenv";
+dotenv.config();
 export const createUser = async (req, res) => {
     console.log(req.body);
     try {
@@ -49,12 +50,12 @@ export const loginUser = async (req, res) => {
         let token;
 
         if (remember) {
-            token = jwt.sign({ id: user._id }, "secretkey", { expiresIn: '7d' });
+            token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '7d' });
             res.cookie("token", token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
         }
 
         else {
-            token = jwt.sign({ id: user._id }, "secretkey", { expiresIn: '1d' });
+            token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '1d' });
             res.cookie("token", token, { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 });
         }
 
@@ -83,7 +84,7 @@ export const verifyToken = async (req, res) => {
             return res.status(401).json({ message: "No token provided." });
         }
 
-        const decoded = jwt.verify(token, "secretkey");
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "secretkey");
         const user = await User.findById(decoded.id).select('-password');
 
         if (!user) {

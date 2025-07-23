@@ -6,6 +6,7 @@ export const apiSlice = createApi({
         baseUrl: 'http://localhost:5000',
         credentials: 'include'
     }),
+    tagTypes: ['User'],
     endpoints: (builder) => ({
 
         createUser: builder.mutation({
@@ -14,6 +15,7 @@ export const apiSlice = createApi({
                 method: 'POST',
                 body: userData,
             }),
+            invalidatesTags: ['User'],
         }),
 
         loginUser: builder.mutation({
@@ -22,6 +24,7 @@ export const apiSlice = createApi({
                 method: 'POST',
                 body: userData,
             }),
+            invalidatesTags: ['User'],
         }),
 
         logoutUser: builder.mutation({
@@ -29,6 +32,7 @@ export const apiSlice = createApi({
                 url: '/users/logout',
                 method: 'POST',
             }),
+            invalidatesTags: ['User'],
         }),
 
         verifyToken: builder.query({
@@ -41,7 +45,8 @@ export const apiSlice = createApi({
                 url : '/users/addpunch',
                 method : 'post',
                 body : id
-            })
+            }),
+            invalidatesTags: ['User'],
         }),
 
         works: builder.mutation({
@@ -49,7 +54,8 @@ export const apiSlice = createApi({
                 url: '/users/works',
                 method: 'POST',
                 body: { id }
-            })
+            }),
+            invalidatesTags: ['User'],
         }),
 
         workstatus: builder.mutation({
@@ -57,7 +63,8 @@ export const apiSlice = createApi({
                 url: '/users/workstatus',
                 method: 'POST',
                 body: { id , index}
-            })
+            }),
+            invalidatesTags: ['User'],
         })
     }),
 });

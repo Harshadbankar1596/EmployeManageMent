@@ -161,7 +161,7 @@ const Punchsection = () => {
   const [isClockedIn, setIsClockedIn] = useState(false);
   const navigate = useNavigate();
 
-  const { data: user, isLoading, isError } = useVerifyTokenQuery();
+  const { data: user, isLoading, isError , refetch} = useVerifyTokenQuery();
 
   const calculateTime = useCallback(() => {
     return calculateTotalTime(punchs);
@@ -183,7 +183,8 @@ const Punchsection = () => {
         if (isError) navigate('/login');
       }, 5000)
     }
-  }, [user, isLoading]);
+    refetch();
+  }, [user, refetch]);
 
   useEffect(() => {
     setTotalSeconds(calculateTime());
@@ -194,7 +195,7 @@ const Punchsection = () => {
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isClockedIn, calculateTime]);
+  }, [isClockedIn, calculateTime , refetch , user]);
 
   const handlePunch = async () => {
     try {
@@ -206,6 +207,9 @@ const Punchsection = () => {
       }
     } catch (err) {
       navigate('/login');
+    }
+    finally{
+      refetch();
     }
   };
 

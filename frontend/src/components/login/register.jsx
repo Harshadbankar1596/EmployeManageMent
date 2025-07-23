@@ -51,11 +51,12 @@ const Register = () => {
 
     try {
       const result = await createUser(userData).unwrap().then((res) => {
-        dispatch(setUser(res.user));
         setTimeout(()=>{
           navigate("/login");
         },1000)
+        dispatch(setUser(res.user));
       })
+      
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
