@@ -165,17 +165,37 @@ export const works = async (req, res) => {
 export const workstatus = async (req, res) => {
     try {
         console.log("workstatus" , req.body)
-        const { id , index } = req.body;
-        const user = await User.findById(id);
+        const { userid , objid } = req.body;
+        const user = await User.findById(userid);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        user.workingOn[index].status = !user.workingOn[index].status;
+     user.workingOn.find(work => work._id.toString() === objid).status = !user.workingOn.find(work => work._id.toString() === objid).status;
         console.log("user.workingOn" , user.workingOn)
         await user.save();
         res.status(200).json({ message: "Work status", workstatus: user.workingOn });
     } catch (error) {
         console.error("Error in workstatus:", error);
         res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
+
+
+export const taskstatus = async (req, res) => {
+    try {
+
+        const {userid , objid , taskid} = req.body
+        const user = await User.findById(userid)
+        if(!user){
+            res.status(404).json({message : "user not found"})
+        }
+
+        user.workingOn.find(work => work._id.toString() === objid).task.find(task => task._id.toString() === taskid).status = !user.workingOn.find(work => work._id.toString() === objid).task.find(task => task._id.toString() === taskid).status
+        await user.save()
+        res.status(200).json({message : "task status updated", taskstatus : user.workingOn})
+        
+    } catch (error) {
+        console.log("error in add taskstatus")
+        res.status(500).json({message : "server error"})
     }
 }

@@ -1,106 +1,90 @@
-import React, { useEffect, useState } from 'react';
-import { useWorksMutation, useWorkstatusMutation } from '../../redux/apislice';
+import { useWorksMutation, useWorkstatusMutation, useTaskstatusMutation } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
-import { FiCheck, FiLoader, FiClipboard } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
 
 const Works = () => {
+    const [workstatus] = useWorkstatusMutation();
+    const [taskstatus] = useTaskstatusMutation();
+    const [works, { isLoading, isError, refetch }] = useWorksMutation();
     const id = useSelector((state) => state.user.id);
-    const [fetchWorks, { isLoading }] = useWorksMutation();
-    const [worksData, setWorksData] = useState([]);
-    const [workstatus, { isLoading: isWorkStatusLoading }] = useWorkstatusMutation();
-    const [updatingIndex, setUpdatingIndex] = useState(null);
-
+    const [work, setWork] = useState([]);
     useEffect(() => {
-        if (id) {
-            fetchWorks(id)
-                .unwrap()
-                .then((res) => {
-                    setWorksData(res.works || []);
-                })
-                .catch(console.error);
-        }
-    }, [id, fetchWorks]);
+        works(id).then((res) => {
+            setWork(res.data.works);
+            console.log("res", res);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, [refetch]);
 
-    const handleStatusChange = (index) => {
-        setUpdatingIndex(index);
-        workstatus({ id, index })
-            .unwrap()
-            .then((res) => {
-                setWorksData(res.workstatus || []);
-            })
-            .catch(console.error)
-            .finally(() => setUpdatingIndex(null));
+    const handleWorkstatus = (objid) => {
+        workstatus({ userid: id, objid: objid }).then((res) => {
+            console.log("res 2 ", res.data);
+            setWork(res.data.workstatus);
+        }).catch((err) => {
+            console.log(err);
+        })
     };
 
-    if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center h-64">
-                <FiLoader className="animate-spin text-3xl text-blue-500 mb-3" />
-                <p className="text-gray-600">Loading your tasks...</p>
-            </div>
-        );
-    }
-
-    if (!worksData || worksData.length === 0) {
-        return (
-            <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-xl p-6 text-center">
-                <FiClipboard className="text-4xl text-gray-400 mb-3" />
-                <h3 className="text-xl font-medium text-gray-700 mb-1">No tasks found</h3>
-                <p className="text-gray-500">Add new tasks to get started</p>
-            </div>
-        );
+    const handleTaskstatus = (objid, taskid) => {
+        taskstatus({ userid: id, objid: objid, taskid: taskid }).then((res) => {
+            console.log("res 3 ", res.data);
+            setWork(res.data.taskstatus);
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     return (
-        <div className="space-y-3 h-96 overflow-y-auto scrollbar-hide">
-            {worksData.map((work, index) => (
-                <div
-                    key={work._id || index}
-                    className={`
-                        flex items-center gap-4 p-4 rounded-xl transition-all duration-300
-                          shadow-sm hover:shadow-md
-                        ${work.status ? 'bg-green-200 ' : 'bg-white'}
-                    `}
-                >
-                    <button
-                        onClick={() => handleStatusChange(index)}
-                        disabled={isWorkStatusLoading && updatingIndex === index}
-                        className={`
-                            w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0
-                            border-2 transition-colors duration-300 focus:outline-none
-                            ${work.status 
-                                ? 'bg-green-500 border-green-500 text-white' 
-                                : 'border-gray-300 hover:border-blue-400'}
-                        `}
-                    >
-                        {updatingIndex === index ? (
-                            <FiLoader className="animate-spin" />
-                        ) : work.status ? (
-                            <FiCheck className="font-bold" />
-                        ) : null}
-                    </button>
-
-                    <div className="flex-1 min-w-0">
-                        <p className={`
-                            font-medium truncate transition-all
-                            ${work.status ? 'text-green-700 line-through' : 'text-gray-800'}
-                        `}>
-                            {work.work}
+        <div className=''>
+            {work?.map((workItem, idx) => (
+                <details className="mb-4 shadow-2xl  rounded-xl " key={idx}>
+                    <summary className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 py-4 sm:px-5 sm:py-5 rounded-xl ${workItem.status ? "bg-blue-500 text-white" : "bg-yellow-500 text-white"} cursor-pointer`}>
+                        <h1 className="text-base sm:text-lg font-semibold break-words">{workItem.title}</h1>
+                        <p className="text-sm sm:text-base">
+                            {workItem.startdate ? workItem.startdate.split("T")[0] : ""}
                         </p>
-                    </div>
+                        <div className="flex items-center">
+                            <label htmlFor={`complete-${idx}`} className="mr-2 text-sm sm:text-base"></label>
+                            <input
+                                onChange={() => handleWorkstatus(workItem._id)}
+                                type="checkbox"
+                                id={`complete-${idx}`}
+                                name="complete"
+                                checked={workItem.status}
+                                readOnly
+                                className="w-4 h-4"
+                            />
+                        </div>
+                    </summary>
+                    <div>
+                        {workItem.task && workItem.task.length > 0 ? (
+                            workItem.task.map((task, tIdx) => (
+                                <div
+                                    key={workItem._id}
+                                    className={`justify-between px-5 py-5 my-2 rounded-lg shadow-sm bg-blue-100 flex items-center gap-2 ${task.status ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}
+                                >
 
-                    <span className={`
-                        px-3 py-1 rounded-full text-xs font-semibold
-                        ${work.status 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'}
-                    `}>
-                        {work.status ? "Completed" : "Pending"}
-                    </span>
-                </div>
+                                    <p>{task.title}</p>
+                                    <div>
+                                        <label htmlFor={`task-${tIdx}`} className="mr-2 text-sm sm:text-base">Task {tIdx + 1}:</label>
+                                        <input
+                                            type="checkbox"
+                                            id={`task-${tIdx}`}
+                                            name="task"
+                                            checked={task.status}
+                                            onChange={() => handleTaskstatus(workItem._id, task._id)}
+                                        />
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="pl-6 py-1 text-gray-500">No tasks available.</div>
+                        )}
+                    </div>
+                </details>
             ))}
         </div>
     );
-};
-
+}
 export default Works;

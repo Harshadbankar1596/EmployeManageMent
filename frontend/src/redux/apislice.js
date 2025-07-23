@@ -59,13 +59,22 @@ export const apiSlice = createApi({
         }),
 
         workstatus: builder.mutation({
-            query: ({id , index}) => ({
+            query: ({userid , objid}) => ({
                 url: '/users/workstatus',
                 method: 'POST',
-                body: { id , index}
+                body: { userid , objid}
             }),
             invalidatesTags: ['User'],
-        })
+        }),
+
+        taskstatus: builder.mutation({
+            query: ({userid , objid , taskid}) => ({
+                url: '/users/taskstatus',
+                method: 'POST',
+                body: { userid , objid , taskid}
+            }),
+            invalidatesTags: ['User'],
+        }),
     }),
 });
 
@@ -76,5 +85,6 @@ export const {
     useVerifyTokenQuery,
     useAddpunchMutation,
     useWorksMutation,
-    useWorkstatusMutation
+    useWorkstatusMutation,
+    useTaskstatusMutation
 } = apiSlice;

@@ -3,13 +3,12 @@ import {BrowserRouter,Routes,Route,useLocation,} from "react-router-dom";
 
 import Register from "./components/login/register";
 import Login from "./components/login/login";
-import CalendarGrid from "./components/login/o1";
 import Maindashboard from "./components/dashboard/maindashboard";
 import Works from "./components/dashboard/works";
 import Nav from "./components/dashboard/nav";
 import Quickaction from "./components/dashboard/quickaction";
 import Side from "./components/aside/side";
-
+import CalendarComponent from "./components/calender/calender.jsx";
 const App = () => {
   const location = useLocation();
   const hideNavPaths = ["/login", "/register"];
@@ -27,8 +26,8 @@ const App = () => {
           <Route path="/" element={<Maindashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/calender" element={<CalendarGrid />} />
           <Route path="/works" element={<Works />} />
+          <Route path="/calender" element={<CalendarComponent />} />
         </Routes>
       </div>
     </div>

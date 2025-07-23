@@ -1,5 +1,5 @@
 
-import { createUser, loginUser, logoutUser, verifyToken , addpunch , works , workstatus} from "../controller/usercontroller.js";
+import { createUser, loginUser, logoutUser, verifyToken , addpunch , works , workstatus , taskstatus} from "../controller/usercontroller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import express from "express";
 const router = express.Router();
@@ -12,6 +12,6 @@ router.get("/verify", authMiddleware, verifyToken);
 router.post('/addpunch' , authMiddleware , addpunch)
 router.post('/works' , authMiddleware , works)
 router.post('/workstatus' , authMiddleware , workstatus)
-
+router.post('/taskstatus' , authMiddleware , taskstatus)
 
 export default router;
