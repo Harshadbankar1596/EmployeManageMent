@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useWorksMutation, useWorkstatusMutation, useTaskstatusMutation } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
 import { FaExclamationTriangle, FaClipboardList, FaChevronDown, FaClipboard, FaCheck, FaClock } from 'react-icons/fa';
-
+import { FcCancel } from "react-icons/fc";
 const Works = () => {
     const [workstatus] = useWorkstatusMutation();
     const [taskstatus] = useTaskstatusMutation();
@@ -140,8 +140,8 @@ const Works = () => {
                                     </p>
 
                                     <div className="flex items-center">
-                                        <label htmlFor={`complete-${workItem._id}`} className="mr-2 text-sm font-medium">Complete</label>
-                                        <div className="relative">
+                                        <label htmlFor={`complete-${workItem._id}`} className="mr-2 text-sm font-medium">{workItem.status ? "Complete" : "Incomplete"}</label>
+                                        {/* <div className="relative">
                                             <input
                                                 onClick={e => e.stopPropagation()}
                                                 onChange={e => handleWorkstatus(e, workItem._id)}
@@ -155,7 +155,7 @@ const Works = () => {
                                                 }`}></div>
                                             <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out ${workItem.status ? "transform translate-x-6" : ""
                                                 }`}></div>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <div className="transform transition-transform duration-300">
@@ -185,12 +185,14 @@ const Works = () => {
                                                         }`}
                                                 >
                                                     <div className="flex items-center gap-3">
-                                                        <div className={`p-2 rounded-full ${task.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"
+                                                        <div 
+                                                            onClick={() => handleTaskstatus(workItem._id, task._id)}
+                                                         className={`p-2 rounded-full ${task.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"
                                                             }`}>
                                                             {task.status ? (
                                                                 <FaCheck className="h-5 w-5" />
                                                             ) : (
-                                                                <FaClock className="h-5 w-5" />
+                                                                <FcCancel className="h-5 w-5" />
                                                             )}
                                                         </div>
                                                         <p className={`font-medium ${task.status ? "text-green-800" : "text-red-800"}`}>
@@ -198,7 +200,7 @@ const Works = () => {
                                                         </p>
                                                     </div>
 
-                                                    <div className="flex items-center">
+                                                    {/* <div className="flex items-center">
                                                         <label className="relative inline-flex items-center cursor-pointer">
                                                             <input
                                                                 type="checkbox"
@@ -211,7 +213,7 @@ const Works = () => {
                                                             <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ${task.status ? "transform translate-x-5" : ""
                                                                 }`}></div>
                                                         </label>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             ))}
                                         </div>
