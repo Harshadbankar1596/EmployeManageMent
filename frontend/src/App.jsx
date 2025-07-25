@@ -1,6 +1,5 @@
 import React from "react";
 import {BrowserRouter,Routes,Route,useLocation,} from "react-router-dom";
-
 import Register from "./components/login/register";
 import Login from "./components/login/login";
 import Maindashboard from "./components/dashboard/maindashboard";
@@ -9,6 +8,7 @@ import Nav from "./components/dashboard/nav";
 import Quickaction from "./components/dashboard/quickaction";
 import Side from "./components/aside/side";
 import CalendarComponent from "./components/calender/calender.jsx";
+import Summary from "./components/summary/summary.jsx";
 const App = () => {
   const location = useLocation();
   const hideNavPaths = ["/login", "/register"];
@@ -28,6 +28,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/works" element={<Works />} />
           <Route path="/calender" element={<CalendarComponent />} />
+          <Route path="/summary" element={<Summary />} />
         </Routes>
       </div>
     </div>

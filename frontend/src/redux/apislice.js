@@ -39,12 +39,12 @@ export const apiSlice = createApi({
             query: () => '/users/verify',
         }),
 
-        
+
         addpunch: builder.mutation({
-            query: (id) => ({
-                url : '/users/addpunch',
-                method : 'post',
-                body : id
+            query: ({ id, currentHours }) => ({
+                url: '/users/addpunch',
+                method: 'post',
+                body: { id, currentHours }
             }),
             invalidatesTags: ['User'],
         }),
@@ -59,26 +59,44 @@ export const apiSlice = createApi({
         }),
 
         workstatus: builder.mutation({
-            query: ({userid , objid}) => ({
+            query: ({ userid, objid }) => ({
                 url: '/users/workstatus',
                 method: 'POST',
-                body: { userid , objid}
+                body: { userid, objid }
             }),
             invalidatesTags: ['User'],
         }),
 
         taskstatus: builder.mutation({
-            query: ({userid , objid , taskid}) => ({
+            query: ({ userid, objid, taskid }) => ({
                 url: '/users/taskstatus',
                 method: 'POST',
-                body: { userid , objid , taskid}
+                body: { userid, objid, taskid }
             }),
             invalidatesTags: ['User'],
+        }),
+
+        getlogs: builder.mutation({
+            query: (id) => ({
+                url: '/users/getlogs',
+                method: 'post',
+                body: { id }
+            }),
+            invalidatesTags: ['User'],
+        }),
+
+        summary: builder.mutation({
+            query: (id) => ({
+                url: '/users/summary',
+                method: 'post',
+                body: { id }
+            }),
         }),
     }),
 });
 
 export const {
+
     useCreateUserMutation,
     useLoginUserMutation,
     useLogoutUserMutation,
@@ -86,5 +104,8 @@ export const {
     useAddpunchMutation,
     useWorksMutation,
     useWorkstatusMutation,
-    useTaskstatusMutation
+    useTaskstatusMutation,
+    useGetlogsMutation,
+    useSummaryMutation,
+
 } = apiSlice;

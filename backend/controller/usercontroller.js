@@ -2,7 +2,9 @@ import User from "../model/userschema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+
 dotenv.config();
+
 export const createUser = async (req, res) => {
     console.log(req.body);
     try {
@@ -46,7 +48,7 @@ export const loginUser = async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials." });
         }
-        
+
         let token;
 
         if (remember) {
@@ -60,9 +62,10 @@ export const loginUser = async (req, res) => {
         }
 
         res.status(200).json({ message: "Login successful.", user: user, token: token });
+        console.log("user : : :  :    : : : : : : : : : ", true)
     } catch (error) {
         console.error("Login error:", error);
-        res.status(500).json({ message: "Server error.",error });
+        res.status(500).json({ message: "Server error.", error });
     }
 };
 
@@ -75,7 +78,6 @@ export const logoutUser = async (req, res) => {
         res.status(500).json({ message: "Server error.", error: error.message });
     }
 };
-
 
 export const verifyToken = async (req, res) => {
     try {
@@ -98,20 +100,13 @@ export const verifyToken = async (req, res) => {
     }
 };
 
-
 export const addpunch = async (req, res) => {
     try {
-        const { id } = req.body;
-        if (!id) {
-            return res.status(400).json({ message: "User ID is required" });
-        }
+        const { id , currentHours } = req.body;
 
         const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
-        }
-        if (!Array.isArray(user.logs)) {
-            user.logs = [];
         }
 
         const today = new Date().toLocaleDateString();
@@ -126,6 +121,7 @@ export const addpunch = async (req, res) => {
             }
             user.logs[logIndex].punchs.push(currentTime);
             currentlog = user.logs[logIndex];
+
         } else {
             const newlog = {
                 date: today,
@@ -134,6 +130,10 @@ export const addpunch = async (req, res) => {
             };
             user.logs.unshift(newlog);
             currentlog = newlog;
+        }
+
+        if(currentHours){
+            currentHours >= 8 ? user.logs[0].status = "present" : currentHours >= 4 ? user.logs[0].status = "halfday" : user.logs[0].status = "pending"
         }
 
         await user.save();
@@ -145,11 +145,10 @@ export const addpunch = async (req, res) => {
     }
 };
 
-
 export const works = async (req, res) => {
     try {
         const id = req.body.id;
-        console.log("iddddddddddddddddddddddddddddd" , req.body)
+        console.log("iddddddddddddddddddddddddddddd", req.body)
         const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -159,43 +158,109 @@ export const works = async (req, res) => {
         console.error("Error in works:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
-}
-
+};
 
 export const workstatus = async (req, res) => {
     try {
-        console.log("workstatus" , req.body)
-        const { userid , objid } = req.body;
+        console.log("workstatus", req.body)
+        const { userid, objid } = req.body;
         const user = await User.findById(userid);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-     user.workingOn.find(work => work._id.toString() === objid).status = !user.workingOn.find(work => work._id.toString() === objid).status;
-        console.log("user.workingOn" , user.workingOn)
+        user.workingOn.find(work => work._id.toString() === objid).status = !user.workingOn.find(work => work._id.toString() === objid).status;
+        console.log("user.workingOn", user.workingOn)
         await user.save();
         res.status(200).json({ message: "Work status", workstatus: user.workingOn });
     } catch (error) {
         console.error("Error in workstatus:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
-}
-
+};
 
 export const taskstatus = async (req, res) => {
     try {
 
-        const {userid , objid , taskid} = req.body
+        const { userid, objid, taskid } = req.body
         const user = await User.findById(userid)
-        if(!user){
-            res.status(404).json({message : "user not found"})
+        if (!user) {
+            res.status(404).json({ message: "user not found" })
         }
 
         user.workingOn.find(work => work._id.toString() === objid).task.find(task => task._id.toString() === taskid).status = !user.workingOn.find(work => work._id.toString() === objid).task.find(task => task._id.toString() === taskid).status
+
         await user.save()
-        res.status(200).json({message : "task status updated", taskstatus : user.workingOn})
-        
+
+        console.log("user.workingOn.find(work => work._id.toString() === objid).task", user.workingOn.find(work => work._id.toString() === objid).task)
+        let cout = 0
+
+        for (let i = 0; i < user.workingOn.find(work => work._id.toString() === objid).task.length; i++) {
+            if (user.workingOn.find(work => work._id.toString() === objid).task[i].status) {
+                cout++
+            }
+        }
+
+        console.log("cout", cout)
+        console.log("user.workingOn.find(work => work._id.toString() === objid).task.length", user.workingOn.find(work => work._id.toString() === objid).task.length)
+
+        if (cout === user.workingOn.find(work => work._id.toString() === objid).task.length) {
+            user.workingOn.find(work => work._id.toString() === objid).status = true
+            await user.save()
+        }
+        else {
+            user.workingOn.find(work => work._id.toString() === objid).status = false
+            await user.save()
+        }
+
+        res.status(200).json({ message: "task status updated", taskstatus: user.workingOn })
+
     } catch (error) {
         console.log("error in add taskstatus")
-        res.status(500).json({message : "server error"})
+        res.status(500).json({ message: "server error" })
     }
-}
+};
+
+export const getlogs = async (req, res) => {
+    try {
+
+        const { id } = req.body
+
+        const user = await User.findById(id)
+
+        if (!user) res.status(404).json({ message: "user not found" })
+
+        const logs = user.logs
+
+        res.status(200).json({ message: "logs fetched", logs: logs })
+
+    } catch (error) {
+        console.log("errror ni getlogs")
+        res.status(500).json({ message: "server error" })
+    }
+};
+
+export const summary = async (req , res) => {
+    try {
+
+        const {id} = req.body
+
+        if(!id) res.status(400).json({message : "id is required"})
+
+        const user = await User.findById(id)   
+
+        if(!user) res.status(404).json({message : "user not found"})
+
+        
+        const totalhours = user.logs
+        const presentdays = user.logs.filter((log) => log.status === "present").length
+        const halfdays = user.logs.filter((log) => log.status === "halfday").length
+        const unactivedays = user.logs.filter((log) => log.status === "pending").length
+        // console.log("totalhours" , user.logs.map((log) => log.status === "present" || log.status === "halfday" ? log.punchs : null))
+        
+        res.status(200).json({message : "summary fetched", totalhours , presentdays , halfdays , unactivedays})
+
+    } catch (error) {
+        console.log("error in summery",error)
+        res.status(500).json({ message: "server error" })
+    }
+};

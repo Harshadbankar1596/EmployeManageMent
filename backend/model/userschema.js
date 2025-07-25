@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
         presentDays: Number,
         leaveDays: Number,
         halfDays: Number,
-        totalWorkingHours: Number,
+        totalWorkingHours: Array,
         averageDailyHours: Number,
     },
     workingOn: {

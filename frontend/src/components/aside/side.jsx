@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useLogoutUserMutation } from '../../redux/apislice'
 import { logoutuser } from '../../redux/userslice/userslice'
 import { useDispatch } from 'react-redux'
@@ -23,9 +24,9 @@ const side = () => {
         <nav className="flex-1 px-1 md:px-4 py-6 mt-10 items-center justify-center">
           <ul className="space-y-2 md:space-y-4">
             <li>
-              <a href="/" className="flex items-center gap-0 md:gap-3 px-2 md:px-3 py-2 rounded-lg hover:bg-blue-800 transition text-xs md:text-base">
+              <Link to={"/"} className="flex items-center gap-0 md:gap-3 px-2 md:px-3 py-2 rounded-lg hover:bg-blue-800 transition text-xs md:text-base">
                 <span className="hidden md:inline">Dashboard</span>
-              </a>
+              </Link>
             </li>
             <li>
               <a  href="/" className="flex items-center gap-0 md:gap-3 px-2 md:px-3 py-2 rounded-lg hover:bg-blue-800 transition text-xs md:text-base">
