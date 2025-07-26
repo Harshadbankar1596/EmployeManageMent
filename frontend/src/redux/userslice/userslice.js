@@ -21,7 +21,7 @@ const userSlice = createSlice({
             state.phone = action.payload.phone;
             state.password = action.payload.password;
             state.role = action.payload.role;
-            state.id = action.payload._id;
+            state.id = action.payload.id;
         },
 
         logoutuser : ()=>{

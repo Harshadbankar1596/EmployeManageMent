@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/userslice/userslice";
@@ -11,19 +11,20 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", remember: false });
   const dispatch = useDispatch();
-  const [loginUser, {refetch}] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const navigate = useNavigate();
 
-  // Fix: Remove event listener on unmount, and don't add on every render
+  // Only add event listener for closing success modal when success is true
   useEffect(() => {
+    if (!success) return;
     const handleBodyClick = () => setSuccess(false);
     document.body.addEventListener("click", handleBodyClick);
     return () => {
       document.body.removeEventListener("click", handleBodyClick);
     };
-  }, []);
+  }, [success]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -38,33 +39,30 @@ const Login = () => {
     setErrors({});
     setSubmitError("");
     try {
-      // Only send email and password to API, not remember
-      setTimeout(() => {
-        navigate("/");
-        refetch();
-        setSuccess(false);
-      }, 1000);
-      const { email, password } = form;
-      const res = await loginUser({ email, password }).unwrap();
+      // Send all form fields, including remember, to API
+      const res = await loginUser(form).unwrap();
+      console.log("res", res)
       dispatch(setUser(res.user));
       setSuccess(true);
       setForm({ email: "", password: "", remember: false });
+      // Only navigate after showing success for a short time
+      setTimeout(() => {
+        setSuccess(false);
+        navigate("/");
+      }, 1000);
     } catch (err) {
-      // Fix: Show error only for wrong credentials, not always
+      // If backend provides error message, use it, else fallback
+      let errorMsg = "Invalid credentials";
+      if (err && err.data && err.data.message) {
+        errorMsg = err.data.message;
+      }
       setErrors({
-        email: "Invalid email or password",
-        password: "Invalid email or password",
+        email: errorMsg,
+        password: errorMsg,
       });
-      setSubmitError("Invalid credentials");
+      setSubmitError(errorMsg);
     }
   };
-
-  // Fix: useEffect logic for redirect if already logged in
-  // useEffect(() => {
-  //   if (mail && mail !== "") {
-  //     navigate("/");
-  //   }
-  // }, [mail, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">

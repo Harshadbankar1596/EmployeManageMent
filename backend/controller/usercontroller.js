@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 import multer from "multer";
+import fs from "fs";
 
 export const createUser = async (req, res) => {
     console.log(req.body);
@@ -42,12 +43,14 @@ export const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: "Invalid credentials." });
+            console.log("not match email : ", email)
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials." });
+            console.log("not match password : ", password)
         }
 
         let token;
@@ -62,14 +65,24 @@ export const loginUser = async (req, res) => {
             res.cookie("token", token, { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 });
         }
 
-        res.status(200).json({ message: "Login successful.", user: user, token: token });
+        let userdata = {
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            id : user._id,
+        }
+        // logs: user.logs,
+        // workingOn: user.workingOn,
+        // summary: user.summary
+
+        res.status(200).json({ message: "Login successful.", user: userdata, token: token });
         console.log("user : : :  :    : : : : : : : : : ", true)
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Server error.", error });
     }
 };
-
 export const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token");
@@ -94,7 +107,19 @@ export const verifyToken = async (req, res) => {
             return res.status(401).json({ message: "Invalid token." });
         }
 
-        res.status(200).json({ user: user });
+        let userdata = {
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            logs: user.logs,
+            id : user._id,
+        }
+        // workingOn: user.workingOn,
+        // summary: user.summary
+        
+
+        res.status(200).json({ user: userdata });
     } catch (error) {
         console.error("Token verification error:", error);
         res.status(401).json({ message: "Invalid token." });
@@ -268,21 +293,92 @@ export const summary = async (req , res) => {
 
 export const uploadprofileimg = async (req, res) => {
     try {
-        const { id } = req.body
+        const { id, img } = req.body;
+        console.log("img ============================================== ", img)
+
+        if (!id) {
+            return res.status(400).json({ message: "User id is required" });
+        }
+        if (!img) {
+            return res.status(400).json({ message: "Image is required" });
+        }
+
+        // Find user
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+       
+        let matches = img.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+        if (!matches || matches.length !== 3) {
+            return res.status(400).json({ message: "Invalid image format" });
+        }
+        let contentType = matches[1];
+        let imageBuffer = Buffer.from(matches[2], 'base64');
+
+        user.profileimg = {
+            data: imageBuffer,
+            contentType: contentType
+        };
+
+        await user.save();
+
+        res.status(200).json({ message: "Profile image uploaded successfully" });
+    } catch (error) {
+        console.error("Error uploading profile image:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+export const getimage = async (req, res) => {
+    try {
+
+        const {id} = req.body
+
         const user = await User.findById(id)
+
         if(!user) res.status(404).json({message : "user not found"})
 
-        const {img} = req.body
-
-        if(!img) res.status(400).json({message : "image is required"})
-
-        user.profileimg = img
-        await user.save()
-
-        res.status(200).json({message : "profile image uploaded", profileimg : user.profileimg})
+        if(!user.profileimg) res.status(404).json({message : "no image found"})
+        
+        res.status(200).json({message : "image fetched", image : user.profileimg.data})   
+        
         
     } catch (error) {
-        console.log("error in uploadprofileimg", error)
-        res.status(500).json({ message: "server error" })
+        console.log("error in getimage")
+        res.status(500).json({message : "server error"})
+    }
+}
+
+export const updateprofile = async (req, res) => {
+    try {
+
+        console.log("updateprofile", req.body)
+
+        const {id , data} = req.body
+
+        const user = await User.findById(id)
+
+        if(!user) res.status(404).json({message : "user not found"})
+
+        user.name = data.name
+        user.email = data.email
+        user.phone = data.phone
+
+        await user.save()
+
+        let userdata = {
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            id : user._id,
+        }
+
+        res.status(200).json({message : "profile updated", user : userdata})
+        
+    } catch (error) {
+        console.log("error in update profile")
     }
 }

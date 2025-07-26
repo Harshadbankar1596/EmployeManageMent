@@ -1,4 +1,4 @@
-import { createUser, loginUser, logoutUser, verifyToken , addpunch , works , workstatus , taskstatus , getlogs , summary } from "../controller/usercontroller.js";
+import { createUser, loginUser, logoutUser, verifyToken , addpunch , works , workstatus , taskstatus , getlogs , summary , uploadprofileimg , getimage , updateprofile} from "../controller/usercontroller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import express from "express";
 const router = express.Router();
@@ -14,5 +14,8 @@ router.post('/workstatus' , authMiddleware , workstatus)
 router.post('/taskstatus' , authMiddleware , taskstatus)
 router.post('/getlogs' , authMiddleware , getlogs)
 router.post('/summary' , authMiddleware , summary)
+router.post('/uploadprofileimg' , authMiddleware , uploadprofileimg)
+router.post('/getimage' , authMiddleware , getimage)
+router.post('/updateprofile' , authMiddleware , updateprofile)
 
 export default router;

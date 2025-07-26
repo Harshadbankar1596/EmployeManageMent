@@ -91,6 +91,34 @@ export const apiSlice = createApi({
                 method: 'post',
                 body: { id }
             }),
+            invalidatesTags: ['User'],
+        }),
+
+        uploadprofileimg: builder.mutation({
+            query: ({ id, img }) => ({
+                url: '/users/uploadprofileimg',
+                method: 'POST',
+                body: { id, img }
+            }),
+            invalidatesTags: ['User'],
+        }),
+
+        getimage: builder.mutation({
+            query: (id) => ({
+                url: '/users/getimage',
+                method: 'post',
+                body: { id }
+            }),
+            invalidatesTags: ['User'],
+        }),
+
+        updateprofile: builder.mutation({
+            query: ({ id, data }) => ({
+                url: '/users/updateprofile',
+                method: 'POST',
+                body: { id, data }
+            }),
+            invalidatesTags: ['User'],
         }),
     }),
 });
@@ -107,5 +135,7 @@ export const {
     useTaskstatusMutation,
     useGetlogsMutation,
     useSummaryMutation,
-
+    useUploadprofileimgMutation,
+    useGetimageMutation,
+    useUpdateprofileMutation,
 } = apiSlice;
