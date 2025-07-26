@@ -9,6 +9,7 @@ import Quickaction from "./components/dashboard/quickaction";
 import Side from "./components/aside/side";
 import CalendarComponent from "./components/calender/calender.jsx";
 import Summary from "./components/summary/summary.jsx";
+import Employeprofile from "./components/profie/employeprofile.jsx";
 const App = () => {
   const location = useLocation();
   const hideNavPaths = ["/login", "/register"];
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/works" element={<Works />} />
           <Route path="/calender" element={<CalendarComponent />} />
           <Route path="/summary" element={<Summary />} />
+          <Route path="/profile" element={<Employeprofile />} />
         </Routes>
       </div>
     </div>

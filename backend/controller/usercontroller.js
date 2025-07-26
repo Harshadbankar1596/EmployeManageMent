@@ -2,8 +2,8 @@ import User from "../model/userschema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
 dotenv.config();
+import multer from "multer";
 
 export const createUser = async (req, res) => {
     console.log(req.body);
@@ -35,6 +35,7 @@ export const createUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
+
     console.log(req.body);
     try {
         const { email, password, remember } = req.body;
@@ -264,3 +265,24 @@ export const summary = async (req , res) => {
         res.status(500).json({ message: "server error" })
     }
 };
+
+export const uploadprofileimg = async (req, res) => {
+    try {
+        const { id } = req.body
+        const user = await User.findById(id)
+        if(!user) res.status(404).json({message : "user not found"})
+
+        const {img} = req.body
+
+        if(!img) res.status(400).json({message : "image is required"})
+
+        user.profileimg = img
+        await user.save()
+
+        res.status(200).json({message : "profile image uploaded", profileimg : user.profileimg})
+        
+    } catch (error) {
+        console.log("error in uploadprofileimg", error)
+        res.status(500).json({ message: "server error" })
+    }
+}

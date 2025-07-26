@@ -1,6 +1,6 @@
 import {useEffect} from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate , Link } from 'react-router-dom'
 const Nav = () => {
     const user = useSelector((state) => state.user)
     const navigate = useNavigate()
@@ -21,9 +21,9 @@ const Nav = () => {
                 </div>
             </div>
             <div>
-                <button className='text-black font-semibold px-2 sm:px-3 md:px-5 py-1 sm:py-1.5 md:py-2 rounded-md bg-yellow-400 text-xs sm:text-xs md:text-sm lg:text-base hover:bg-yellow-300 transition-colors'>
+                <Link to={"/profile"} className='text-black font-semibold px-2 sm:px-3 md:px-5 py-1 sm:py-1.5 md:py-2 rounded-md bg-yellow-400 text-xs sm:text-xs md:text-sm lg:text-base hover:bg-yellow-300 transition-colors'>
                     Edit Profile    
-                </button>
+                </Link>
             </div>
         </div>
     )

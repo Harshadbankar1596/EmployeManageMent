@@ -140,7 +140,7 @@ const Works = () => {
                                     </p>
 
                                     <div className="flex items-center">
-                                        <label htmlFor={`complete-${workItem._id}`} className="mr-2 text-sm font-medium">{workItem.status ? "Complete" : "Incomplete"}</label>
+                                        <label htmlFor={`complete-${workItem._id}`} className="mr-2 text-sm font-medium">{workItem.status ? "Complete" : "InComplete"}</label>
                                         {/* <div className="relative">
                                             <input
                                                 onClick={e => e.stopPropagation()}
@@ -185,10 +185,10 @@ const Works = () => {
                                                         }`}
                                                 >
                                                     <div className="flex items-center gap-3">
-                                                        <div 
+                                                        <div
                                                             onClick={() => handleTaskstatus(workItem._id, task._id)}
-                                                         className={`p-2 rounded-full ${task.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"
-                                                            }`}>
+                                                            className={`p-2 cursor-pointer rounded-full ${task.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"
+                                                                }`}>
                                                             {task.status ? (
                                                                 <FaCheck className="h-5 w-5" />
                                                             ) : (

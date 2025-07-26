@@ -88,7 +88,7 @@ const SummaryCharts = () => {
         }));
 
         setMonthlyData(chartData);
-        setDailyHours(dailyHoursData.slice(-7));
+        setDailyHours(dailyHoursData.reverse().slice(-7));
 
         setAttendanceData([
           { id: 0, value: present, label: 'Present', color: '#10B981' },
@@ -187,6 +187,7 @@ const SummaryCharts = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
 
   return (
     <div className="sm:p-4">
@@ -323,7 +324,7 @@ const SummaryCharts = () => {
                   label: 'Date'
                 }]}
                 series={[{ 
-                  data: dailyHours.map(d => d.hours), 
+                  data: dailyHours.map(d => d.hours),  
                   label: 'Hours Worked',
                   color: '#6366F1'
                 }]}

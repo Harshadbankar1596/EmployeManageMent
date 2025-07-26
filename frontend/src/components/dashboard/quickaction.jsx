@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { FcLeave } from "react-icons/fc";
-import { BiSolidNetworkChart, BiArea, BiSolidBarChartSquare } from "react-icons/bi";
+import { BiSolidNetworkChart, BiArea, BiSolidBarChartSquare , BiChat} from "react-icons/bi";
 import { FcCalendar } from "react-icons/fc";
 const Quikactionbox = () => {
   return (
@@ -90,6 +90,22 @@ const Quikactionbox = () => {
           <p className="text-base sm:text-lg font-bold mx-2 sm:mx-3">Summary</p>
           <BiSolidBarChartSquare className="text-xl sm:text-2xl" />
         </Link>
+        <Link
+          to={"/groupchat"}
+          className="
+            flex items-center justify-between
+            bg-white py-4 px-4
+            rounded-md transition duration-700
+            hover:scale-105 hover:shadow-lg
+            flex-shrink-0 text-center
+            w-full
+          "
+        >
+          <p className="text-base sm:text-lg font-bold mx-2 sm:mx-3">Group Chat</p>
+          <BiChat className="text-xl sm:text-2xl" />
+        </Link>
+
+
       </div>
     </div>
   )
