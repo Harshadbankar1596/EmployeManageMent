@@ -73,32 +73,34 @@ const EmployeProfile = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-xl shadow-lg">
-      <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-8">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 bg-white rounded-xl shadow-lg">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-800 mb-6 sm:mb-8">
         Employee Profile
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         {/* Profile Image Section */}
-        <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Profile Image</h2>
-          <form onSubmit={handleUpload} className="space-y-4">
+        <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-700 mb-4 sm:mb-6">Profile Image</h2>
+          <form onSubmit={handleUpload} className="space-y-4 sm:space-y-6">
             <div className="flex flex-col items-center">
-              <div className="relative mb-4">
+              <div className="relative mb-4 sm:mb-6">
                 {preview ? (
                   <img 
                     src={preview} 
                     alt="Preview" 
-                    className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md"
+                    className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-cover rounded-full border-4 border-white shadow-lg"
                   />
                 ) : (
-                  <div className="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32 flex items-center justify-center">
-                    <span className="text-gray-500">No image</span>
+                  <div className="bg-gray-200 border-2 border-dashed rounded-full w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 flex items-center justify-center">
+                    <svg className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
                   </div>
                 )}
               </div>
               
-              <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">
+              <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 font-medium">
                 <span>Choose Image</span>
                 <input
                   type="file"
@@ -112,7 +114,7 @@ const EmployeProfile = () => {
             <button
               type="submit"
               disabled={isLoading || !selectedFile}
-              className={`w-full py-2 px-4 rounded-md text-white font-medium ${
+              className={`w-full py-2 sm:py-3 px-4 rounded-lg text-white font-medium ${
                 isLoading || !selectedFile 
                   ? 'bg-gray-400 cursor-not-allowed' 
                   : 'bg-blue-600 hover:bg-blue-700'
@@ -132,53 +134,53 @@ const EmployeProfile = () => {
         </div>
 
         {/* Profile Update Section */}
-        <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Profile Information</h2>
-          <form onSubmit={handleUpdate} className="space-y-4">
+        <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-700 mb-4 sm:mb-6">Profile Information</h2>
+          <form onSubmit={handleUpdate} className="space-y-4 sm:space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Full Name</label>
               <input
                 name="name"
                 type="text"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your name"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                placeholder="Enter your full name"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Email Address</label>
               <input
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your email"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                placeholder="Enter your email address"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Phone Number</label>
               <input
                 name="phone"
                 type="text"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your phone"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                placeholder="Enter your phone number"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Role</label>
               <input
                 name="role"
                 type="text"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                 placeholder="Enter your role"
               />
             </div>
@@ -186,7 +188,7 @@ const EmployeProfile = () => {
             <button
               type="submit"
               disabled={isUpdateLoading}
-              className={`w-full py-2 px-4 rounded-md text-white font-medium ${
+              className={`w-full py-2 sm:py-3 px-4 rounded-lg text-white font-medium ${
                 isUpdateLoading 
                   ? 'bg-gray-400 cursor-not-allowed' 
                   : 'bg-green-600 hover:bg-green-700'
@@ -200,10 +202,10 @@ const EmployeProfile = () => {
 
       {/* Status Messages */}
       {message && (
-        <div className={`mt-6 p-3 rounded-lg text-center ${
+        <div className={`mt-6 p-3 sm:p-4 rounded-lg text-center ${
           message.includes("success") 
-            ? "bg-green-100 text-green-700" 
-            : "bg-red-100 text-red-700"
+            ? "bg-green-100 text-green-700 border border-green-200" 
+            : "bg-red-100 text-red-700 border border-red-200"
         }`}>
           {message}
         </div>

@@ -266,30 +266,3 @@ const Works = () => {
 
 export default Works;
 
-{/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {workItem.task.map((task) => (
-                                                <div
-                                                    key={task._id}
-                                                    className={`p-4 rounded-lg border transition-all duration-300 ease-in-out hover:shadow-md flex items-center justify-between gap-3 ${task.status ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"
-                                                        }`}
-                                                >
-                                                    <div className="flex items-center gap-3">
-                                                        <div
-                                                            onClick={() => handleTaskstatus(workItem._id, task._id)}
-                                                            className={`p-2 cursor-pointer rounded-full ${task.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"
-                                                                }`}>
-                                                            {task.status ? (
-                                                                <FaCheck className="h-5 w-5" />
-                                                            ) : (
-                                                                <FcCancel className="h-5 w-5" />
-                                                            )}
-                                                        </div>
-                                                        <p className={`font-medium ${task.status ? "text-green-800" : "text-red-800"}`}>
-                                                            {task.title}
-                                                        </p>
-                                                    </div>
-
-
-                                                </div>
-                                            ))}
-                                        </div> */}

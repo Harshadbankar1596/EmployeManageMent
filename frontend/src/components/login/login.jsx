@@ -39,19 +39,19 @@ const Login = () => {
     setErrors({});
     setSubmitError("");
     try {
-      // Send all form fields, including remember, to API
+      
       const res = await loginUser(form).unwrap();
       console.log("res", res)
       dispatch(setUser(res.user));
       setSuccess(true);
       setForm({ email: "", password: "", remember: false });
-      // Only navigate after showing success for a short time
+      
       setTimeout(() => {
         setSuccess(false);
         navigate("/");
       }, 1000);
     } catch (err) {
-      // If backend provides error message, use it, else fallback
+      
       let errorMsg = "Invalid credentials";
       if (err && err.data && err.data.message) {
         errorMsg = err.data.message;
@@ -238,8 +238,6 @@ const Login = () => {
 };
 
 export default Login;
-
-
 // import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 // import { useDispatch } from "react-redux";
@@ -465,3 +463,4 @@ export default Login;
 // };
 
 // export default Login;
+
