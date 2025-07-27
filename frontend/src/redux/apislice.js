@@ -76,6 +76,15 @@ export const apiSlice = createApi({
             invalidatesTags: ['User'],
         }),
 
+        addtask: builder.mutation({
+            query: ({ userid, objid , task }) => ({
+                url: '/users/addtask',
+                method: 'POST',
+                body: { userid, objid , task }
+            }),
+            invalidatesTags: ['User'],
+        }),
+
         getlogs: builder.mutation({
             query: (id) => ({
                 url: '/users/getlogs',
@@ -133,6 +142,7 @@ export const {
     useWorksMutation,
     useWorkstatusMutation,
     useTaskstatusMutation,
+    useAddtaskMutation,
     useGetlogsMutation,
     useSummaryMutation,
     useUploadprofileimgMutation,

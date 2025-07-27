@@ -3,8 +3,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
-import multer from "multer";
-import fs from "fs";
 
 export const createUser = async (req, res) => {
     console.log(req.body);
@@ -27,7 +25,7 @@ export const createUser = async (req, res) => {
         await newUser.save();
 
         res.status(201).json({ message: "User registered successfully.", user: newUser });
-        console.log("newUser", newUser);
+        // console.log("newUser", newUser);
 
     } catch (error) {
         console.error("Registration error:", error);
@@ -37,7 +35,7 @@ export const createUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
 
-    console.log(req.body);
+    // console.log(req.body);
     try {
         const { email, password, remember } = req.body;
         const user = await User.findOne({ email });
@@ -77,7 +75,7 @@ export const loginUser = async (req, res) => {
         // summary: user.summary
 
         res.status(200).json({ message: "Login successful.", user: userdata, token: token });
-        console.log("user : : :  :    : : : : : : : : : ", true)
+        // console.log("user : : :  :    : : : : : : : : : ", true)
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Server error.", error });
@@ -174,7 +172,7 @@ export const addpunch = async (req, res) => {
 export const works = async (req, res) => {
     try {
         const id = req.body.id;
-        console.log("iddddddddddddddddddddddddddddd", req.body)
+        // console.log("iddddddddddddddddddddddddddddd", req.body)
         const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -204,6 +202,45 @@ export const workstatus = async (req, res) => {
     }
 };
 
+export const addtask = async (req , res) => {
+    try {
+
+        const {userid , objid , task} = req.body
+
+        const user = await User.findById(userid)
+
+        if(!user) res.status(404).json({message : "user not found"});
+
+        user.workingOn.find(work => work._id.toString() === objid).task.unshift({title : task , status : false})
+
+        let cout = 0
+
+        for (let i = 0; i < user.workingOn.find(work => work._id.toString() === objid).task.length; i++) {
+            if (user.workingOn.find(work => work._id.toString() === objid).task[i].status) {
+                cout++
+            }
+        }
+
+        // console.log("cout", cout)
+        // console.log("user.workingOn.find(work => work._id.toString() === objid).task.length", user.workingOn.find(work => work._id.toString() === objid).task.length)
+
+        if (cout === user.workingOn.find(work => work._id.toString() === objid).task.length) {
+            user.workingOn.find(work => work._id.toString() === objid).status = true
+            await user.save()
+        }
+        else {
+            user.workingOn.find(work => work._id.toString() === objid).status = false
+            await user.save()
+        }
+
+        res.status(200).json({message : "task added", works : user.workingOn})
+        
+    } catch (error) {
+        console.log("error in addtask")
+        res.status(500).json({message : "server error"})
+    }
+}
+
 export const taskstatus = async (req, res) => {
     try {
 
@@ -217,7 +254,7 @@ export const taskstatus = async (req, res) => {
 
         await user.save()
 
-        console.log("user.workingOn.find(work => work._id.toString() === objid).task", user.workingOn.find(work => work._id.toString() === objid).task)
+        // console.log("user.workingOn.find(work => work._id.toString() === objid).task", user.workingOn.find(work => work._id.toString() === objid).task)
         let cout = 0
 
         for (let i = 0; i < user.workingOn.find(work => work._id.toString() === objid).task.length; i++) {
@@ -226,8 +263,8 @@ export const taskstatus = async (req, res) => {
             }
         }
 
-        console.log("cout", cout)
-        console.log("user.workingOn.find(work => work._id.toString() === objid).task.length", user.workingOn.find(work => work._id.toString() === objid).task.length)
+        // console.log("cout", cout)
+        // console.log("user.workingOn.find(work => work._id.toString() === objid).task.length", user.workingOn.find(work => work._id.toString() === objid).task.length)
 
         if (cout === user.workingOn.find(work => work._id.toString() === objid).task.length) {
             user.workingOn.find(work => work._id.toString() === objid).status = true
@@ -294,7 +331,7 @@ export const summary = async (req , res) => {
 export const uploadprofileimg = async (req, res) => {
     try {
         const { id, img } = req.body;
-        console.log("img ============================================== ", img)
+        // console.log("img ============================================== ", img)
 
         if (!id) {
             return res.status(400).json({ message: "User id is required" });
@@ -354,7 +391,7 @@ export const getimage = async (req, res) => {
 export const updateprofile = async (req, res) => {
     try {
 
-        console.log("updateprofile", req.body)
+        // console.log("updateprofile", req.body)
 
         const {id , data} = req.body
 

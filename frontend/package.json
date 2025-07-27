@@ -5,7 +5,7 @@
   "type": "module",
   "main": "electron/main.js",
   "scripts": {
-    "dev" : "vite",
+    "dev": "vite",
     "devm": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build",
     "lint": "eslint .",
@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "add": "^2.0.6",
     "dotenv": "^17.2.0",
+    "lucide-react": "^0.526.0",
     "react": "^19.1.0",
     "react-big-calendar": "^1.19.4",
     "react-dom": "^19.1.0",
