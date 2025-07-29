@@ -6,7 +6,7 @@ export const apiSlice = createApi({
         baseUrl: 'http://localhost:5000',
         credentials: 'include'
     }),
-    tagTypes: ['User'],
+    tagTypes: ['User', 'Chat'],
     endpoints: (builder) => ({
 
         createUser: builder.mutation({
@@ -37,6 +37,7 @@ export const apiSlice = createApi({
 
         verifyToken: builder.query({
             query: () => '/users/verify',
+            invalidatesTags: ['User'],
         }),
 
 
@@ -77,10 +78,10 @@ export const apiSlice = createApi({
         }),
 
         addtask: builder.mutation({
-            query: ({ userid, objid , task }) => ({
+            query: ({ userid, objid, task }) => ({
                 url: '/users/addtask',
                 method: 'POST',
-                body: { userid, objid , task }
+                body: { userid, objid, task }
             }),
             invalidatesTags: ['User'],
         }),
@@ -129,23 +130,52 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['User'],
         }),
+
+        //     getmessages: builder.mutation({
+        //         query: (groupname) => ({
+        //             url: '/chat/getmessages',
+        //             method: 'POST',
+        //             body: { groupname }
+        //         }),
+        //         invalidatesTags: ['User', 'Chat'],
+        //     }),
+        // }),
+        
+        getMessages: builder.query({
+            query: (groupname) => ({
+                url: '/chat/getmessages',
+                method: 'POST',
+                body: { groupname }
+            }),
+            providesTags: ['Chat'],
+        }),
+
+        createGroup: builder.mutation({
+            query: (groupname) => ({
+                url: '/chat/creategroup',
+                method: 'POST',
+                body: { groupname }
+            }),
+            invalidatesTags: ['Chat'],
+        }),
     }),
-});
+})
+    export const {
 
-export const {
-
-    useCreateUserMutation,
-    useLoginUserMutation,
-    useLogoutUserMutation,
-    useVerifyTokenQuery,
-    useAddpunchMutation,
-    useWorksMutation,
-    useWorkstatusMutation,
-    useTaskstatusMutation,
-    useAddtaskMutation,
-    useGetlogsMutation,
-    useSummaryMutation,
-    useUploadprofileimgMutation,
-    useGetimageMutation,
-    useUpdateprofileMutation,
-} = apiSlice;
+        useCreateUserMutation,
+        useLoginUserMutation,
+        useLogoutUserMutation,
+        useVerifyTokenQuery,
+        useAddpunchMutation,
+        useWorksMutation,
+        useWorkstatusMutation,
+        useTaskstatusMutation,
+        useAddtaskMutation,
+        useGetlogsMutation,
+        useSummaryMutation,
+        useUploadprofileimgMutation,
+        useGetimageMutation,
+        useUpdateprofileMutation,
+        useGetMessagesQuery,
+        useCreateGroupMutation,
+    } = apiSlice;
