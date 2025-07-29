@@ -99,11 +99,11 @@ const Chat = () => {
   const bottomRef = useRef(null)
 
   const [creategroup, setCreategroup] = useState("")
-  const [groupname, setGroupname] = useState("mygroup")
+  const [groupname, setGroupname] = useState("")
   const name = useSelector((state) => state.user.name)
   const [localMessages, setLocalMessages] = useState([])
 
-  const { data, refetch, isLoading } = useGetMessagesQuery(groupname)
+  const { data, refetch, isLoading , refetch: refetchgroup} = useGetMessagesQuery(groupname)
   const [createGroup, { isLoading: isCreating , error }] = useCreateGroupMutation()
   useEffect(() => {
     socket.on("receive-message", () => {
@@ -135,6 +135,7 @@ const Chat = () => {
   const createnewgroup = () => {
     createGroup(creategroup)
     setCreategroup("")
+    refetchgroup()
   }
 
   if(error){
@@ -144,28 +145,43 @@ const Chat = () => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-2 md:p-8">
       <div className="w-full md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-lg shadow-md bg-white p-4 md:p-6 mb-6 md:mb-0 md:mr-8">
-        <div className="flex flex-col items-center justify-center mb-6 w-full">
+        <div className="flex flex-col items-center justify-center mb-8 w-full bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg shadow-lg p-4">
           <label
             htmlFor="groupname"
-            className="text-base font-semibold text-blue-900 mb-2"
-            onClick={() => setCreategroup(creategroup)}
+            className="text-lg font-bold text-blue-800 mb-3 tracking-wide"
+            style={{ letterSpacing: "0.03em" }}
           >
             Create More Groups
           </label>
-          <div className="flex w-full gap-2">
+          <div className="flex w-full gap-3">
             <input
               value={creategroup}
               onChange={(e) => setCreategroup(e.target.value)}
               type="text"
               placeholder="Enter Group Name"
-              className="flex-1 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              className="flex-1 border border-blue-300 bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-blue-900 placeholder-gray-400 shadow-sm"
+              style={{ minWidth: 0 }}
             />
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors shadow"
+              className={`px-5 py-2 rounded-r-md font-semibold transition-colors shadow-md border border-blue-600
+                ${isCreating || !creategroup.trim()
+                  ? "bg-blue-300 text-white cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"}
+              `}
               onClick={() => createnewgroup()}
               disabled={isCreating || !creategroup.trim()}
             >
-              {isCreating ? "..." : "Create"}
+              {isCreating ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+                  </svg>
+                  Creating...
+                </span>
+              ) : (
+                "Create"
+              )}
             </button>
           </div>
         </div>

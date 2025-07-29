@@ -53,11 +53,12 @@ export const getmessages = async (req, res) => {
     //   console.log(group.groupname)
     // })
 
-    if (!messsage) {
-      return res.status(404).json({ message: "No messages found" })
+    if(group.length === 0){
+      return res.status(200).json({ message: "No groups found" , groups : [] })
     }
-
+   
     res.status(200).json({ message: messsage , groups : group.map((group)=>group.groupname) })
+
   } catch (error) {
     console.log("error in getmessages")
     res.status(500).json({ message: "Internal server error" })
