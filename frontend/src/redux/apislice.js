@@ -158,6 +158,14 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['Chat'],
         }),
+
+        matchFace: builder.mutation({
+            query: (image) => ({
+                url: '/face/match',
+                method: 'POST',
+                body: { image }
+            }),
+        }),
     }),
 })
     export const {
@@ -178,4 +186,5 @@ export const apiSlice = createApi({
         useUpdateprofileMutation,
         useGetMessagesQuery,
         useCreateGroupMutation,
+        useMatchFaceMutation,
     } = apiSlice;
