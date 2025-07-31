@@ -2,6 +2,7 @@ import User from "../model/userschema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import Screenshot from "../model/screenshot.js";
 dotenv.config();
 
 export const createUser = async (req, res) => {
@@ -417,5 +418,17 @@ export const updateprofile = async (req, res) => {
         
     } catch (error) {
         console.log("error in update profile")
+    }
+}
+
+export const screenshot = async (req, res) => {
+    try {
+        const {name , date , img} = req.body
+        const screenshot = new Screenshot({name , date , image : {data : img, contentType : "image/png"}})
+        await screenshot.save()
+
+        res.status(200).json({message : "screenshot added"})
+    } catch (error) {
+        console.log("error in screenshot")
     }
 }

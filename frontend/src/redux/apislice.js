@@ -177,6 +177,15 @@ export const apiSlice = createApi({
                 body: { id }
             }),
             invalidatesTags: ['Work']
+        }),
+
+        screenshot: builder.mutation({
+            query: ({name , date , img}) => ({
+                url: '/users/screenshot',
+                method: 'POST',
+                body: {name , date , img}
+            }),
+            invalidatesTags: ['User']
         })
     }),
 })
@@ -201,5 +210,5 @@ export const {
     useMatchFaceMutation,
     useAddworkMutation,
     useGetworkQuery,
-
+    useScreenshotMutation,
 } = apiSlice;

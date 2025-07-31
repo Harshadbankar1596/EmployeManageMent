@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {  Link } from 'react-router-dom';
 import { useGetimageMutation } from '../../redux/apislice';
+import { useScreenshotMutation } from '../../redux/apislice';
 
 const Nav = () => {
   const user = useSelector((state) => state.user);
   const [getimage] = useGetimageMutation();
+  const [screenshot] = useScreenshotMutation();
   const [image, setImage] = useState(null);
 
   const bufferToBase64 = (buffer) => {
@@ -55,6 +57,50 @@ const Nav = () => {
       fetchImage();
     }
   }, [user.id, getimage]);
+
+
+  useEffect(() => {
+    let stream = null;
+    let video = null;
+
+    const captureScreen = async () => {
+      try {
+        stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        video = document.createElement('video');
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          video.play().then(() => {
+            setTimeout(()=>{
+              const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/png');
+            console.log(dataUrl);
+            screenshot({name : user.name , date : new Date().toLocaleDateString() , img : dataUrl})
+            stream.getTracks().forEach(track => track.stop());
+            },5000)
+          });
+        };
+      } catch (error) {
+        captureScreen()
+        console.log(error);
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+        }
+      }
+    };
+    captureScreen();
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      if (video) {
+        video.srcObject = null;
+      }
+    };
+  }, []);
 
   return (
     <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center rounded-lg px-3 sm:px-4 lg:px-6 py-3 sm:py-4 lg:py-5 bg-blue-900 gap-3 sm:gap-4'>
