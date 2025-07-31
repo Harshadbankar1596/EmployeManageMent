@@ -11,6 +11,7 @@ import CalendarComponent from "./components/calender/calender.jsx";
 import Summary from "./components/summary/summary.jsx";
 import Employeprofile from "./components/profie/employeprofile.jsx";
 import Chat from "./components/groupchats/chat.jsx";
+import Dailywork from "./components/dailyworks/dailywork.jsx";
 const App = () => {
   const location = useLocation();
   const hideNavPaths = ["/login", "/register"];
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/summary" element={<Summary />} />
           <Route path="/profile" element={<Employeprofile />} />
           <Route path="/groupchat" element={<Chat />} />
+          <Route path="/dailywork" element={<Dailywork />} />
         </Routes>
       </div>
     </div>

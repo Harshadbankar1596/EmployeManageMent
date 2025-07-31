@@ -1,12 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const apiSlice = createApi({
+    
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:5000',
         credentials: 'include'
     }),
-    tagTypes: ['User', 'Chat'],
+
+    tagTypes: ['User', 'Chat' , 'Work'],
     endpoints: (builder) => ({
 
         createUser: builder.mutation({
@@ -131,16 +133,8 @@ export const apiSlice = createApi({
             invalidatesTags: ['User'],
         }),
 
-        //     getmessages: builder.mutation({
-        //         query: (groupname) => ({
-        //             url: '/chat/getmessages',
-        //             method: 'POST',
-        //             body: { groupname }
-        //         }),
-        //         invalidatesTags: ['User', 'Chat'],
-        //     }),
-        // }),
-        
+
+
         getMessages: builder.query({
             query: (groupname) => ({
                 url: '/chat/getmessages',
@@ -166,25 +160,46 @@ export const apiSlice = createApi({
                 body: { image }
             }),
         }),
+
+        addwork: builder.mutation({
+            query: ({ id, work, time, date }) => ({
+                url: '/works/addwork',
+                method: 'post',
+                body: { id, work, time, date }
+            }),
+            invalidatesTags: ['Work']
+        }),
+
+        getwork: builder.query({
+            query: (id) => ({
+                url: '/works/getwork',
+                method: 'post',
+                body: { id }
+            }),
+            invalidatesTags: ['Work']
+        })
     }),
 })
-    export const {
+export const {
 
-        useCreateUserMutation,
-        useLoginUserMutation,
-        useLogoutUserMutation,
-        useVerifyTokenQuery,
-        useAddpunchMutation,
-        useWorksMutation,
-        useWorkstatusMutation,
-        useTaskstatusMutation,
-        useAddtaskMutation,
-        useGetlogsMutation,
-        useSummaryMutation,
-        useUploadprofileimgMutation,
-        useGetimageMutation,
-        useUpdateprofileMutation,
-        useGetMessagesQuery,
-        useCreateGroupMutation,
-        useMatchFaceMutation,
-    } = apiSlice;
+    useCreateUserMutation,
+    useLoginUserMutation,
+    useLogoutUserMutation,
+    useVerifyTokenQuery,
+    useAddpunchMutation,
+    useWorksMutation,
+    useWorkstatusMutation,
+    useTaskstatusMutation,
+    useAddtaskMutation,
+    useGetlogsMutation,
+    useSummaryMutation,
+    useUploadprofileimgMutation,
+    useGetimageMutation,
+    useUpdateprofileMutation,
+    useGetMessagesQuery,
+    useCreateGroupMutation,
+    useMatchFaceMutation,
+    useAddworkMutation,
+    useGetworkQuery,
+
+} = apiSlice;

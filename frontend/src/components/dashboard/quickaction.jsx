@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { FcLeave } from "react-icons/fc";
-import { BiSolidNetworkChart, BiArea, BiSolidBarChartSquare , BiChat} from "react-icons/bi";
+import { BiSolidNetworkChart, BiArea, BiSolidBarChartSquare , BiChat , BiSun} from "react-icons/bi";
 import { FcCalendar } from "react-icons/fc";
 
 const Quikactionbox = () => {
@@ -86,6 +86,7 @@ const Quikactionbox = () => {
           <p className="text-sm sm:text-base lg:text-lg font-bold mx-2 sm:mx-3 text-gray-700">Summary</p>
           <BiSolidBarChartSquare className="text-lg sm:text-xl lg:text-2xl text-indigo-600" />
         </Link>
+
         
         <Link
           to={"/groupchat"}
@@ -100,6 +101,20 @@ const Quikactionbox = () => {
         >
           <p className="text-sm sm:text-base lg:text-lg font-bold mx-2 sm:mx-3 text-gray-700">Group Chat</p>
           <BiChat className="text-lg sm:text-xl lg:text-2xl text-pink-600" />
+        </Link>
+        <Link
+          to={"/dailywork"}
+          className="
+            flex items-center justify-between
+            bg-white py-4 sm:py-5 lg:py-6 px-4 sm:px-5 lg:px-6
+            rounded-lg transition-all duration-300
+            hover:scale-105 hover:shadow-lg hover:bg-yellow-50
+            border border-gray-200 hover:border-yellow-300
+            text-center w-full sm:col-span-2 lg:col-span-1
+          "
+        >
+          <p className="text-sm sm:text-base lg:text-lg font-bold mx-2 sm:mx-3 text-gray-700">Daily Work</p>
+          <BiSun className="text-lg sm:text-xl lg:text-2xl text-yellow-600" />
         </Link>
       </div>
     </div>
