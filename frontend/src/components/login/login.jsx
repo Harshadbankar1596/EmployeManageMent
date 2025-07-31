@@ -9,7 +9,6 @@ import { useMatchFaceMutation } from "../../redux/apislice";
 
 const Login = () => {
   const [matchFace , { isLoading }] = useMatchFaceMutation();
-  const mail = useSelector((state) => state.user.email);
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", remember: false });
   const dispatch = useDispatch();
@@ -75,7 +74,7 @@ const Login = () => {
       audio: false,
     };
     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-      video.srcObject = stream;
+       var stream = video.srcObject = stream;
       video.play();
     });
   }, []);
@@ -91,10 +90,12 @@ const Login = () => {
     const res = await matchFace(image).unwrap();
     console.log("res", res);
 
-    if (res.success) {
+    if (res.success) { 
       setSuccess(true);
+      video.srcObject = null;
     } else {
       setSubmitError(res.message);
+      alert("No match found");
     }
     
   }
@@ -198,7 +199,7 @@ const Login = () => {
               ></video>
             </div>
             <div className="border-4 border-green-400 shadow-lg h-32 w-32 rounded-full overflow-hidden z-10 bg-blue-800 flex items-center justify-center">
-              <canvas
+              <canvas width={128} height={128}
                 className="w-full h-full object-cover z-10"
                 id="canvas"
                 style={{ background: "#0e1e3a" }}

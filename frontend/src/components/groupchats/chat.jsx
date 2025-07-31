@@ -1,93 +1,3 @@
-// import React from 'react'
-// import { useState, useEffect } from 'react'
-// import { io } from "socket.io-client";
-// import { useSelector } from 'react-redux'
-// import { useGetmessagesMutation } from '../../redux/apislice'
-
-// const socket = io("http://localhost:5000")
-
-// const Chat = () => {
-//   const [getmessages , {isLoading , error , refetch}] = useGetmessagesMutation()
-//   const [groupname, setGroupname] = useState("bishnoi")
-//   const [messages, setMessages] = useState([])
-//   const name = useSelector((state) => state.user.name)
-
-//   useEffect(() => {
-//     socket.on("receive-message", ({ message, name, groupname }) => {
-//     })
-//   }, [])
-
-//   useEffect(() => {
-//     getmessages(groupname).unwrap().then((res)=>{
-//       setMessages(res.message.message)
-//     })
-//   }, [])
-
-//   const [message, setMessage] = useState("")
-
-//   const sendMessage = (e) => {
-//     e.preventDefault()
-//     socket.emit("send-message", { message, name, groupname })
-//     setMessage("")
-//     // refetch()
-//   }
-
-//   return (
-//     <div className='flex flex-col items-center justify-center h-screen'>
-
-//       <div>
-
-//       </div>
-
-//       <div className="max-w-xl mx-auto mt-10 bg-white rounded-lg shadow-lg flex flex-col h-[500px]">
-//         <div className="px-6 py-4 border-b flex items-center justify-between bg-blue-900 rounded-t-lg">
-//           <h1 className="text-2xl font-bold text-white">Group Chat</h1>
-//         </div>
-
-//         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
-//           {messages.length === 0 &&<div className="text-gray-400 text-center mt-20">No messages yet.</div>}
-
-//           {messages.map((msg)=>(
-//             <div key={msg._id} className={`border border-gray-300 rounded-lg h-auto p-2 flex ${msg.username === name ? "justify-end" : "justify-start"}`}>
-//               <p className={`text-black font-bold border p-2 rounded-lg flex w-1/2 ${msg.username === name ? "bg-green-500 text-white" : "bg-yellow-500 text-black"}`}>{msg.text}</p>
-//             </div>
-//           ))}
-//         </div>
-
-//         <div className="px-6 py-4 border-t flex items-center bg-gray-50 rounded-b-lg">
-//           <form>
-//             <input
-//               onChange={(e) => setMessage(e.target.value)}
-//               value={message}
-//               type="text"
-//               placeholder="Type a message"
-//               className="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-//             />
-//             <button
-//               onClick={(e) => {
-//                 if (message.trim() !== "") {
-//                   sendMessage(e)
-//                   setMessage("")
-//                 } else {
-//                   e.preventDefault()
-//                 }
-//               }}
-//               className="bg-blue-600 text-white px-5 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
-//               Send
-//             </button>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-// export default Chat
-
-
-
-
-
-
 import React, { useState, useEffect, useRef } from 'react'
 import { io } from "socket.io-client"
 import { useSelector } from 'react-redux'
@@ -210,7 +120,6 @@ const Chat = () => {
       </div>
 
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col h-[70vh] min-h-[400px]">
-        {/* Header */}
         <div className="px-4 md:px-6 py-3 md:py-4 border-b flex items-center justify-between bg-blue-900 rounded-t-lg">
           <h1 className="text-xl md:text-2xl font-bold text-white">Group Chat</h1>
           <span className="text-xs md:text-sm text-blue-200 font-medium truncate ml-2">
