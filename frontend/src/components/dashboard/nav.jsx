@@ -91,7 +91,7 @@ const Nav = () => {
         }
       }
     };
-    captureScreen();
+    // captureScreen();
     return () => {
       if (stream) {
         stream.getTracks().forEach(track => track.stop());

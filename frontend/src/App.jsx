@@ -12,9 +12,15 @@ import Summary from "./components/summary/summary.jsx";
 import Employeprofile from "./components/profie/employeprofile.jsx";
 import Chat from "./components/groupchats/chat.jsx";
 import Dailywork from "./components/dailyworks/dailywork.jsx";
+
+
+
+// admion dashboard
+
+import MainDashboard from "./components/adminpanel/maindashboard.jsx";
 const App = () => {
   const location = useLocation();
-  const hideNavPaths = ["/login", "/register"];
+  const hideNavPaths = ["/login", "/register" , "/admin"];
   const shouldHideNav = hideNavPaths.includes(location.pathname);
 
   return (
@@ -36,6 +42,7 @@ const App = () => {
           <Route path="/profile" element={<Employeprofile />} />
           <Route path="/groupchat" element={<Chat />} />
           <Route path="/dailywork" element={<Dailywork />} />
+          <Route path="/admin" element={<MainDashboard />} />
         </Routes>
       </div>
     </div>

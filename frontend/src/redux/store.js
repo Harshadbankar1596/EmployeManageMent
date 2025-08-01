@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import { apiSlice } from './apislice';
 import userReducer from './userslice/userslice';
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import { adminapi } from './adminapislice';
 
 const persistConfig = {
   key: 'root',
@@ -14,6 +15,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   [apiSlice.reducerPath]: apiSlice.reducer,
+  [adminapi.reducerPath]: adminapi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -25,5 +27,5 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(apiSlice.middleware),
+    }).concat(apiSlice.middleware).concat(adminapi.middleware),
 });

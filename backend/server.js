@@ -3,6 +3,7 @@ import connectDB from "./db/db.js";
 import userRouter from "./routes/userrouts.js";
 import chatRouter from "./routes/chatrouts.js";
 import worksRouter from "./routes/worksrouts.js";
+import adminRouter from "./routes/adminrouts.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import http from "http";
@@ -37,6 +38,7 @@ app.use("/users", userRouter);
 app.use("/chat", chatRouter);
 app.use("/face", faceRouter);
 app.use("/works" , worksRouter);
+app.use("/admin" , adminRouter)
 
 connectDB().then(() => {
     server.listen(PORT, () => { 
