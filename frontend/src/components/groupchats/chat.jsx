@@ -53,7 +53,8 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-2 md:p-8">
+    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-2 md:p-8">
+      {/* <SmoothScroll/> */}
       <div className="w-full md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-lg shadow-md bg-white p-4 md:p-6 mb-6 md:mb-0 md:mr-8">
         <div className="flex flex-col items-center justify-center mb-8 w-full bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg shadow-lg p-4">
           <label
@@ -120,15 +121,15 @@ const Chat = () => {
       </div>
 
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col h-[70vh] min-h-[400px]">
-        <div className="px-4 md:px-6 py-3 md:py-4 border-b flex items-center justify-between bg-blue-900 rounded-t-lg">
+      <div className="px-4 md:px-6 py-3 md:py-4 border-b flex items-center justify-between bg-blue-900 rounded-t-lg">
           <h1 className="text-xl md:text-2xl font-bold text-white">Group Chat</h1>
           <span className="text-xs md:text-sm text-blue-200 font-medium truncate ml-2">
             {groupname}
           </span>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-3 md:px-6 py-3 md:py-4 space-y-3 bg-blue-50">
-          {isLoading && (
+        <div className="lenis-ignore overflow-y-auto flex-1 px-3 md:px-6 py-3 md:py-4 space-y-3 bg-blue-50 scroll-smooth">
+        {isLoading && (
             <div className="text-gray-400 text-center mt-20">Loading messages...</div>
           )}
           {!isLoading && localMessages.length === 0 && (

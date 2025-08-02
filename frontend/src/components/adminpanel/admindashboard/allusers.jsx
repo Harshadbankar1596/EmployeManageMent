@@ -12,9 +12,9 @@ const AllUsers = () => {
     if (error) return <p>Error loading users</p>;
 
     return (
-        <div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="py-6 px-2 md:px-8 bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen">
+            <h2 className="text-3xl font-bold text-center mb-8 text-purple-700 drop-shadow-lg">All Users</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {users?.userdata.map((user, index) => {
                     const base64Image = btoa(
                         new Uint8Array(user.img.data.data).reduce(
@@ -25,21 +25,21 @@ const AllUsers = () => {
                     return (
                         <div
                             key={index}
-                            className="border p-4 rounded-md flex items-center justify-between gap-4"
+                            className="bg-white shadow-xl rounded-2xl p-6 flex flex-col items-center transition-transform hover:scale-105 hover:shadow-2xl duration-300"
                         >
-                            <div className='flex items-center gap-5'>
+                            <div className="relative mb-4">
                                 <img
                                     src={`data:image/jpeg;base64,${base64Image}`}
                                     alt={user.name}
-                                    className="w-16 h-16 object-cover rounded-full"
+                                    className="w-24 h-24 object-cover rounded-full border-4 border-purple-300 shadow-md"
                                 />
-                                <p className="text-lg font-medium">{user.name}</p>
+                                <span className="absolute bottom-0 right-0 w-5 h-5 bg-green-400 border-2 border-white rounded-full"></span>
                             </div>
-                            <div>
-                                <button className='bg-yellow-500 py-2 px-5 rounded-md'>
-                                    Viwe Profile
-                                </button>
-                            </div>
+                            <p className="text-xl font-semibold text-gray-800 mb-2">{user.name}</p>
+                            <p className="text-sm text-gray-500 mb-4">{user.email}</p>
+                            <button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white py-2 px-6 rounded-full font-medium shadow hover:from-blue-500 hover:to-purple-500 transition-colors duration-200">
+                                View Profile
+                            </button>
                         </div>
                     );
                 })}

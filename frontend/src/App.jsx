@@ -12,6 +12,8 @@ import Summary from "./components/summary/summary.jsx";
 import Employeprofile from "./components/profie/employeprofile.jsx";
 import Chat from "./components/groupchats/chat.jsx";
 import Dailywork from "./components/dailyworks/dailywork.jsx";
+import SmoothScroll from "./lenis.jsx";
+import "./App.css"
 
 
 
@@ -25,6 +27,7 @@ const App = () => {
 
   return (
     <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen">
+      <SmoothScroll />
       <div className="w-full lg:w-1/4 xl:w-1/5 mb-4 lg:mb-0">
         <Side />
       </div>
@@ -40,7 +43,7 @@ const App = () => {
           <Route path="/calender" element={<CalendarComponent />} />
           <Route path="/summary" element={<Summary />} />
           <Route path="/profile" element={<Employeprofile />} />
-          <Route path="/groupchat" element={<Chat />} />
+          <Route path="/groupchat"  element={<Chat />} />
           <Route path="/dailywork" element={<Dailywork />} />
           <Route path="/admin" element={<MainDashboard />} />
         </Routes>
