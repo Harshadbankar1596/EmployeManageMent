@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { io } from "socket.io-client"
 import { useSelector } from 'react-redux'
 import { useGetMessagesQuery , useCreateGroupMutation } from '../../redux/apislice'
+import SmoothScroll from '../../lenis'
 
 const socket = io("http://localhost:5000")
 
@@ -9,7 +10,7 @@ const Chat = () => {
   const bottomRef = useRef(null)
 
   const [creategroup, setCreategroup] = useState("")
-  const [groupname, setGroupname] = useState("")
+  const [groupname, setGroupname] = useState("Global")
   const name = useSelector((state) => state.user.name)
   const [localMessages, setLocalMessages] = useState([])
 
@@ -53,10 +54,10 @@ const Chat = () => {
   }
 
   return (
-    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-2 md:p-8">
-      {/* <SmoothScroll/> */}
-      <div className="w-full md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-lg shadow-md bg-white p-4 md:p-6 mb-6 md:mb-0 md:mr-8">
-        <div className="flex flex-col items-center justify-center mb-8 w-full bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg shadow-lg p-4">
+    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-2 md:p-8 animate-fade-in">
+      
+      <div className="w-full md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-lg shadow-md bg-white p-4 md:p-6 mb-6 md:mb-0 md:mr-8 animate-slide-in-left">
+        <div className="flex flex-col items-center justify-center mb-8 w-full bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg shadow-lg p-4 animate-fade-in">
           <label
             htmlFor="groupname"
             className="text-lg font-bold text-blue-800 mb-3 tracking-wide"
@@ -70,7 +71,7 @@ const Chat = () => {
               onChange={(e) => setCreategroup(e.target.value)}
               type="text"
               placeholder="Enter Group Name"
-              className="flex-1 border border-blue-300 bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-blue-900 placeholder-gray-400 shadow-sm"
+              className="flex-1 border border-blue-300 bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-blue-900 placeholder-gray-400 shadow-sm animate-input-pop"
               style={{ minWidth: 0 }}
             />
             <button
@@ -78,6 +79,7 @@ const Chat = () => {
                 ${isCreating || !creategroup.trim()
                   ? "bg-blue-300 text-white cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700 text-white"}
+                animate-bounce-once
               `}
               onClick={() => createnewgroup()}
               disabled={isCreating || !creategroup.trim()}
@@ -97,19 +99,19 @@ const Chat = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-start w-full gap-2">
+        <div className="flex flex-col items-start w-full gap-2 animate-fade-in">
           <span className="text-xs text-gray-400 mb-1">Your Groups</span>
-          <div className="flex flex-col gap-1 w-full max-h-60 overflow-y-auto">
+          <div data-lenis-prevent className="flex flex-col gap-1 w-full max-h-60 overflow-y-auto">
             {data?.groups?.length === 0 && (
-              <span className="text-gray-400 text-sm px-2 py-1">No groups yet.</span>
+              <span className="text-gray-400 text-sm px-2 py-1 animate-fade-in">No groups yet.</span>
             )}
             {data?.groups?.map((group) => (
               <button
                 key={group}
                 onClick={() => setGroupname(group)}
-                className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                className={`w-full text-left px-3 py-2 rounded-md transition-colors duration-200 ${
                   group === groupname
-                    ? "bg-blue-100 text-blue-700 font-bold"
+                    ? "bg-blue-100 text-blue-700 font-bold animate-pop"
                     : "bg-gray-100 hover:bg-blue-50 text-blue-500"
                 }`}
               >
@@ -120,20 +122,21 @@ const Chat = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col h-[70vh] min-h-[400px]">
-      <div className="px-4 md:px-6 py-3 md:py-4 border-b flex items-center justify-between bg-blue-900 rounded-t-lg">
+      <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg flex flex-col h-[70vh] min-h-[400px] animate-slide-in-up">
+        <div className="px-4 md:px-6 py-3 md:py-4 border-b flex items-center justify-between bg-blue-900 rounded-t-lg animate-fade-in">
           <h1 className="text-xl md:text-2xl font-bold text-white">Group Chat</h1>
           <span className="text-xs md:text-sm text-blue-200 font-medium truncate ml-2">
             {groupname}
           </span>
         </div>
 
-        <div className="lenis-ignore overflow-y-auto flex-1 px-3 md:px-6 py-3 md:py-4 space-y-3 bg-blue-50 scroll-smooth">
+        <div data-lenis-prevent className="overflow-y-auto flex-1 px-3 md:px-6 py-3 md:py-4 space-y-3 bg-blue-50 scroll-smooth animate-fade-in">
+          
         {isLoading && (
-            <div className="text-gray-400 text-center mt-20">Loading messages...</div>
+            <div className="text-gray-400 text-center mt-20 animate-pulse">Loading messages...</div>
           )}
           {!isLoading && localMessages.length === 0 && (
-            <div className="text-gray-400 text-center mt-20">No messages yet.</div>
+            <div className="text-gray-400 text-center mt-20 animate-fade-in">No messages yet.</div>
           )}
 
           {localMessages.map((msg, idx) => (
@@ -142,13 +145,13 @@ const Chat = () => {
               key={msg._id || idx}
               className={`flex flex-col items-${
                 msg.username === name ? "end" : "start"
-              }`}
+              } animate-chat-bubble`}
             >
               <div
-                className={`rounded-lg p-2 flex flex-col max-w-[85%] break-words text-base md:text-lg shadow-sm ${
+                className={`rounded-lg p-2 flex flex-col max-w-[85%] break-words text-base md:text-lg shadow-sm transition-all duration-300 ${
                   msg.username === name
-                    ? "bg-green-500 text-white self-end"
-                    : "bg-yellow-400 text-black self-start"
+                    ? "bg-green-500 text-white self-end animate-bubble-right"
+                    : "bg-yellow-400 text-black self-start animate-bubble-left"
                 }`}
               >
                 {msg.username !== name && (
@@ -176,7 +179,7 @@ const Chat = () => {
           ))}
         </div>
 
-        <div className="px-3 md:px-6 py-3 border-t flex items-center bg-gray-50 rounded-b-lg">
+        <div className="px-3 md:px-6 py-3 border-t flex items-center bg-gray-50 rounded-b-lg animate-fade-in">
           <form className="flex w-full" onSubmit={(e) => {
             if (message.trim() !== "") {
               sendMessage(e)
@@ -189,11 +192,11 @@ const Chat = () => {
               value={message}
               type="text"
               placeholder="Type a message"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm md:text-base"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm md:text-base animate-input-pop"
             />
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 md:px-5 py-2 rounded-r-md hover:bg-blue-700 transition-colors text-sm md:text-base"
+              className="bg-blue-600 text-white px-4 md:px-5 py-2 rounded-r-md hover:bg-blue-700 transition-colors text-sm md:text-base animate-bounce-once"
               disabled={message.trim() === ""}
             >
               Send

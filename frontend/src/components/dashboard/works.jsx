@@ -41,7 +41,7 @@ const Works = () => {
         }));
     };
 
-   
+
 
     const handleTaskstatus = async (objid, taskid) => {
         try {
@@ -216,43 +216,41 @@ const Works = () => {
 
                                     {workItem.task && workItem.task.length > 0 ? (
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                                        {workItem.task.map((task) => (
-                                          <div
-                                            key={task._id}
-                                            className={`
+                                            {workItem.task.map((task) => (
+                                                <div
+                                                    key={task._id}
+                                                    className={`
                                               p-3 sm:p-4 rounded-lg border transition-all duration-300 ease-in-out hover:shadow-md 
-                                              flex items-center min-w-0 ${task.status 
-                                                ? "border-green-200 bg-green-50" 
-                                                : "border-red-200 bg-red-50"
-                                              }`}
-                                          >
-                                            <div className="flex items-center min-w-0 flex-1 gap-3">
-                                              <div
-                                                onClick={() => handleTaskstatus(workItem._id, task._id)}
-                                                className={`flex-shrink-0 p-1.5 sm:p-2 cursor-pointer rounded-full ${
-                                                  task.status 
-                                                    ? "bg-green-200 text-green-700" 
-                                                    : "bg-red-200 text-red-700"
-                                                }`}
-                                              >
-                                                {task.status ? (
-                                                  <FaCheck className="h-4 w-4 sm:h-5 sm:w-5" />
-                                                ) : (
-                                                  <FcCancel className="h-4 w-4 sm:h-5 sm:w-5" />
-                                                )}
-                                              </div>
-                                              <p 
-                                                className={`font-medium truncate min-w-0 ${
-                                                  task.status ? "text-green-800" : "text-red-800"
-                                                }`}
-                                                title={task.title} 
-                                              >
-                                                {task.title}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        ))}
-                                      </div>
+                                              flex items-center min-w-0 ${task.status
+                                                            ? "border-green-200 bg-green-50"
+                                                            : "border-red-200 bg-red-50"
+                                                        }`}
+                                                >
+                                                    <div className="flex items-center min-w-0 flex-1 gap-3">
+                                                        <div
+                                                            onClick={() => handleTaskstatus(workItem._id, task._id)}
+                                                            className={`flex-shrink-0 p-1.5 sm:p-2 cursor-pointer rounded-full ${task.status
+                                                                    ? "bg-green-200 text-green-700"
+                                                                    : "bg-red-200 text-red-700"
+                                                                }`}
+                                                        >
+                                                            {task.status ? (
+                                                                <FaCheck className="h-4 w-4 sm:h-5 sm:w-5" />
+                                                            ) : (
+                                                                <FcCancel className="h-4 w-4 sm:h-5 sm:w-5" />
+                                                            )}
+                                                        </div>
+                                                        <p
+                                                            className={`font-medium truncate min-w-0 ${task.status ? "text-green-800" : "text-red-800"
+                                                                }`}
+                                                            title={task.title}
+                                                        >
+                                                            {task.title}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     ) : null}
                                 </div>
                             </div>

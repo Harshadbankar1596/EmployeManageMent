@@ -190,10 +190,10 @@ const SummaryCharts = () => {
 
 
   return (
-    <div className="sm:p-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mb-6">
-        <FaCalendarCheck className="text-2xl text-indigo-600" />
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Attendance & Work Analytics</h2>
+    <div className="sm:p-4 transition-all duration-500 ease-in-out">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mb-6 animate-fade-in">
+        <FaCalendarCheck className="text-2xl text-indigo-600 transition-transform duration-500 group-hover:scale-110" />
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 transition-colors duration-500">Attendance & Work Analytics</h2>
       </div>
       <div
         className={`grid gap-2 sm:gap-3 mb-6`}
@@ -204,27 +204,27 @@ const SummaryCharts = () => {
         {summaryCards.map((card, index) => (
           <Card 
             key={index} 
-            className="shadow rounded-lg sm:rounded-xl p-0"
+            className="shadow rounded-lg sm:rounded-xl p-0 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 bg-white/90"
             sx={{
               minWidth: 0,
               boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
               margin: 0,
             }}
           >
-            <CardContent className="flex flex-col items-center p-2 sm:p-3">
-              <div className={`p-2 sm:p-3 rounded-full mb-2 sm:mb-3 ${card.color}`}>
+            <CardContent className="flex flex-col items-center p-2 sm:p-3 animate-fade-in">
+              <div className={`p-2 sm:p-3 rounded-full mb-2 sm:mb-3 ${card.color} transition-all duration-500 group-hover:scale-110`}>
                 {card.icon}
               </div>
               <Typography 
                 variant="subtitle1" 
-                className="font-semibold text-gray-700"
+                className="font-semibold text-gray-700 transition-colors duration-500"
                 sx={{ fontSize: { xs: '1rem', sm: '1.15rem' }, lineHeight: 1.1 }}
               >
                 {card.value}
               </Typography>
               <Typography 
                 variant="caption" 
-                className="text-gray-500 mt-0.5 sm:mt-1"
+                className="text-gray-500 mt-0.5 sm:mt-1 transition-colors duration-500"
                 sx={{ fontSize: { xs: '0.75rem', sm: '0.9rem' } }}
               >
                 {card.title}
@@ -234,15 +234,15 @@ const SummaryCharts = () => {
         ))}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
-        <Card className="shadow-lg rounded-xl h-full">
-          <CardContent>
+        <Card className="shadow-lg rounded-xl h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 bg-white/95">
+          <CardContent className="animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <FaBusinessTime className="text-indigo-500" />
-              <Typography variant="h6" className="font-semibold">
+              <FaBusinessTime className="text-indigo-500 transition-transform duration-500 group-hover:scale-110" />
+              <Typography variant="h6" className="font-semibold transition-colors duration-500">
                 Attendance Distribution
               </Typography>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center transition-all duration-500">
               <PieChart
                 series={[
                   {
@@ -258,28 +258,28 @@ const SummaryCharts = () => {
               />
             </div>
             <div className="grid grid-cols-3 gap-2 mt-4">
-              {attendanceData.map((item) => (
+              {attendanceData.map((item, idx) => (
                 <div 
                   key={item.id} 
-                  className="flex flex-col items-center p-2 rounded-lg"
+                  className="flex flex-col items-center p-2 rounded-lg transition-all duration-500 hover:scale-105"
                   style={{ backgroundColor: `${item.color}20` }}
                 >
-                  <span className="font-semibold">{item.value}</span>
-                  <span className="text-xs">{item.label}</span>
+                  <span className="font-semibold transition-colors duration-500">{item.value}</span>
+                  <span className="text-xs transition-colors duration-500">{item.label}</span>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
-        <Card className="shadow-lg rounded-xl h-full">
-          <CardContent>
+        <Card className="shadow-lg rounded-xl h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 bg-white/95">
+          <CardContent className="animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <FaRegClock className="text-indigo-500" />
-              <Typography variant="h6" className="font-semibold">
+              <FaRegClock className="text-indigo-500 transition-transform duration-500 group-hover:scale-110" />
+              <Typography variant="h6" className="font-semibold transition-colors duration-500">
                 Work Time Analysis
               </Typography>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center transition-all duration-500">
               <PieChart
                 series={[
                   {
@@ -295,28 +295,28 @@ const SummaryCharts = () => {
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4">
-              {workTimeData.map((item) => (
+              {workTimeData.map((item, idx) => (
                 <div 
                   key={item.id} 
-                  className="flex flex-col items-center p-2 rounded-lg"
+                  className="flex flex-col items-center p-2 rounded-lg transition-all duration-500 hover:scale-105"
                   style={{ backgroundColor: `${item.color}20` }}
                 >
-                  <span className="font-semibold">{item.value} hours</span>
-                  <span className="text-xs">{item.label}</span>
+                  <span className="font-semibold transition-colors duration-500">{item.value} hours</span>
+                  <span className="text-xs transition-colors duration-500">{item.label}</span>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
-        <Card className="shadow-lg rounded-xl h-full col-span-1 xl:col-span-1">
-          <CardContent>
+        <Card className="shadow-lg rounded-xl h-full col-span-1 xl:col-span-1 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 bg-white/95">
+          <CardContent className="animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <FaChartBar className="text-indigo-500" />
-              <Typography variant="h6" className="font-semibold">
+              <FaChartBar className="text-indigo-500 transition-transform duration-500 group-hover:scale-110" />
+              <Typography variant="h6" className="font-semibold transition-colors duration-500">
                 Daily Hours (Last 7 Days)
               </Typography>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center transition-all duration-500">
               <BarChart
                 xAxis={[{ 
                   scaleType: 'band', 
@@ -336,15 +336,15 @@ const SummaryCharts = () => {
         </Card>
       </div>
       <div className="mt-4">
-        <Card className="shadow-lg rounded-xl">
-          <CardContent>
+        <Card className="shadow-lg rounded-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 bg-white/95">
+          <CardContent className="animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <FaChartBar className="text-indigo-500" />
-              <Typography variant="h6" className="font-semibold">
+              <FaChartBar className="text-indigo-500 transition-transform duration-500 group-hover:scale-110" />
+              <Typography variant="h6" className="font-semibold transition-colors duration-500">
                 Monthly Work Hours Trend
               </Typography>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center transition-all duration-500">
               <LineChart
                 xAxis={[{ 
                   data: monthlyData.map(d => d.month), 
@@ -365,6 +365,17 @@ const SummaryCharts = () => {
           </CardContent>
         </Card>
       </div>
+      <style>
+        {`
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(16px);}
+            to { opacity: 1; transform: translateY(0);}
+          }
+          .animate-fade-in {
+            animation: fade-in 0.7s cubic-bezier(0.4,0,0.2,1) both;
+          }
+        `}
+      </style>
     </div>
   );
 };
