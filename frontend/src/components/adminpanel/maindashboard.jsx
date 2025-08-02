@@ -1,15 +1,22 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import AllUsers from './admindashboard/allusers'
-import Punchsection from '../dashboard/punchsection'
+import ProjectSummary from './admindashboard/projectsummary'
+import Adminaction from './admindashboard/adminaction.jsx'
 
 const MainDashboard = () => {
+  const location = useLocation();
+
+  const isActive = (path) => {
+    return location.pathname === `/admin${path}`;
+  };
+
   return (
-    <div className='py-5'>
-      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+    <div>
+      <Adminaction/>
       <Routes>
-        <Route path='' element={<Punchsection />} />        
-        <Route path='users' element={<AllUsers />} />      
+        <Route path='Employee' element={<AllUsers />} />
+        <Route path='projects' element={<ProjectSummary />} />
       </Routes>
     </div>
   )

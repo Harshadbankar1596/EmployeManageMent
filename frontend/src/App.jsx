@@ -14,13 +14,12 @@ import Chat from "./components/groupchats/chat.jsx";
 import Dailywork from "./components/dailyworks/dailywork.jsx";
 import SmoothScroll from "./lenis.jsx";
 import "./App.css"
-
-
-
-
+import ProtectedRoute from "./components/protectedrout.jsx";
+// Admin dashboard
 import MainDashboard from "./components/adminpanel/maindashboard.jsx";
+
 const App = () => {
-  const location = useLocation()
+  const location = useLocation();
   const pathname = location.pathname;
 
   const hideQuickActionPaths = ["/login", "/register", "/admin"];
@@ -28,6 +27,7 @@ const App = () => {
 
   const hideNavPaths = ["/login", "/register"];
   const shouldHideNav = hideNavPaths.includes(pathname);
+
   return (
     <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen">
       <SmoothScroll />
@@ -36,8 +36,8 @@ const App = () => {
       </div>
 
       <div className="w-full lg:w-3/4 xl:w-4/5 py-3 sm:py-4 lg:py-5 px-3 sm:px-4 lg:px-5">
-      {!shouldHideNav && <Nav />}
-      {!shouldHideQuickAction && <Quickaction />}
+        {!shouldHideNav && <Nav />}
+        {!shouldHideQuickAction && <Quickaction />}
         <Routes>
           <Route path="/" element={<Maindashboard />} />
           <Route path="/login" element={<Login />} />
@@ -48,7 +48,11 @@ const App = () => {
           <Route path="/profile" element={<Employeprofile />} />
           <Route path="/groupchat" element={<Chat />} />
           <Route path="/dailywork" element={<Dailywork />} />
-          <Route path="/admin/*" element={<MainDashboard />} />
+          <Route path="/admin/*" element={
+            // <ProtectedRoute>
+              <MainDashboard />
+            // </ProtectedRoute>
+          } />
         </Routes>
       </div>
     </div>

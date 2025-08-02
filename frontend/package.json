@@ -21,6 +21,8 @@
     "add": "^2.0.6",
     "dotenv": "^17.2.0",
     "face-api.js": "^0.22.2",
+    "framer-motion": "^12.23.12",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.526.0",
     "react": "^19.1.0",
     "react-big-calendar": "^1.19.4",

@@ -8,7 +8,7 @@ import { useLoginUserMutation } from "../../redux/apislice";
 import { useMatchFaceMutation } from "../../redux/apislice";
 
 const Login = () => {
-  const [matchFace , { isLoading }] = useMatchFaceMutation();
+  const [matchFace, { isLoading }] = useMatchFaceMutation();
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", remember: false });
   const dispatch = useDispatch();
@@ -39,19 +39,29 @@ const Login = () => {
     setErrors({});
     setSubmitError("");
     try {
-      
+
       const res = await loginUser(form).unwrap();
       console.log("res", res)
       dispatch(setUser(res.user));
       setSuccess(true);
       setForm({ email: "", password: "", remember: false });
-      
-      setTimeout(() => {
-        setSuccess(false);
-        navigate("/");
-      }, 1000);
+
+      if (res.user.isadmin) {
+        setTimeout(() => {
+          setSuccess(false);
+          navigate("/admin");
+        }, 1000);
+      }
+      else {
+        setTimeout(() => {
+          setSuccess(false);
+          navigate("/");
+        }, 1000);
+      }
+
+
     } catch (err) {
-      
+
       let errorMsg = "Invalid credentials";
       if (err && err.data && err.data.message) {
         errorMsg = err.data.message;
@@ -74,30 +84,30 @@ const Login = () => {
       audio: false,
     };
     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-       var stream = video.srcObject = stream;
+      var stream = video.srcObject = stream;
       video.play();
     });
   }, []);
 
 
- async function capture() {
+  async function capture() {
 
     const canvas = document.getElementById("canvas");
     const video = document.getElementById("video");
     canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
     const image = canvas.toDataURL("image/jpeg");
-    if (isLoading) console.log("isLoading") ;
+    if (isLoading) console.log("isLoading");
     const res = await matchFace(image).unwrap();
     console.log("res", res);
 
-    if (res.success) { 
+    if (res.success) {
       setSuccess(true);
       video.srcObject = null;
     } else {
       setSubmitError(res.message);
       alert("No match found");
     }
-    
+
   }
 
   return (
