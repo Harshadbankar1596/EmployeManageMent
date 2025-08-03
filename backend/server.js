@@ -10,6 +10,7 @@ import http from "http";
 import { Server } from "socket.io";
 import { socketHandler } from "./controller/chatcontroller.js";
 import faceRouter from "./routes/facerout.js";
+import leaverouts from "./routes/leaverouts.js"
 
 const app = express();
 const PORT = 5000;
@@ -26,8 +27,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:5173',
-    credentials: true
-}));
+    credentials: true,               
+  }));
 
 socketHandler(io);
 
@@ -39,6 +40,7 @@ app.use("/chat", chatRouter);
 app.use("/face", faceRouter);
 app.use("/works" , worksRouter);
 app.use("/admin" , adminRouter)
+app.use("/leave" , leaverouts)
 
 connectDB().then(() => {
     server.listen(PORT, () => { 

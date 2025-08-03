@@ -55,7 +55,7 @@ export const loginUser = async (req, res) => {
 
         if (remember) {
             token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '7d' });
-            res.cookie("token", token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+            res.cookie("token", token, { httpOnly: true, secure: false, sameSite: 'Lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
         }
 
         else {
@@ -68,10 +68,10 @@ export const loginUser = async (req, res) => {
             email: user.email,
             phone: user.phone,
             role: user.role,
-            id : user._id,
-            isadmin : user.isadmin
+            id: user._id,
+            isadmin: user.isadmin
         }
-        
+
 
         res.status(200).json({ message: "Login successful.", user: userdata, token: token });
         // console.log("user : : :  :    : : : : : : : : : ", true)
@@ -110,11 +110,11 @@ export const verifyToken = async (req, res) => {
             phone: user.phone,
             role: user.role,
             logs: user.logs,
-            id : user._id,
+            id: user._id,
         }
         // workingOn: user.workingOn,
         // summary: user.summary
-        
+
 
         res.status(200).json({ user: userdata });
     } catch (error) {
@@ -125,7 +125,7 @@ export const verifyToken = async (req, res) => {
 
 export const addpunch = async (req, res) => {
     try {
-        const { id , currentHours } = req.body;
+        const { id, currentHours } = req.body;
 
         const user = await User.findById(id);
         if (!user) {
@@ -155,7 +155,7 @@ export const addpunch = async (req, res) => {
             currentlog = newlog;
         }
 
-        if(currentHours){
+        if (currentHours) {
             currentHours >= 8 ? user.logs[0].status = "present" : currentHours >= 4 ? user.logs[0].status = "halfday" : user.logs[0].status = "pending"
         }
 
@@ -201,16 +201,16 @@ export const workstatus = async (req, res) => {
     }
 };
 
-export const addtask = async (req , res) => {
+export const addtask = async (req, res) => {
     try {
 
-        const {userid , objid , task} = req.body
+        const { userid, objid, task } = req.body
 
         const user = await User.findById(userid)
 
-        if(!user) res.status(404).json({message : "user not found"});
+        if (!user) res.status(404).json({ message: "user not found" });
 
-        user.workingOn.find(work => work._id.toString() === objid).task.unshift({title : task , status : false})
+        user.workingOn.find(work => work._id.toString() === objid).task.unshift({ title: task, status: false })
 
         let cout = 0
 
@@ -232,11 +232,11 @@ export const addtask = async (req , res) => {
             await user.save()
         }
 
-        res.status(200).json({message : "task added", works : user.workingOn})
-        
+        res.status(200).json({ message: "task added", works: user.workingOn })
+
     } catch (error) {
         console.log("error in addtask")
-        res.status(500).json({message : "server error"})
+        res.status(500).json({ message: "server error" })
     }
 }
 
@@ -301,28 +301,28 @@ export const getlogs = async (req, res) => {
     }
 };
 
-export const summary = async (req , res) => {
+export const summary = async (req, res) => {
     try {
 
-        const {id} = req.body
+        const { id } = req.body
 
-        if(!id) res.status(400).json({message : "id is required"})
+        if (!id) res.status(400).json({ message: "id is required" })
 
-        const user = await User.findById(id)   
+        const user = await User.findById(id)
 
-        if(!user) res.status(404).json({message : "user not found"})
+        if (!user) res.status(404).json({ message: "user not found" })
 
-        
+
         const totalhours = user.logs
         const presentdays = user.logs.filter((log) => log.status === "present").length
         const halfdays = user.logs.filter((log) => log.status === "halfday").length
         const unactivedays = user.logs.filter((log) => log.status === "pending").length
         // console.log("totalhours" , user.logs.map((log) => log.status === "present" || log.status === "halfday" ? log.punchs : null))
-        
-        res.status(200).json({message : "summary fetched", totalhours , presentdays , halfdays , unactivedays})
+
+        res.status(200).json({ message: "summary fetched", totalhours, presentdays, halfdays, unactivedays })
 
     } catch (error) {
-        console.log("error in summery",error)
+        console.log("error in summery", error)
         res.status(500).json({ message: "server error" })
     }
 };
@@ -345,7 +345,7 @@ export const uploadprofileimg = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-       
+
         let matches = img.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
         if (!matches || matches.length !== 3) {
             return res.status(400).json({ message: "Invalid image format" });
@@ -370,20 +370,20 @@ export const uploadprofileimg = async (req, res) => {
 export const getimage = async (req, res) => {
     try {
 
-        const {id} = req.body
+        const { id } = req.body
 
         const user = await User.findById(id)
 
-        if(!user) res.status(404).json({message : "user not found"})
+        if (!user) res.status(404).json({ message: "user not found" })
 
-        if(!user.profileimg) res.status(404).json({message : "no image found"})
-        
-        res.status(200).json({message : "image fetched", image : user.profileimg.data})   
-        
-        
+        if (!user.profileimg) res.status(404).json({ message: "no image found" })
+
+        res.status(200).json({ message: "image fetched", image: user.profileimg.data })
+
+
     } catch (error) {
         console.log("error in getimage")
-        res.status(500).json({message : "server error"})
+        res.status(500).json({ message: "server error" })
     }
 }
 
@@ -392,11 +392,11 @@ export const updateprofile = async (req, res) => {
 
         // console.log("updateprofile", req.body)
 
-        const {id , data} = req.body
+        const { id, data } = req.body
 
         const user = await User.findById(id)
 
-        if(!user) res.status(404).json({message : "user not found"})
+        if (!user) res.status(404).json({ message: "user not found" })
 
         user.name = data.name
         user.email = data.email
@@ -409,11 +409,11 @@ export const updateprofile = async (req, res) => {
             email: user.email,
             phone: user.phone,
             role: user.role,
-            id : user._id,
+            id: user._id,
         }
 
-        res.status(200).json({message : "profile updated", user : userdata})
-        
+        res.status(200).json({ message: "profile updated", user: userdata })
+
     } catch (error) {
         console.log("error in update profile")
     }
@@ -421,11 +421,11 @@ export const updateprofile = async (req, res) => {
 
 export const screenshot = async (req, res) => {
     try {
-        const {name , date , img} = req.body
-        const screenshot = new Screenshot({name , date , image : {data : img, contentType : "image/png"}})
+        const { name, date, img } = req.body
+        const screenshot = new Screenshot({ name, date, image: { data: img, contentType: "image/png" } })
         await screenshot.save()
 
-        res.status(200).json({message : "screenshot added"})
+        res.status(200).json({ message: "screenshot added" })
     } catch (error) {
         console.log("error in screenshot")
     }

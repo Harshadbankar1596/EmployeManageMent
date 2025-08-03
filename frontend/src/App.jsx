@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Register from "./components/login/register";
 import Login from "./components/login/login";
 import Maindashboard from "./components/dashboard/maindashboard";
@@ -12,17 +12,18 @@ import Summary from "./components/summary/summary.jsx";
 import Employeprofile from "./components/profie/employeprofile.jsx";
 import Chat from "./components/groupchats/chat.jsx";
 import Dailywork from "./components/dailyworks/dailywork.jsx";
+import Leave from "./components/leaves/leave.jsx";
 import SmoothScroll from "./lenis.jsx";
-import "./App.css"
 import ProtectedRoute from "./components/protectedrout.jsx";
-// Admin dashboard
 import MainDashboard from "./components/adminpanel/maindashboard.jsx";
+import AllUsers from "./components/adminpanel/admindashboard/allusers.jsx";
+import ProjectSummary from "./components/adminpanel/admindashboard/projectsummary.jsx";
 
 const App = () => {
   const location = useLocation();
   const pathname = location.pathname;
 
-  const hideQuickActionPaths = ["/login", "/register", "/admin"];
+  const hideQuickActionPaths = ["/login", "/register"];
   const shouldHideQuickAction = hideQuickActionPaths.includes(pathname) || pathname.startsWith("/admin");
 
   const hideNavPaths = ["/login", "/register"];
@@ -35,24 +36,29 @@ const App = () => {
         <Side />
       </div>
 
-      <div className="w-full lg:w-3/4 xl:w-4/5 py-3 sm:py-4 lg:py-5 px-3 sm:px-4 lg:px-5">
+      <div className="w-full lg:w-3/4 xl:w-4/5 sm:py-4 lg:py-5 px-3 sm:px-4 lg:px-10">
         {!shouldHideNav && <Nav />}
         {!shouldHideQuickAction && <Quickaction />}
+
         <Routes>
           <Route path="/" element={<Maindashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/works" element={<Works />} />
+          <Route path="/leave" element={<Leave />} />
           <Route path="/calender" element={<CalendarComponent />} />
           <Route path="/summary" element={<Summary />} />
           <Route path="/profile" element={<Employeprofile />} />
           <Route path="/groupchat" element={<Chat />} />
           <Route path="/dailywork" element={<Dailywork />} />
-          <Route path="/admin/*" element={
-            // <ProtectedRoute>
-              <MainDashboard />
-            // </ProtectedRoute>
-          } />
+
+          <Route path="/admin/*" element={<MainDashboard />}>
+            <Route path="employee" element={<AllUsers />} />
+            <Route path="projects" element={<ProjectSummary />} />
+            <Route path="calenderadmin" element={<CalendarComponent />} />
+            <Route path="chat" element={<Chat />} />
+            <Route path="*" element={<Navigate to="" />} />
+          </Route>
         </Routes>
       </div>
     </div>
