@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect , useRef } from 'react'
 import { Routes, Route, Link, useLocation, Outlet } from 'react-router-dom'
 import AllUsers from './admindashboard/allusers'
 import ProjectSummary from './admindashboard/projectsummary'
@@ -14,10 +14,12 @@ const MainDashboard = () => {
   // const isActive = (path) => location.pathname === `/admin/${path}`;
   const [isadmin, setisadmin] = useState(false)
   const [veryify] = useVerifyisadminMutation()
+  const [pendingleaves , setpendingleaves] = useState(0)
 
   useEffect(() => {
-    veryify(id).unwrap().then(() => {
-      console.log("is admin")
+    veryify(id).unwrap().then((v) => {
+      console.log("is admin" , v)
+      setpendingleaves(v.pendingleaves)
       setisadmin(true)
     })
   }, [])
@@ -26,7 +28,7 @@ const MainDashboard = () => {
 
     return (
       <div>
-        <Adminaction />
+        <Adminaction pendingleaves={pendingleaves} />
         <Outlet />
       </div>
     )

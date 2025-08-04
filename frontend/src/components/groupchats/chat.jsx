@@ -72,7 +72,7 @@ const Chat = () => {
   }, [error])
 
   return (
-    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-200 p-2 md:p-6">
+    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen  p-2 md:p-6">
       {/* Sidebar */}
       <motion.aside
         className="w-full sm:w-80 md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-2xl shadow-lg bg-white p-4 md:p-6 mb-4 md:mb-0 md:mr-8"
@@ -200,6 +200,7 @@ const Chat = () => {
           )}
 
           <AnimatePresence>
+            <SmoothScroll/>
             {localMessages.map((msg, idx) => (
               <motion.div
                 ref={idx === localMessages.length - 1 ? bottomRef : null}

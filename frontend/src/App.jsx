@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/protectedrout.jsx";
 import MainDashboard from "./components/adminpanel/maindashboard.jsx";
 import AllUsers from "./components/adminpanel/admindashboard/allusers.jsx";
 import ProjectSummary from "./components/adminpanel/admindashboard/projectsummary.jsx";
+import Adminleaves from "./components/adminpanel/admindashboard/adminleaves.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -57,6 +58,7 @@ const App = () => {
             <Route path="projects" element={<ProjectSummary />} />
             <Route path="calenderadmin" element={<CalendarComponent />} />
             <Route path="chat" element={<Chat />} />
+            <Route path="leaves" element={<Adminleaves/>}/>
             <Route path="*" element={<Navigate to="" />} />
           </Route>
         </Routes>

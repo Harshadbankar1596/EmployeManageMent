@@ -1,5 +1,5 @@
 import User from "../model/userschema.js";
-
+import leaves from "../model/leaveschema.js";
 
 export const getallprojects = async (req, res) => {
     res.status(200).json({ message: "all projects" })
@@ -30,7 +30,11 @@ export const verifyisadmin = async (req , res)=>{
 
         if(!user) res.status(422).json({message : "user not found"});
 
-        if(user.isadmin) res.status(200).json({message : "true"})
+        const leave = await leaves.find({status : "pending"})
+
+        // console.log("leaves => " , leave)
+
+        if(user.isadmin) res.status(200).json({message : "true" , pendingleaves : leave.length})
         
     } catch (error) {
         res.status(500).json({message : "error in vryfy admin"})

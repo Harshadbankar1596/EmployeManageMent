@@ -11,10 +11,45 @@ export const leaveslice = createApi({
                 url : "/applyleaves",
                 method : "POST",
                 body : {id , formData}
+            }),
+            invalidatesTags : ["leave"]
+        }),
+        allleaves : builder.query({
+            query : (userid)=>({
+                url : "/allleaves",
+                method : "post",
+                body : {userid}
+            }),
+            invalidatesTags : ["leave"]
+        }),
+
+        getallleaves : builder.query({
+            query : ()=>({
+                url : "/getallleaves",
+                method : "get"
             })
+        }),
+
+        approvedleave : builder.mutation({
+            query : (id)=>({
+                url : "/approvedleave",
+                method : "post",
+                body : {id}
+            }),
+            invalidatesTags : ["leave"]
+        }),
+
+        rejectleave : builder.mutation({
+            query : (id)=>({
+                url : "/rejectleave",
+                method : "post",
+                body : {id}
+            }),
+            invalidatesTags : ["leave"]
         })
-    })
+    }),
+
 })
 
-export const {useApplyleavesMutation} = leaveslice
+export const {useApplyleavesMutation , useAllleavesQuery , useGetallleavesQuery , useApprovedleaveMutation , useRejectleaveMutation} = leaveslice
 

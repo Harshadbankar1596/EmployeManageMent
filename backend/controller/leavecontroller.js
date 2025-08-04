@@ -6,7 +6,7 @@ export const applyleaves = async (req , res) =>{
 
         const newleaveapply = new leaveschema({
             name : req.body.formData.name,
-            id : req.body.id,
+            userid : req.body.id,
             startDate : req.body.formData.startDate,
             endDate : req.body.formData.endDate,
             description : req.body.formData.description,
@@ -45,11 +45,11 @@ export const allleavs = async (req , res) =>{
 
     try {
 
-        const {name} = req.body
+        const {userid} = req.body
 
-        if(!name) res.status(400).json({message : "user not"})
+        if(!userid) res.status(400).json({message : "user not"})
 
-        const allleavs = await leaveschema.find({name : name})
+        const allleavs = await leaveschema.find({userid : userid})
 
         if(!allleavs) res.status(422).json({message : "not found leavs"});
 
@@ -65,7 +65,7 @@ export const allleavs = async (req , res) =>{
 
 }
 
-export const acseptleave = async (req , res)=>{
+export const approved = async (req , res)=>{
     try {
 
         const {id} = req.body
@@ -76,7 +76,7 @@ export const acseptleave = async (req , res)=>{
 
         if(!Leave) res.status(422).json({message : "leave not find"});
 
-        Leave.status = true
+        Leave.status = "approved"
 
         await Leave.save()
 
@@ -84,5 +84,28 @@ export const acseptleave = async (req , res)=>{
         
     } catch (error) {
         res.status(500).json({message : "error in acsept leave"})
+    }
+}
+
+export const rejectleave = async (req , res)=>{
+    try {
+
+        const {id} = req.body
+
+        if(!id) res.status(400).json({message : "id not found"});
+
+        const leave = await leaveschema.findById(id);
+
+        if(!leave) res.status(422).json({message : "invalid id"});
+
+        leave.status = "reject"
+
+        await leave.save()
+
+        res.status(200).json({message : "rejected leave done" , leave : leave})
+        
+    } catch (error) {
+        console.log("error in reject leave")
+        res.status(500).json({message : "error in reject leave req"})
     }
 }
