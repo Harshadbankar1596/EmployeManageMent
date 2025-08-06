@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 import http from "http";
 import { Server } from "socket.io";
 import { socketHandler } from "./controller/chatcontroller.js";
-import faceRouter from "./routes/facerout.js";
+// import faceRouter from "./routes/facerout.js";
 import leaverouts from "./routes/leaverouts.js"
 
 const app = express();
@@ -39,7 +39,7 @@ socketHandler(io);
 
 app.use("/users", userRouter);
 app.use("/chat", chatRouter);
-app.use("/face", faceRouter);
+// app.use("/face", faceRouter);
 app.use("/works" , worksRouter);
 app.use("/admin" , adminRouter)
 app.use("/leave" , leaverouts)
