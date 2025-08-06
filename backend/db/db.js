@@ -33,6 +33,6 @@ const connectDB = async () => {
         console.error("Employee DB connection error:", error);
         process.exit(1);
     }
-};
+}; 
 
 export default connectDB;
