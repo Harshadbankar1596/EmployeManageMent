@@ -3,7 +3,7 @@ import { Form } from "react-router-dom"
 
 export const leaveslice = createApi({
     reducerPath : "leave",
-    baseQuery : fetchBaseQuery({baseUrl : "http://localhost:5000/leave" , credentials: "include"}),
+    baseQuery : fetchBaseQuery({baseUrl : `${import.meta.env.VITE_BACKEND_URL}/leave` , credentials: "include"}),
     tagTypes : ['leave'],
     endpoints : (builder)=>({
         applyleaves : builder.mutation({

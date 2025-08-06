@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import path from 'node:path';
 import { app, BrowserWindow } from 'electron';
 import { join } from 'node:path';
@@ -16,7 +18,7 @@ function createWindow () {
   });
 
   
-  win.loadURL('http://localhost:5173');
+  win.loadURL(process.env.VITE_APP_URL);
 }
 
 app.whenReady().then(createWindow);

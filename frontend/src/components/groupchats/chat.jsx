@@ -5,7 +5,7 @@ import { useGetMessagesQuery, useCreateGroupMutation } from '../../redux/apislic
 import { motion, AnimatePresence } from 'framer-motion'
 import SmoothScroll from '../../lenis'
 
-const socket = io("http://localhost:5000")
+const socket = io(import.meta.env.VITE_BACKEND_URL)
 
 const sidebarVariants = {
   hidden: { x: -50, opacity: 0 },

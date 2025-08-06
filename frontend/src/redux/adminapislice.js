@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const adminapi = createApi({
     reducerPath: "adminapi",
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/admin" , credentials: "include"}),
+    baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_BACKEND_URL}/admin` , credentials: "include"}),
     tagTypes: ["projects", "users"],
     
     endpoints: (builder) => ({
