@@ -61,15 +61,6 @@ export const apiSlice = createApi({
             invalidatesTags: ['User'],
         }),
 
-        workstatus: builder.mutation({
-            query: ({ userid, objid }) => ({
-                url: '/users/workstatus',
-                method: 'POST',
-                body: { userid, objid }
-            }),
-            invalidatesTags: ['User'],
-        }),
-
         taskstatus: builder.mutation({
             query: ({ userid, objid, taskid }) => ({
                 url: '/users/taskstatus',
@@ -186,6 +177,15 @@ export const apiSlice = createApi({
                 body: {name , date , img}
             }),
             invalidatesTags: ['User']
+        }),
+
+        getallmemebers : builder.mutation({
+            query : ({userid , projectid})=>({
+                url : "/users/getallmembers",
+                method : "POST",
+                body : {userid , projectid}
+            }),
+            invalidatesTags : ["User"]
         })
     }),
 })
@@ -197,7 +197,6 @@ export const {
     useVerifyTokenQuery,
     useAddpunchMutation,
     useWorksMutation,
-    useWorkstatusMutation,
     useTaskstatusMutation,
     useAddtaskMutation,
     useGetlogsMutation,
@@ -211,4 +210,5 @@ export const {
     useAddworkMutation,
     useGetworkQuery,
     useScreenshotMutation,
+    useGetallmemebersMutation,
 } = apiSlice;

@@ -1,25 +1,27 @@
 import { useState, useEffect } from 'react';
-import { useWorksMutation, useWorkstatusMutation, useTaskstatusMutation } from '../../redux/apislice';
+import { useWorksMutation, useTaskstatusMutation } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
-import { CircleFadingPlus } from "lucide-react";
 import { FaExclamationTriangle, FaClipboardList, FaChevronDown, FaClipboard, FaCheck, FaPlus } from 'react-icons/fa';
 import { FcCancel } from "react-icons/fc";
-import { useAddtaskMutation } from '../../redux/apislice';
+import { useAddtaskMutation, useGetallmemebersMutation } from '../../redux/apislice';
+
+
 const Works = () => {
+
     const [addtask] = useAddtaskMutation();
-    const [workstatus] = useWorkstatusMutation();
     const [taskstatus] = useTaskstatusMutation();
     const [works, { isLoading, isError, refetch }] = useWorksMutation();
     const id = useSelector((state) => state.user.id);
     const [work, setWork] = useState([]);
     const [expandedItems, setExpandedItems] = useState({});
-    const [taskmodal, setTaskmodal] = useState(false);
+    const [taskModalFor, setTaskModalFor] = useState(null);
     const [inputtask, setInputtask] = useState('');
+
     useEffect(() => {
         const fetchWorks = async () => {
             try {
                 const res = await works(id);
-                console.log("res main ", res.data.works)
+                console.log(res)
                 setWork(res.data.works);
                 const initialExpandedState = {};
                 res.data.works.forEach((workItem, idx) => {
@@ -41,8 +43,6 @@ const Works = () => {
         }));
     };
 
-
-
     const handleTaskstatus = async (objid, taskid) => {
         try {
             const res = await taskstatus({ userid: id, objid: objid, taskid: taskid });
@@ -56,11 +56,11 @@ const Works = () => {
         try {
             const res = await addtask({ userid: id, objid: objid, task: task })
             setWork(res.data.works)
-            console.log("res", res.data.works)
         } catch (err) {
             console.log(err);
         }
     }
+
 
     if (isLoading) {
         return (
@@ -110,14 +110,15 @@ const Works = () => {
         );
     }
 
+
+
     return (
         <div className="min-h-screen  py-10 px-2 sm:px-6 flex flex-col items-center animate-fade-in">
             <div className="max-w-4xl w-full mx-auto">
                 <div className="relative text-center mb-14">
-                    {/* Decorative background blobs */}
                     <div className="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-br from-indigo-300 via-purple-200 to-pink-200 opacity-40 rounded-full blur-2xl z-0 animate-pulse-slow"></div>
                     <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-tr from-pink-300 via-purple-200 to-indigo-200 opacity-30 rounded-full blur-2xl z-0 animate-pulse-slow"></div>
-                    
+
                     <h1 className="relative z-10 text-5xl sm:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight drop-shadow-2xl animate-slide-down">
                         <span className="bg-black bg-clip-text text-transparent">
                             <span className="inline-block animate-gradient-x">Your Works Dashboard</span>
@@ -163,28 +164,47 @@ const Works = () => {
                                     <h1 className="text-xl font-bold break-words max-w-xs drop-shadow">{workItem.title}</h1>
                                 </div>
 
-                                <div className="flex items-center gap-6">
-                                    <p className="text-sm sm:text-base bg-black/20 px-4 py-1 rounded-lg font-semibold shadow-inner">
-                                        {workItem.startdate ? workItem.startdate.split("T")[0] : "N/A"}
-                                    </p>
+                                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-full">
+                                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 bg-white/70 px-4 py-2 rounded-lg shadow-inner border border-gray-200">
+                                        <span className="text-xs sm:text-sm font-semibold text-gray-600">
+                                            <span className="inline-block font-bold text-indigo-600">Start:</span>
+                                            <span className="ml-1">{workItem.startdate ? workItem.startdate.split("T")[0] : "N/A"}</span>
+                                        </span>
+                                        <span className="hidden sm:inline-block h-4 w-px bg-gray-300 mx-2"></span>
+                                        <span className="text-xs sm:text-sm font-semibold text-gray-600">
+                                            <span className="inline-block font-bold text-pink-500">End:</span>
+                                            <span className="ml-1">{workItem.enddate ? workItem.enddate.split("T")[0] : "N/A"}</span>
+                                        </span>
+                                    </div>
                                     <div className="flex items-center">
-                                        <label htmlFor={`complete-${workItem._id}`} className="mr-2 text-sm font-semibold tracking-wide">
+                                        <span
+                                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold shadow transition
+                                                ${workItem.status
+                                                    ? "bg-green-100 text-green-700 border border-green-200"
+                                                    : "bg-red-100 text-red-700 border border-red-200"
+                                                }`}
+                                        >
                                             {workItem.status ? (
-                                                <span className="inline-flex items-center gap-1 text-green-100">
-                                                    <FaCheck className="inline-block" /> Complete
-                                                </span>
+                                                <>
+                                                    <FaCheck className="inline-block text-green-500" /> Complete
+                                                </>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1 text-red-100">
+                                                <>
                                                     <FcCancel className="inline-block" /> Incomplete
-                                                </span>
+                                                </>
                                             )}
-                                        </label>
+                                        </span>
                                     </div>
-                                    <div className="transform transition-transform duration-500">
+                                    <button
+                                        type="button"
+                                        className="ml-auto flex items-center justify-center rounded-full bg-white/80 hover:bg-indigo-50 border border-gray-200 shadow transition p-2 focus:outline-none"
+                                        tabIndex={-1}
+                                        aria-label={expandedItems[workItem._id] ? "Collapse details" : "Expand details"}
+                                    >
                                         <FaChevronDown
-                                            className={`h-6 w-6 transition-transform duration-500 ${expandedItems[workItem._id] ? "rotate-180" : ""} group-hover:scale-125`}
+                                            className={`h-5 w-5 text-indigo-400 transition-transform duration-500 ${expandedItems[workItem._id] ? "rotate-180" : ""}`}
                                         />
-                                    </div>
+                                    </button>
                                 </div>
                                 <div className={`absolute left-0 top-0 h-full w-2 rounded-r-lg ${workItem.status ? "bg-green-400" : "bg-red-400"} animate-pulse`} />
                             </div>
@@ -200,6 +220,14 @@ const Works = () => {
                                 }}
                             >
                                 <div className="transition-opacity duration-700">
+                                    <div className="mb-6">
+                                        <h2 className="text-lg font-bold text-indigo-700 mb-3 flex items-center gap-2">
+                                            <FaClipboard className="inline-block text-indigo-400" />
+                                            Members In Project
+                                        </h2>
+
+
+                                    </div>
                                     <div className="flex items-center justify-between mb-5">
                                         <h3 className="font-semibold text-gray-700 flex items-center gap-2 text-lg">
                                             <FaClipboardList className="h-5 w-5 text-indigo-500 animate-fade-in" />
@@ -209,18 +237,18 @@ const Works = () => {
                                             className="cursor-pointer text-indigo-600 border border-indigo-200 hover:bg-indigo-50 p-2 rounded-full shadow transition-all duration-200 hover:scale-110"
                                             onClick={e => {
                                                 e.stopPropagation();
-                                                setTaskmodal(true);
+                                                setTaskModalFor(workItem._id);
                                             }}
                                             aria-label="Add Task"
                                         >
                                             <FaPlus />
                                         </button>
-                                        {taskmodal && (
+                                        {taskModalFor === workItem._id && (
                                             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 sm:px-0 animate-fade-in-fast">
                                                 <div className="relative bg-white w-full max-w-md mx-auto rounded-2xl shadow-2xl p-8 flex flex-col gap-5 border border-indigo-100 animate-pop-in">
                                                     <button
                                                         className="absolute top-3 right-3 text-gray-400 hover:text-indigo-600 transition"
-                                                        onClick={() => setTaskmodal(false)}
+                                                        onClick={() => setTaskModalFor(null)}
                                                         aria-label="Close"
                                                         type="button"
                                                     >
@@ -243,7 +271,7 @@ const Works = () => {
                                                             if (inputtask && inputtask.trim()) {
                                                                 handleAddtask(workItem._id, inputtask.trim());
                                                                 setInputtask('');
-                                                                setTaskmodal(false);
+                                                                setTaskModalFor(null);
                                                             }
                                                         }}
                                                     >
@@ -346,4 +374,3 @@ const Works = () => {
 };
 
 export default Works;
-

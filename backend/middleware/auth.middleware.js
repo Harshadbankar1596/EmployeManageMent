@@ -36,7 +36,7 @@ dotenv.config();
 export const authMiddleware = async (req, res, next) => {
   try {
 
-    console.log("token => ",req.cookies.token)
+    // console.log("token => ",req.cookies.token)
     const token = req.cookies.token;
 
     if (!token) {

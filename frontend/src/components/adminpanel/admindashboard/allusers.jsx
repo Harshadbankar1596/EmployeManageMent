@@ -39,7 +39,7 @@ const AllUsers = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {users?.userdata.map((user, index) => {
                     const base64Image = btoa(
-                        new Uint8Array(user.img.data.data).reduce(
+                        new Uint8Array(user?.img?.data?.data).reduce(
                             (data, byte) => data + String.fromCharCode(byte),
                             ''
                         )

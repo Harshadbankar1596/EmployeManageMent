@@ -4,6 +4,7 @@ export const adminapi = createApi({
     reducerPath: "adminapi",
     baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/admin" , credentials: "include"}),
     tagTypes: ["projects", "users"],
+    
     endpoints: (builder) => ({
 
         verifyisadmin : builder.mutation({
@@ -17,9 +18,9 @@ export const adminapi = createApi({
         getAllProjects: builder.query({
             query: () => ({
                 url: "/getallprojects",
-                method: "GET",
+                method: "GET"
             }),
-            providesTags: ["projects"],
+            providesTags: ["users" , "projects"],
         }),
         getAllUsers: builder.query({
             query: () => ({
@@ -28,7 +29,24 @@ export const adminapi = createApi({
             }),
             providesTags: ["users"],
         }),
+
+        addproject : builder.mutation({
+            query : (obj)=>({
+                url : "/addproject",
+                method : "POST",
+                body : {obj}
+            }),
+            invalidatesTags : ["users" , "projects"]
+        }),
+
+        getproject : builder.mutation({
+            query : (projectid)=>({
+                url : "/getproject",
+                method : "POST",
+                body : {projectid}
+            }),
+        })
     }),
 });
 
-export const { useGetAllProjectsQuery, useGetAllUsersQuery , useVerifyisadminMutation} = adminapi;
+export const { useGetAllProjectsQuery, useGetAllUsersQuery , useVerifyisadminMutation , useAddprojectMutation , useGetprojectMutation} = adminapi;

@@ -13,9 +13,9 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    isadmin : {
-        type : Boolean,
-        default : false
+    isadmin: {
+        type: Boolean,
+        default: false
     },
     password: {
         type: String,
@@ -38,10 +38,10 @@ const userSchema = new mongoose.Schema({
         default: Date.now
     },
     profileimg: {
-        data: Buffer,
+        data: mongoose.Schema.Types.Buffer,
         contentType: String,
     },
-    
+
     logs: [
         {
             date: {
@@ -71,6 +71,7 @@ const userSchema = new mongoose.Schema({
     workingOn: {
         type: [
             {
+                projectid:String,
                 title: { type: String, default: 'Project' },
                 task: [
                     {
@@ -78,25 +79,19 @@ const userSchema = new mongoose.Schema({
                         status: { type: Boolean, default: false },
                     }
                 ],
-                status: { type: Boolean, default: false },
-                startdate: { type: Date, default: new Date().toLocaleDateString() }
-            }
-        ],
-
-        default: [{
-            title: "Project 1",
-            task: [{
-                title: "Task1",
-                status: false,
+                members: [{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User'
             }],
-            status: false,
-            startdate: new Date().toLocaleDateString()
-        }]
+                status: { type: Boolean, default: false },
+                startdate: { type: Date, default: new Date().toLocaleDateString() },
+                enddate : {type : Date , default : new Date().toLocaleDateString()}
+            }
+        ]
     }
 });
 
 const User = mongoose.model('User', userSchema);
 
 export default User;
-
 

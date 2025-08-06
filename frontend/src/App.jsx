@@ -17,8 +17,11 @@ import SmoothScroll from "./lenis.jsx";
 import ProtectedRoute from "./components/protectedrout.jsx";
 import MainDashboard from "./components/adminpanel/maindashboard.jsx";
 import AllUsers from "./components/adminpanel/admindashboard/allusers.jsx";
-import ProjectSummary from "./components/adminpanel/admindashboard/projectsummary.jsx";
+// import ProjectSummary from "./components/adminpanel/admindashboard/projectsummary.jsx";
 import Adminleaves from "./components/adminpanel/admindashboard/adminleaves.jsx";
+import Addproject from "./components/adminpanel/admindashboard/addproject.jsx";
+import Assinproject from "./components/adminpanel/admindashboard/assinproject.jsx";
+import Projectdetails from "./components/adminpanel/admindashboard/projectdetails.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -55,10 +58,13 @@ const App = () => {
 
           <Route path="/admin/*" element={<MainDashboard />}>
             <Route path="employee" element={<AllUsers />} />
-            <Route path="projects" element={<ProjectSummary />} />
+            {/* <Route path="projects" element={<ProjectSummary />} /> */}
             <Route path="calenderadmin" element={<CalendarComponent />} />
             <Route path="chat" element={<Chat />} />
             <Route path="leaves" element={<Adminleaves/>}/>
+            <Route path="addproject" element={<Addproject/>}/>
+            <Route path="assinTask" element={<Assinproject/>}/>
+            <Route path="assinTask/:id" element={<Projectdetails/>}/>
             <Route path="*" element={<Navigate to="" />} />
           </Route>
         </Routes>

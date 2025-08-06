@@ -8,6 +8,7 @@ dotenv.config();
 export const createUser = async (req, res) => {
     console.log(req.body);
     try {
+
         const { name, email, phone, password, role } = req.body;
 
         if (!name || !email || !password || !phone) {
@@ -23,11 +24,11 @@ export const createUser = async (req, res) => {
         const hash = await bcrypt.hash(password, 10);
 
         const newUser = new User({ name, email, password: hash, phone, role });
+
         await newUser.save();
 
         res.status(201).json({ message: "User registered successfully.", user: newUser });
         // console.log("newUser", newUser);
-
     } catch (error) {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Server error.", error: error.message });
@@ -428,5 +429,49 @@ export const screenshot = async (req, res) => {
         res.status(200).json({ message: "screenshot added" })
     } catch (error) {
         console.log("error in screenshot")
+    }
+}
+
+
+
+export const getallmembers = async (req, res) => {
+    try {
+        console.log(req.body)
+        const { userid, projectid } = req.body;
+
+        if (!userid || !Array.isArray(userid) || userid.length === 0) {
+            return res.status(400).json({ message: "userids array is required" });
+        }
+
+        const members = await User.find({ _id: { $in: userid } });
+
+        if (!members || members.length === 0) {
+            return res.status(404).json({ message: "Users Not Found" });
+        }
+
+
+
+        const membersobj = members.map((user) => {
+            const projectInfo = Array.isArray(user.workingOn)
+                ? user.workingOn.find((work) => String(work._id) === String(projectid))
+                : null;
+
+            // Debug log for project info of each user
+            console.log('Project info for user', user._id, ':', projectInfo);
+            const projectdetail = {
+                task : projectInfo.task, 
+            }
+
+            return {
+                name: user.name,
+                img: user.profileimg,
+                projectinfo: projectdetail
+            };
+        });
+
+        res.status(200).json({ members: membersobj });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server Error in Fetch All Members" });
     }
 }
