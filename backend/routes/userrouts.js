@@ -9,7 +9,7 @@ router.post("/login", loginUser);
 
 router.post("/logout", logoutUser);
 
-router.get("/verify", authMiddleware, verifyToken);
+router.get("/verify", verifyToken);
 
 router.post('/addpunch', authMiddleware, addpunch)
 

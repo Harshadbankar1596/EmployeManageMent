@@ -93,15 +93,17 @@ export const logoutUser = async (req, res) => {
 export const verifyToken = async (req, res) => {
     try {
         const token = req.cookies.token;
+
         if (!token) {
-            return res.status(401).json({ message: "No token provided." });
+            return res.status(400).json({ message: "No token provided." });
         }
 
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "secretkey");
+
         const user = await User.findById(decoded.id).select('-password');
 
         if (!user) {
-            return res.status(401).json({ message: "Invalid token." });
+            return res.status(422).json({ message: "Invalid token." });
         }
 
         let userdata = {
@@ -113,13 +115,13 @@ export const verifyToken = async (req, res) => {
             id: user._id,
         }
 
-
-
         res.status(200).json({ user: userdata });
+
     } catch (error) {
         console.error("Token verification error:", error);
-        res.status(401).json({ message: "Invalid token." });
+        res.status(500).send({ message: "Invalid token."+error.message });
     }
+
 };
 
 export const addpunch = async (req, res) => {
@@ -127,30 +129,43 @@ export const addpunch = async (req, res) => {
         const { id, currentHours } = req.body;
 
         const user = await User.findById(id);
+
         if (!user) {
+
             return res.status(404).json({ message: "User not found" });
+
         }
 
         const today = new Date().toLocaleDateString();
+
         const currentTime = new Date().toLocaleTimeString();
 
         let logIndex = user.logs.findIndex((log) => log.date === today);
+
         let currentlog;
 
         if (logIndex !== -1) {
+
             if (!Array.isArray(user.logs[logIndex].punchs)) {
+
                 user.logs[logIndex].punchs = [];
+
             }
+
             user.logs[logIndex].punchs.push(currentTime);
+
             currentlog = user.logs[logIndex];
 
         } else {
+
             const newlog = {
                 date: today,
                 punchs: [currentTime],
                 status: "pending"
             };
+
             user.logs.unshift(newlog);
+
             currentlog = newlog;
         }
 
@@ -161,9 +176,13 @@ export const addpunch = async (req, res) => {
         await user.save();
 
         return res.status(200).json({ message: "Punch added successfully", log: currentlog });
+
     } catch (error) {
+
         console.error("Error in addpunch:", error);
+
         res.status(500).json({ message: "Server error", error: error.message });
+
     }
 };
 

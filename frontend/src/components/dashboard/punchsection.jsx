@@ -54,13 +54,17 @@ const Punchsection = () => {
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [isClockedIn, setIsClockedIn] = useState(false);
   const navigate = useNavigate();
-  const { data: user, isLoading, isError , refetch} = useVerifyTokenQuery();
-
+  const { data: user, isLoading, isError, refetch } = useVerifyTokenQuery();
+  console.log(isError)
   const calculateTime = useCallback(() => {
     return calculateTotalTime(punchs);
   }, [punchs]);
 
   useEffect(() => {
+    if (isLoading) {
+      console.log("loading in veryfy user ", isLoading);
+    }
+
     if (user?.user?.logs) {
       const today = new Date().toLocaleDateString();
       const todayLog = user.user.logs.find((log) => log.date === today);
@@ -69,18 +73,17 @@ const Punchsection = () => {
       setIsClockedIn(punches.length % 2 !== 0);
     }
 
-    if (isLoading) {
-      console.log("loading in veryfy user ", isLoading);
-    }
-
     else {
       setTimeout(() => {
+        alert("Error in Veryfy Token")
+        console.log(isError)
         if (isError) navigate('/login');
-      }, 5000)
+      }, 1000)
     }
+
     refetch();
   }, [user, refetch]);
-  
+
   console.log(punchs)
   useEffect(() => {
     setTotalSeconds(calculateTime());
@@ -91,11 +94,11 @@ const Punchsection = () => {
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isClockedIn, calculateTime , refetch , user]);
+  }, [isClockedIn, calculateTime, refetch, user]);
 
   const handlePunch = async () => {
     try {
-      const res = await addpunch({ id , currentHours }).unwrap();
+      const res = await addpunch({ id, currentHours }).unwrap();
       if (res?.log?.punchs) {
         const newPunchs = res.log.punchs;
         setPunchs(newPunchs);
@@ -104,24 +107,26 @@ const Punchsection = () => {
     } catch (err) {
       navigate('/login');
     }
-    finally{
+    finally {
       refetch();
     }
   };
-  
+
   const EIGHT_HOURS = 8 * 3600;
   const percentage = Math.min(100, (totalSeconds / EIGHT_HOURS) * 100);
   const liveTime = formatTime(totalSeconds);
-  
-  {isLoading && (
-    <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500">Loa</div>
-    </div>
-  )}
+
+  {
+    isLoading && (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500">Loa</div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col w-full gap-4 justify-center items-center lg:flex-row lg:flex-nowrap">
-      
+
       <div className="bg-white rounded-lg shadow-2xl w-full p-4 sm:p-6 flex flex-col h-80 sm:h-80 mb-4 lg:mb-0 lg:max-w-xl">
         <div className="flex justify-between items-center text-gray-500">
           <p className="text-lg sm:text-xl font-bold">Today Activity</p>
@@ -159,7 +164,7 @@ const Punchsection = () => {
         </div>
 
         <div data-lenis-prevent className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full flex-1">
-          <SmoothScroll/>
+          <SmoothScroll />
           {punchs.length === 0 && (
             <div className="text-center text-gray-400">No punches yet today.</div>
           )}

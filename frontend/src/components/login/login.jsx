@@ -35,10 +35,13 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+
+    
     e.preventDefault();
     setErrors({});
     setSubmitError("");
     try {
+
 
       const res = await loginUser(form).unwrap();
       console.log("res", res)
@@ -46,17 +49,20 @@ const Login = () => {
       setSuccess(true);
       setForm({ email: "", password: "", remember: false });
 
+
       if (res.user.isadmin) {
         setTimeout(() => {
           setSuccess(false);
           navigate("/admin");
         }, 1000);
       }
+
+
       else {
         setTimeout(() => {
           setSuccess(false);
           navigate("/");
-        }, 5000);
+        }, 1000);
       }
 
 
