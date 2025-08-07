@@ -124,67 +124,129 @@ export const verifyToken = async (req, res) => {
 
 };
 
+// export const addpunch = async (req, res) => {
+//     try {
+//         const { id, currentHours } = req.body;
+
+//         const user = await User.findById(id);
+
+//         if (!user) {
+
+//             return res.status(404).json({ message: "User not found" });
+
+//         }
+
+//         const today = new Date().toLocaleDateString();
+
+//         const currentTime = new Date().toLocaleTimeString();
+
+//         let logIndex = user.logs.findIndex((log) => log.date === today);
+
+//         let currentlog;
+
+//         if (logIndex !== -1) {
+
+//             if (!Array.isArray(user.logs[logIndex].punchs)) {
+
+//                 user.logs[logIndex].punchs = [];
+
+//             }
+
+//             user.logs[logIndex].punchs.push(currentTime);
+
+//             currentlog = user.logs[logIndex];
+
+//         } else {
+
+//             const newlog = {
+//                 date: today,
+//                 punchs: [currentTime],
+//                 status: "pending"
+//             };
+
+//             user.logs.unshift(newlog);
+
+//             currentlog = newlog;
+//         }
+
+//         if (currentHours) {
+//             currentHours >= 8 ? user.logs[0].status = "present" : currentHours >= 4 ? user.logs[0].status = "halfday" : user.logs[0].status = "pending"
+//         }
+
+//         await user.save();
+
+//         return res.status(200).json({ message: "Punch added successfully", log: currentlog });
+
+//     } catch (error) {
+
+//         console.error("Error in addpunch:", error);
+
+//         res.status(500).json({ message: "Server error", error: error.message });
+
+//     }
+// };
+
 export const addpunch = async (req, res) => {
     try {
         const { id, currentHours } = req.body;
 
+        const today = new Date().toLocaleDateString();
+        const currentTime = new Date().toLocaleTimeString();
+
         const user = await User.findById(id);
 
         if (!user) {
-
             return res.status(404).json({ message: "User not found" });
-
         }
 
-        const today = new Date().toLocaleDateString();
-
-        const currentTime = new Date().toLocaleTimeString();
-
-        let logIndex = user.logs.findIndex((log) => log.date === today);
-
-        let currentlog;
+        const logIndex = user.logs.findIndex(log => log.date === today);
 
         if (logIndex !== -1) {
+            // ✅ Atomic update existing log
+            const punchPath = `logs.${logIndex}.punchs`;
+            const statusPath = `logs.${logIndex}.status`;
 
-            if (!Array.isArray(user.logs[logIndex].punchs)) {
+            const newStatus = currentHours >= 8
+                ? "present"
+                : currentHours >= 4
+                    ? "halfday"
+                    : "pending";
 
-                user.logs[logIndex].punchs = [];
-
-            }
-
-            user.logs[logIndex].punchs.push(currentTime);
-
-            currentlog = user.logs[logIndex];
+            await User.updateOne(
+                { _id: id },
+                {
+                    $push: { [punchPath]: currentTime },
+                    $set: { [statusPath]: newStatus }
+                }
+            );
 
         } else {
-
+            // ✅ Add new log entry
             const newlog = {
                 date: today,
                 punchs: [currentTime],
-                status: "pending"
+                status:
+                    currentHours >= 8
+                        ? "present"
+                        : currentHours >= 4
+                            ? "halfday"
+                            : "pending"
             };
 
-            user.logs.unshift(newlog);
-
-            currentlog = newlog;
+            await User.updateOne(
+                { _id: id },
+                { $push: { logs: { $each: [newlog], $position: 0 } } } // unshift equivalent
+            );
         }
 
-        if (currentHours) {
-            currentHours >= 8 ? user.logs[0].status = "present" : currentHours >= 4 ? user.logs[0].status = "halfday" : user.logs[0].status = "pending"
-        }
-
-        await user.save();
-
-        return res.status(200).json({ message: "Punch added successfully", log: currentlog });
+        return res.status(200).json({ message: "Punch added successfully" });
 
     } catch (error) {
-
         console.error("Error in addpunch:", error);
-
         res.status(500).json({ message: "Server error", error: error.message });
-
     }
 };
+
 
 export const works = async (req, res) => {
     try {

@@ -48,21 +48,21 @@ function formatTime(totalSeconds) {
 }
 
 const Punchsection = () => {
-  const [addpunch] = useAddpunchMutation();
+  const [addpunch , {isLoading : punchveryfy}] = useAddpunchMutation();
   const id = useSelector((state) => state.user.id);
   const [punchs, setPunchs] = useState([]);
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [isClockedIn, setIsClockedIn] = useState(false);
   const navigate = useNavigate();
-  const { data: user, isLoading, isError, refetch } = useVerifyTokenQuery();
-  console.log(isError)
+  const { data: user, isLoading:veryfy, isError, refetch } = useVerifyTokenQuery();
+  // console.log(isError)
   const calculateTime = useCallback(() => {
     return calculateTotalTime(punchs);
   }, [punchs]);
 
   useEffect(() => {
-    if (isLoading) {
-      console.log("loading in veryfy user ", isLoading);
+    if (veryfy || punchveryfy) {
+      console.log("loading in veryfy user ", veryfy);
     }
 
     if (user?.user?.logs) {
@@ -75,16 +75,17 @@ const Punchsection = () => {
 
     else {
       setTimeout(() => {
-        alert("Error in Veryfy Token")
+        // alert("Error in Veryfy Token")
         console.log(isError)
         if (isError) navigate('/login');
       }, 1000)
     }
 
-    refetch();
-  }, [user, refetch]);
+    // refetch();
+  }, [user, refetch , isError]);
 
-  console.log(punchs)
+  // console.log(punchs)
+
   useEffect(() => {
     setTotalSeconds(calculateTime());
     let interval;
@@ -107,22 +108,20 @@ const Punchsection = () => {
     } catch (err) {
       navigate('/login');
     }
-    finally {
-      refetch();
-    }
+    
   };
 
   const EIGHT_HOURS = 8 * 3600;
   const percentage = Math.min(100, (totalSeconds / EIGHT_HOURS) * 100);
   const liveTime = formatTime(totalSeconds);
 
-  {
-    isLoading && (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500">Loa</div>
-      </div>
-    )
-  }
+
+  if (veryfy || punchveryfy) return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500"></div>
+    </div>
+  )
+
 
   return (
     <div className="flex flex-col w-full gap-4 justify-center items-center lg:flex-row lg:flex-nowrap">
