@@ -1,3 +1,4 @@
+process.env.TZ = 'Asia/Kolkata';
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
@@ -13,6 +14,9 @@ import { Server } from "socket.io";
 import { socketHandler } from "./controller/chatcontroller.js";
 // import faceRouter from "./routes/facerout.js";
 import leaverouts from "./routes/leaverouts.js"
+
+import moment from "moment-timezone"
+const indiaTime = moment().tz("Asia/Kolkata").format();
 
 const app = express();
 const PORT = 5000;

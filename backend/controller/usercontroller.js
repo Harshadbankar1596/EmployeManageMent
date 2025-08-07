@@ -1,3 +1,4 @@
+process.env.TZ = 'Asia/Kolkata';
 import User from "../model/userschema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
