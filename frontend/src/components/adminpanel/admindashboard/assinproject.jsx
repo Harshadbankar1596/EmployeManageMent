@@ -25,7 +25,7 @@ const Assinproject = () => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                     {projects?.allprojects?.length === 0 && (
-                        <div className="col-span-full text-center text-gray-400 text-xl py-16 bg-white/60 rounded-xl shadow-inner animate-pulse">
+                        <div className="col-span-full text-center text-gray-400 text-xl py-16 bg-white/60 rounded-xl shadow-inner ">
                             <svg className="mx-auto mb-3 w-10 h-10 text-blue-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75h.008v.008H9.75V9.75zm4.5 0h.008v.008h-.008V9.75zm-7.5 2.25a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0zm7.5 3.75v.008h.008V15.75H12z" />
                             </svg>
@@ -57,8 +57,8 @@ const Assinproject = () => {
                                     </span>
                                 )}
                             </div>
-                            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full opacity-30 blur-2xl z-0 animate-float"></div>
-                            <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-blue-200 rounded-full opacity-20 blur-2xl z-0 animate-float2"></div>
+                            {/* <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full opacity-30 blur-2xl z-0 animate-float"></div>
+                            <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-blue-200 rounded-full opacity-20 blur-2xl z-0 animate-float2"></div> */}
                             <h3 className="text-2xl font-bold text-blue-800 mb-2 tracking-wide z-10 relative animate-slideRight">
                                 {project.title}
                             </h3>

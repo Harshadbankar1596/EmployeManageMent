@@ -119,3 +119,25 @@ export const getproject = async ( req , res )=> {
         res.status(500).json({message : "Server Error"})
      }
 }
+
+export const addmember = async (req , res) => {
+    try {
+
+        const {projectid , userid} = req.body
+
+        if(!projectid || !userid) res.status(400).json({message : "userid or project id ARE require"});
+
+        const newproject = await project.findById(projectid)
+
+        newproject.members.unshift(userid)
+
+        if(!newproject) res.status(422).json({message : "Project not Found"})
+
+        await newproject.save()
+
+        res.status(200).json({message : "Member added Sucssesfully"})
+        
+    } catch (error) {
+        res.status(500).json({mesage : "Server Error"})
+    }
+}

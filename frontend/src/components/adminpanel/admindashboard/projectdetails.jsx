@@ -10,7 +10,7 @@ import { FaRegCheckCircle } from 'react-icons/fa';
 import { BsExclamationCircle } from 'react-icons/bs';
 
 const ShimmerProjectHeader = () => (
-  <div className="animate-pulse flex flex-col sm:flex-row items-center justify-between gap-10 mt-12 w-full max-w-4xl mx-auto">
+  <div className="  flex flex-col sm:flex-row items-center justify-between gap-10 mt-12 w-full max-w-4xl mx-auto">
     <div className="flex-1 w-full">
       <div className="h-10 bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 rounded w-2/3 mb-4"></div>
       <div className="flex gap-6 mt-4">
@@ -26,7 +26,7 @@ const ShimmerProjectHeader = () => (
 );
 
 const ShimmerEmployeeCard = () => (
-  <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-center gap-6 animate-pulse">
+  <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-center gap-6 ">
     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 via-blue-50 to-blue-100"></div>
     <div className="flex-1 w-full">
       <div className="h-6 w-1/3 bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 rounded mb-2"></div>
@@ -122,13 +122,13 @@ const Projectdetails = () => {
                 </span>
                 <span className="flex items-center gap-2 min-w-[150px]">
                   {projectdetail?.staus ? (
-                    <span className="inline-flex items-center px-4 py-2 text-base font-semibold rounded-full bg-green-100 text-green-800 border border-green-300 shadow animate-bounceIn">
+                    <span className="inline-flex items-center px-4 py-2 text-base font-semibold rounded-full bg-green-100 text-green-800 border border-green-300 shadow ">
                       {/* Completed Icon */}
                       <FaRegCheckCircle className="w-5 h-5 mr-2 text-green-500" />
                       Completed
                     </span>
                   ) : (
-                    <span className="inline-flex items-center px-4 py-2 text-base font-semibold rounded-full bg-red-100 text-red-800 border border-red-300 shadow animate-pulse">
+                    <span className="inline-flex items-center px-4 py-2 text-base font-semibold rounded-full bg-red-100 text-red-800 border border-red-300 shadow ">
                       {/* Active Icon */}
                       <BsExclamationCircle className="w-5 h-5 mr-2 text-red-500" />
                       Active

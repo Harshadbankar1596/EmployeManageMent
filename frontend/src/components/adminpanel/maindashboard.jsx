@@ -13,7 +13,7 @@ const MainDashboard = () => {
   const id = useSelector((state) => state.user.id)
   // const isActive = (path) => location.pathname === `/admin/${path}`;
   const [isadmin, setisadmin] = useState(false)
-  const [veryify] = useVerifyisadminMutation()
+  const [veryify , { isLoading , isError }] = useVerifyisadminMutation()
   const [pendingleaves , setpendingleaves] = useState(0)
 
   useEffect(() => {
@@ -28,6 +28,9 @@ const MainDashboard = () => {
 
     return (
       <div>
+        {isLoading && (
+          <div className="flex justify-center items-center h-screen bg-red-700">Loading...</div>
+        )}
         <Adminaction pendingleaves={pendingleaves} />
         <Outlet />
       </div>
