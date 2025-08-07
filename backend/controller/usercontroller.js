@@ -28,7 +28,7 @@ export const createUser = async (req, res) => {
         await newUser.save();
 
         res.status(201).json({ message: "User registered successfully.", user: newUser });
-        // console.log("newUser", newUser);
+        console.log("newUser", newUser);
     } catch (error) {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Server error.", error: error.message });
@@ -56,7 +56,7 @@ export const loginUser = async (req, res) => {
 
         if (remember) {
             token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '7d' });
-            res.cookie("token", token, { httpOnly: true, secure: false, sameSite: 'Lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
+            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'Lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
         }
 
         else {
