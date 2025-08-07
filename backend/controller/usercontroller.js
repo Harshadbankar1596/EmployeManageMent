@@ -42,21 +42,21 @@ export const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: "Invalid credentials." });
-            console.log("not match email : ", email)
+            // console.log("not match email : ", email)
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials." });
-            console.log("not match password : ", password)
+            // console.log("not match password : ", password)
         }
 
         let token;
 
         if (remember) {
             token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '7d' });
-            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'Lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
+            res.cookie("token", token, { httpOnly: true, secure: true, Samesite : 'None' , maxAge: 7 * 24 * 60 * 60 * 1000 });
         }
 
         else {
