@@ -67,6 +67,7 @@ const Punchsection = () => {
 
     if (user?.user?.logs) {
       const today = new Date().toLocaleDateString();
+      console.log(today)
       const todayLog = user.user.logs.find((log) => log.date === today);
       const punches = todayLog?.punchs || [];
       setPunchs(punches);
@@ -105,6 +106,7 @@ const Punchsection = () => {
         setPunchs(newPunchs);
         setIsClockedIn(newPunchs.length % 2 !== 0);
       }
+        await refetch();
     } catch (err) {
       navigate('/login');
     }
