@@ -5,41 +5,300 @@ import { FaBookOpen } from "react-icons/fa";
 import { RiTaskLine } from "react-icons/ri";
 import { FaPen } from "react-icons/fa";
 const Adminaction = (props) => {
-  console.log(props)
   return (
     <div className="my-5 mx-2 sm:mx-4 md:mx-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <Link to={'/admin/employee'}>
-          <div className="bg-yellow-500 rounded-2xl flex flex-col sm:flex-row gap-3 sm:gap-5 items-center justify-center p-4 sm:p-8 w-full h-32 sm:h-40 shadow-lg cursor-pointer transition-transform hover:scale-105">
-            <IoPerson className="text-black text-5xl sm:text-7xl md:text-8xl lg:text-9xl mb-2 sm:mb-0" />
-            <p className="text-black text-base sm:text-xl md:text-2xl font-bold">Employes</p>
+      <div
+        className="
+          grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4
+          gap-3 sm:gap-5 md:gap-6
+          justify-items-center
+          w-full
+          max-w-4xl
+          mx-auto
+        "
+      >
+        {/* Employees */}
+        <Link
+          to="/admin/employee"
+          className={`
+            group
+            flex flex-col items-center justify-center
+            relative
+            rounded-full
+            border border-gray-200
+            bg-yellow-100
+            shadow-sm
+            transition-all duration-300
+            hover:border-yellow-400
+            hover:shadow-lg
+            focus:outline-none
+            w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32
+            p-0
+            overflow-visible
+            animate-fade-in-up
+          `}
+          style={{
+            animation: `fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0s both`
+          }}
+        >
+          <div
+            className={`
+              flex items-center justify-center
+              bg-yellow-200 group-hover:bg-yellow-300
+              rounded-full
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28
+              transition-colors duration-300
+              text-center
+            `}
+          >
+            <IoPerson
+              className={`
+                text-yellow-700
+                text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+                transition-transform duration-300
+                group-hover:scale-110
+              `}
+            />
           </div>
+          <span
+            className={`
+              mt-2
+              px-3 py-1
+              rounded-md
+              bg-white
+              shadow
+              text-xs sm:text-sm md:text-base
+              font-semibold
+              text-yellow-800
+              transition-all duration-300
+              text-center
+              select-none
+            `}
+            style={{
+              minWidth: '90px'
+            }}
+          >
+            Employees
+          </span>
         </Link>
 
-        <Link to={'/admin/leaves'} className=''>
-          <div className="bg-blue-900 rounded-2xl flex flex-col sm:flex-row gap-3 sm:gap-5 items-center justify-center p-4 sm:p-8 w-full h-32 sm:h-40 shadow-lg cursor-pointer transition-transform hover:scale-105">
-            <div className={`${props.pendingleaves === 0 ? "hidden" : "flex"} text-white font-bold`}>
-              {props.pendingleaves}
-            </div>
-            <FaBookOpen className="text-white text-5xl sm:text-7xl md:text-8xl lg:text-9xl mb-2 sm:mb-0" />
-            <p className="text-white text-base sm:text-xl md:text-2xl font-bold">Leaves</p>
+        {/* Leaves */}
+        <Link
+          to="/admin/leaves"
+          className={`
+            group
+            flex flex-col items-center justify-center
+            relative
+            rounded-full
+            border border-gray-200
+            bg-blue-100
+            shadow-sm
+            transition-all duration-300
+            hover:border-blue-400
+            hover:shadow-lg
+            focus:outline-none
+            w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32
+            p-0
+            overflow-visible
+            animate-fade-in-up
+          `}
+          style={{
+            animation: `fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.05s both`
+          }}
+        >
+          <div
+            className={`
+              flex items-center justify-center
+              bg-blue-200 group-hover:bg-blue-300
+              rounded-full
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28
+              transition-colors duration-300
+              text-center
+              relative
+            `}
+          >
+            {/* Pending leaves badge */}
+            {props.pendingleaves > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 shadow z-10">
+                {props.pendingleaves}
+              </span>
+            )}
+            <FaBookOpen
+              className={`
+                text-blue-700
+                text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+                transition-transform duration-300
+                group-hover:scale-110
+              `}
+            />
           </div>
+          <span
+            className={`
+              mt-2
+              px-3 py-1
+              rounded-md
+              bg-white
+              shadow
+              text-xs sm:text-sm md:text-base
+              font-semibold
+              text-blue-800
+              transition-all duration-300
+              text-center
+              select-none
+            `}
+            style={{
+              minWidth: '90px'
+            }}
+          >
+            Leaves
+          </span>
         </Link>
 
-        <Link to={'/admin/assinTask'}>
-          <div className="bg-green-500 rounded-2xl flex flex-col sm:flex-row gap-3 sm:gap-5 items-center justify-center p-4 sm:p-8 w-full h-32 sm:h-40 shadow-lg cursor-pointer transition-transform hover:scale-105">
-            <RiTaskLine className="text-white text-5xl sm:text-7xl md:text-8xl lg:text-9xl mb-2 sm:mb-0" />
-            <p className="text-white text-base sm:text-xl md:text-2xl font-bold">Assin Task</p>
+        {/* Assign Task */}
+        <Link
+          to="/admin/assinTask"
+          className={`
+            group
+            flex flex-col items-center justify-center
+            relative
+            rounded-full
+            border border-gray-200
+            bg-green-100
+            shadow-sm
+            transition-all duration-300
+            hover:border-green-400
+            hover:shadow-lg
+            focus:outline-none
+            w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32
+            p-0
+            overflow-visible
+            animate-fade-in-up
+          `}
+          style={{
+            animation: `fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both`
+          }}
+        >
+          <div
+            className={`
+              flex items-center justify-center
+              bg-green-200 group-hover:bg-green-300
+              rounded-full
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28
+              transition-colors duration-300
+              text-center
+            `}
+          >
+            <RiTaskLine
+              className={`
+                text-green-700
+                text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+                transition-transform duration-300
+                group-hover:scale-110
+              `}
+            />
           </div>
+          <span
+            className={`
+              mt-2
+              px-3 py-1
+              rounded-md
+              bg-white
+              shadow
+              text-xs sm:text-sm md:text-base
+              font-semibold
+              text-green-800
+              transition-all duration-300
+              text-center
+              select-none
+            `}
+            style={{
+              minWidth: '90px'
+            }}
+          >
+            Assign Task
+          </span>
         </Link>
 
-        <Link to={'/admin/addProject'}>
-          <div className="bg-black rounded-2xl flex flex-col sm:flex-row gap-3 sm:gap-5 items-center justify-center p-4 sm:p-8 w-full h-32 sm:h-40 shadow-lg cursor-pointer transition-transform hover:scale-105">
-            <FaPen className="text-white text-5xl sm:text-7xl md:text-8xl lg:text-9xl mb-2 sm:mb-0" />
-            <p className="text-white text-base sm:text-xl md:text-2xl font-bold">Add Project</p>
+        {/* Add Project */}
+        <Link
+          to="/admin/addProject"
+          className={`
+            group
+            flex flex-col items-center justify-center
+            relative
+            rounded-full
+            border border-gray-200
+            bg-gray-900
+            shadow-sm
+            transition-all duration-300
+            hover:border-gray-700
+            hover:shadow-lg
+            focus:outline-none
+            w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32
+            p-0
+            overflow-visible
+            animate-fade-in-up
+          `}
+          style={{
+            animation: `fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s both`
+          }}
+        >
+          <div
+            className={`
+              flex items-center justify-center
+              bg-gray-800 group-hover:bg-gray-700
+              rounded-full
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28
+              transition-colors duration-300
+              text-center
+            `}
+          >
+            <FaPen
+              className={`
+                text-white
+                text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+                transition-transform duration-300
+                group-hover:scale-110
+              `}
+            />
           </div>
+          <span
+            className={`
+              mt-2
+              px-3 py-1
+              rounded-md
+              bg-white
+              shadow
+              text-xs sm:text-sm md:text-base
+              font-semibold
+              text-gray-900
+              transition-all duration-300
+              text-center
+              select-none
+            `}
+            style={{
+              minWidth: '90px'
+            }}
+          >
+            Add Project
+          </span>
         </Link>
       </div>
+      <style>{`
+        @keyframes fadeInUp {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+        }
+      `}</style>
     </div>
   )
 }

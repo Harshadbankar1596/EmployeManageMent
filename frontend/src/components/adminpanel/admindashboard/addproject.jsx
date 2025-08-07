@@ -23,7 +23,7 @@ const UserSkeleton = () => (
 
 const Addproject = () => {
     const [openmodal , setopenmodal] = useState(false)
-    const [addproject] = useAddprojectMutation()
+    const [addproject , {isLoading : mutationloading}] = useAddprojectMutation()
     const { data: users, isLoading } = useGetAllUsersQuery()
     const [members, setmembers] = useState([])
     const [form, setForm] = useState({
@@ -116,6 +116,27 @@ const Addproject = () => {
         {openmodal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
                 <Addprojectmodal />
+            </div>
+        )}
+
+        {mutationloading && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+                <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center animate-fade-in">
+                    <svg className="animate-spin h-12 w-12 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <div className="text-blue-700 font-semibold text-lg">Adding Project...</div>
+                </div>
+                <style jsx>{`
+                    @keyframes fade-in {
+                        from { opacity: 0; transform: scale(0.95);}
+                        to { opacity: 1; transform: scale(1);}
+                    }
+                    .animate-fade-in {
+                        animation: fade-in 0.4s ease;
+                    }
+                `}</style>
             </div>
         )}
         <div className="min-h-screen flex items-center justify-center py-8 px-4">
@@ -211,7 +232,7 @@ const Addproject = () => {
                             </div>
                         </div>
 
-                        {/* Selected members chips */}
+                        
                         {selectedMembers.length > 0 && (
                             <div className="mt-4 animate-fade-in">
                                 <label className="block text-gray-700 font-medium mb-2">

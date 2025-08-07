@@ -1,19 +1,23 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useGetAllProjectsQuery } from '../../../redux/adminapislice'
 import { useGetallmemebersMutation } from '../../../redux/apislice'
 import { Link } from 'react-router-dom'
 
 const Assinproject = () => {
-    const { data: projects } = useGetAllProjectsQuery()
-    console.log(projects?.allprojects)
+    const { data: projects, isLoading: projectsLoading } = useGetAllProjectsQuery()
     const [getallmembers] = useGetallmemebersMutation()
-
-
 
     function openproject(projectid) {
         console.log('ids', projectid)
     }
 
+    if (projectsLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+            </div>
+        )
+    }
 
     return (
         <div className="w-full min-h-screen py-12 px-2 animate-fadeIn">

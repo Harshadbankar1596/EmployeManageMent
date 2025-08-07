@@ -202,7 +202,7 @@ export const addpunch = async (req, res) => {
         const logIndex = user.logs.findIndex(log => log.date === today);
 
         if (logIndex !== -1) {
-            // ✅ Atomic update existing log
+            
             const punchPath = `logs.${logIndex}.punchs`;
             const statusPath = `logs.${logIndex}.status`;
 

@@ -22,6 +22,33 @@ const messageVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 12 } }
 }
 
+// Loader with animated dots (soft animation)
+const DotsLoader = () => (
+  <motion.div
+    className="flex items-center justify-center gap-1 mt-2"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+  >
+    <span className="text-blue-500 text-sm font-semibold">Sending</span>
+    <motion.span
+      className="inline-block w-2 h-2 bg-blue-400 rounded-full"
+      animate={{ y: [0, -4, 0] }}
+      transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut" }}
+    />
+    <motion.span
+      className="inline-block w-2 h-2 bg-blue-400 rounded-full"
+      animate={{ y: [0, -4, 0] }}
+      transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut", delay: 0.2 }}
+    />
+    <motion.span
+      className="inline-block w-2 h-2 bg-blue-400 rounded-full"
+      animate={{ y: [0, -4, 0] }}
+      transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut", delay: 0.4 }}
+    />
+  </motion.div>
+)
+
 const Chat = () => {
   const bottomRef = useRef(null)
 
@@ -33,12 +60,22 @@ const Chat = () => {
   const { data, refetch, isLoading, refetch: refetchgroup } = useGetMessagesQuery(groupname)
   const [createGroup, { isLoading: isCreating, error }] = useCreateGroupMutation()
 
+  // Loader state for sending message
+  const [sending, setSending] = useState(false)
+  // Store the last sent message (for loader)
+  const [pendingMessage, setPendingMessage] = useState(null)
+
   useEffect(() => {
-    socket.on("receive-message", () => {
-      refetch()
-    })
+    // Listen for message received event
+    const handleReceive = () => {
+      refetch().then(() => {
+        setSending(false)
+        setPendingMessage(null)
+      })
+    }
+    socket.on("receive-message", handleReceive)
     return () => {
-      socket.off("receive-message")
+      socket.off("receive-message", handleReceive)
     }
   }, [groupname, refetch])
 
@@ -55,6 +92,14 @@ const Chat = () => {
 
   const sendMessage = (e) => {
     e.preventDefault()
+    if (!message.trim()) return
+    setSending(true)
+    setPendingMessage({
+      username: name,
+      text: message,
+      time: new Date().toISOString(),
+      _id: `pending-${Date.now()}`
+    })
     socket.emit("send-message", { message, name, groupname })
     setMessage("")
   }
@@ -70,6 +115,11 @@ const Chat = () => {
       alert("Group already exists")
     }
   }, [error])
+
+  // Compose messages list with pending message if sending
+  const displayedMessages = sending && pendingMessage
+    ? [...localMessages, { ...pendingMessage, pending: true }]
+    : localMessages
 
   return (
     <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen  p-2 md:p-6">
@@ -189,7 +239,7 @@ const Chat = () => {
               Loading messages...
             </motion.div>
           )}
-          {!isLoading && localMessages.length === 0 && (
+          {!isLoading && displayedMessages.length === 0 && (
             <motion.div
               className="text-gray-400 text-center mt-20"
               initial={{ opacity: 0 }}
@@ -201,9 +251,9 @@ const Chat = () => {
 
           <AnimatePresence>
             <SmoothScroll/>
-            {localMessages.map((msg, idx) => (
+            {displayedMessages.map((msg, idx) => (
               <motion.div
-                ref={idx === localMessages.length - 1 ? bottomRef : null}
+                ref={idx === displayedMessages.length - 1 ? bottomRef : null}
                 key={msg._id || idx}
                 className={`flex flex-col items-${msg.username === name ? "end" : "start"} w-full`}
                 initial="hidden"
@@ -218,6 +268,7 @@ const Chat = () => {
                       ? "bg-gradient-to-br from-green-400 to-green-500 text-white self-end"
                       : "bg-gradient-to-br from-yellow-300 to-yellow-400 text-black self-start"
                   }`}
+                  style={msg.pending ? { opacity: 0.7, filter: "blur(0.5px)" } : {}}
                 >
                   {msg.username !== name && (
                     <p className="text-red-600 text-xs font-semibold mb-1">{msg.username}</p>
@@ -239,6 +290,8 @@ const Chat = () => {
                         })
                       : ""}
                   </p>
+                  {/* Show loader for the pending message */}
+                  {msg.pending && <DotsLoader />}
                 </div>
               </motion.div>
             ))}
@@ -254,7 +307,7 @@ const Chat = () => {
           <form
             className="flex w-full gap-2"
             onSubmit={(e) => {
-              if (message.trim() !== "") {
+              if (message.trim() !== "" && !sending) {
                 sendMessage(e)
               } else {
                 e.preventDefault()
@@ -267,14 +320,15 @@ const Chat = () => {
               type="text"
               placeholder="Type a message"
               className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm md:text-base"
+              disabled={sending}
             />
             <motion.button
               type="submit"
-              className="bg-blue-600 text-white px-4 md:px-5 py-2 rounded-r-md hover:bg-blue-700 transition-colors text-sm md:text-base font-semibold"
-              disabled={message.trim() === ""}
+              className={`bg-blue-600 text-white px-4 md:px-5 py-2 rounded-r-md hover:bg-blue-700 transition-colors text-sm md:text-base font-semibold ${sending ? "opacity-60 cursor-not-allowed" : ""}`}
+              disabled={message.trim() === "" || sending}
               whileTap={{ scale: 0.97 }}
             >
-              Send
+              {sending ? <DotsLoader /> : "Send"}
             </motion.button>
           </form>
         </motion.div>

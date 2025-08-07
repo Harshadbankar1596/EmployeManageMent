@@ -48,13 +48,13 @@ function formatTime(totalSeconds) {
 }
 
 const Punchsection = () => {
-  const [addpunch , {isLoading : punchveryfy}] = useAddpunchMutation();
+  const [addpunch, { isLoading: punchveryfy }] = useAddpunchMutation();
   const id = useSelector((state) => state.user.id);
   const [punchs, setPunchs] = useState([]);
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [isClockedIn, setIsClockedIn] = useState(false);
   const navigate = useNavigate();
-  const { data: user, isLoading:veryfy, isError, refetch } = useVerifyTokenQuery();
+  const { data: user, isLoading: veryfy, isError, refetch } = useVerifyTokenQuery();
   // console.log(isError)
   const calculateTime = useCallback(() => {
     return calculateTotalTime(punchs);
@@ -83,9 +83,8 @@ const Punchsection = () => {
     }
 
     // refetch();
-  }, [user, refetch , isError]);
+  }, [user, refetch, isError]);
 
-  // console.log(punchs)
 
   useEffect(() => {
     setTotalSeconds(calculateTime());
@@ -106,11 +105,11 @@ const Punchsection = () => {
         setPunchs(newPunchs);
         setIsClockedIn(newPunchs.length % 2 !== 0);
       }
-        await refetch();
+      await refetch();
     } catch (err) {
       navigate('/login');
     }
-    
+
   };
 
   const EIGHT_HOURS = 8 * 3600;
@@ -189,3 +188,4 @@ const Punchsection = () => {
 };
 
 export default Punchsection;
+

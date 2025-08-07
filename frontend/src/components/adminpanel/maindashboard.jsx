@@ -26,13 +26,20 @@ const MainDashboard = () => {
 
   if (isadmin) {
 
+    
+
     return (
       <div>
-        {isLoading && (
-          <div className="flex justify-center items-center h-screen bg-red-700">Loading...</div>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-screen">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+          </div>
+        ) : (
+          <>
+            <Adminaction pendingleaves={pendingleaves} />
+            <Outlet />
+          </>
         )}
-        <Adminaction pendingleaves={pendingleaves} />
-        <Outlet />
       </div>
     )
   }
