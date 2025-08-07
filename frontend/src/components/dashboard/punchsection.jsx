@@ -79,7 +79,8 @@ const Punchsection = () => {
     }
     refetch();
   }, [user, refetch]);
-
+  
+  console.log(punchs)
   useEffect(() => {
     setTotalSeconds(calculateTime());
     let interval;
@@ -153,7 +154,7 @@ const Punchsection = () => {
 
         <div data-lenis-prevent className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full flex-1">
           <SmoothScroll/>
-          {punchs.length === 0 && (
+          {punchs.length === 0 ? refetch : true && (
             <div className="text-center text-gray-400">No punches yet today.</div>
           )}
           {punchs.map((punch, index) => (
