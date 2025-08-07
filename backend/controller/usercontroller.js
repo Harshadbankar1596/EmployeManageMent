@@ -43,7 +43,6 @@ export const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: "Invalid credentials." });
-            // console.log("not match email : ", email)
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -57,12 +56,12 @@ export const loginUser = async (req, res) => {
 
         if (remember) {
             token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '7d' });
-            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None'  , maxAge: 7 * 24 * 60 * 60 * 1000 });
+            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 7 * 24 * 60 * 60 * 1000 });
         }
 
         else {
             token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '1d' });
-            res.cookie("token", token, {maxAge: 1 * 24 * 60 * 60 * 1000 });
+            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 1 * 24 * 60 * 60 * 1000 });
         }
 
         let userdata = {
@@ -76,7 +75,6 @@ export const loginUser = async (req, res) => {
 
 
         res.status(200).json({ message: "Login successful.", user: userdata, token: token });
-        // console.log("user : : :  :    : : : : : : : : : ", true)
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Server error.", error });
@@ -114,8 +112,7 @@ export const verifyToken = async (req, res) => {
             logs: user.logs,
             id: user._id,
         }
-        // workingOn: user.workingOn,
-        // summary: user.summary
+
 
 
         res.status(200).json({ user: userdata });
@@ -173,7 +170,6 @@ export const addpunch = async (req, res) => {
 export const works = async (req, res) => {
     try {
         const id = req.body.id;
-        // console.log("iddddddddddddddddddddddddddddd", req.body)
         const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -460,7 +456,7 @@ export const getallmembers = async (req, res) => {
             // Debug log for project info of each user
             console.log('Project info for user', user._id, ':', projectInfo);
             const projectdetail = {
-                task : projectInfo.task, 
+                task: projectInfo.task,
             }
 
             return {
