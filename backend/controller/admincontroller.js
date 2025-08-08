@@ -72,72 +72,114 @@ export const addproject = async (req, res) => {
                 // console.log("user finded")
                 newwork.workingOn.unshift(newprojectas)
                 // console.log("user add work")
-               await newwork.save()
+                await newwork.save()
             } catch (error) {
-                console.log("errorin save user work" , error)
+                console.log("errorin save user work", error)
             }
         }
-  
-        res.status(200).json({message : "Project Delevered"})
+
+        res.status(200).json({ message: "Project Delevered" })
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({ message: "server error"})
+        res.status(500).json({ message: "server error" })
     }
 }
 
-export const getallprojects = async (req , res)=>{
+export const getallprojects = async (req, res) => {
     try {
-        
+
         const allproject = await project.find()
 
-        if(!allproject) return(json({message : "404"}));
+        if (!allproject) return (json({ message: "404" }));
 
-        res.status(200).json({message : "all projext" , allprojects : allproject})
+        res.status(200).json({ message: "all projext", allprojects: allproject })
 
     } catch (error) {
-        res.status(500).json({message : "server error"})
+        res.status(500).json({ message: "server error" })
     }
-} 
+}
 
-export const getproject = async ( req , res )=> {
-     try {
+export const getproject = async (req, res) => {
+    try {
         console.log(req.body)
 
-        const {projectid} = req.body
+        const { projectid } = req.body
 
-        if(!projectid) res.status(400).json({message : "Id Not Find"});
+        if (!projectid) res.status(400).json({ message: "Id Not Find" });
 
         const projectdetail = await project.findById(projectid)
 
-        if(!projectdetail) res.status(422).json({message : "Project Not Find"});
+        if (!projectdetail) res.status(422).json({ message: "Project Not Find" });
 
-        res.status(200).json({project : projectdetail})
-        
-     } catch (error) {
+        res.status(200).json({ project: projectdetail })
+
+    } catch (error) {
         console.log(error)
-        res.status(500).json({message : "Server Error"})
-     }
+        res.status(500).json({ message: "Server Error" })
+    }
 }
 
-export const addmember = async (req , res) => {
+export const addmember = async (req, res) => {
     try {
 
-        const {projectid , userid} = req.body
+        console.log(req.body)
+        const memberId = req.body.data[0].memberId
+        const projectid = req.body.data[0].projectid
 
-        if(!projectid || !userid) res.status(400).json({message : "userid or project id ARE require"});
+        if (!projectid || !memberId) res.status(400).json({ message: "memberId or project id ARE require" });
 
         const newproject = await project.findById(projectid)
 
-        newproject.members.unshift(userid)
+        if (!newproject.members.includes(memberId)) {
+            newproject.members.unshift(memberId);
+        }
 
-        if(!newproject) res.status(422).json({message : "Project not Found"})
+        if (!newproject) res.status(422).json({ message: "Project not Found" })
 
         await newproject.save()
 
-        res.status(200).json({message : "Member added Sucssesfully"})
-        
+        res.status(200).json({ message: "Member added Sucssesfully" })
+
     } catch (error) {
-        res.status(500).json({mesage : "Server Error"})
+        res.status(500).json({ mesage: "Server Error" })
+    }
+}
+
+export const getallmembersname = async (req, res) => {
+    const users = await User.find();
+    const names = users.map((user) => ({
+        name: user.name,
+        id: user._id,
+    }));
+    res.status(200).json({ usersname: names });
+}
+
+export const addtask = async (req, res) => {
+    try {
+
+        console.log("add task => ", req.body)
+
+        const { userid, projectid, task } = req.body
+
+        if (!userid || !projectid || !task) res.status(400).json({ message: "userid projectid and task are not found" });
+
+        const user = await User.findById(userid)
+
+        if (!user) res.status(422).json({ message: "user not found" });
+
+        if (!user.workingOn.find(work => work._id.toString() === projectid).task) {
+            user.workingOn.find(work => work._id.toString() === projectid).task.push({ title: task, status: false })
+        }
+        else {
+            user?.workingOn?.find(work => work._id.toString() === projectid).task?.unshift({ title: task, status: false })
+        }
+        await user.save()
+
+        res.status(200).json({ message: "task addes" })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "erver error : " + error })
     }
 }

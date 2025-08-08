@@ -55,7 +55,7 @@ const Punchsection = () => {
   const [isClockedIn, setIsClockedIn] = useState(false);
   const navigate = useNavigate();
   const { data: user, isLoading: veryfy, isError, refetch } = useVerifyTokenQuery();
-  // console.log(isError)
+  
   const calculateTime = useCallback(() => {
     return calculateTotalTime(punchs);
   }, [punchs]);

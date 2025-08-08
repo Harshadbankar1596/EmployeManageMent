@@ -299,9 +299,6 @@ export const addtask = async (req, res) => {
             }
         }
 
-        // console.log("cout", cout)
-        // console.log("user.workingOn.find(work => work._id.toString() === objid).task.length", user.workingOn.find(work => work._id.toString() === objid).task.length)
-
         if (cout === user.workingOn.find(work => work._id.toString() === objid).task.length) {
             user.workingOn.find(work => work._id.toString() === objid).status = true
             await user.save()
@@ -514,7 +511,7 @@ export const screenshot = async (req, res) => {
 
 export const getallmembers = async (req, res) => {
     try {
-        console.log(req.body)
+        console.log("get members => " , req.body)
         const { userid, projectid } = req.body;
 
         if (!userid || !Array.isArray(userid) || userid.length === 0) {
@@ -537,19 +534,20 @@ export const getallmembers = async (req, res) => {
             // Debug log for project info of each user
             console.log('Project info for user', user._id, ':', projectInfo);
             const projectdetail = {
-                task: projectInfo.task,
+                task : projectInfo?.task,
             }
 
             return {
                 name: user.name,
                 img: user.profileimg,
-                projectinfo: projectdetail
+                projectinfo: projectdetail,
+                userid : user._id
             };
         });
 
         res.status(200).json({ members: membersobj });
 
     } catch (error) {
-        res.status(500).json({ message: "Server Error in Fetch All Members" });
+        res.status(500).json({ message: "Server Error in Fetch All Members"+error });
     }
 }
