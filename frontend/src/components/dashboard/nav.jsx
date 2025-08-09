@@ -31,7 +31,7 @@ const Nav = () => {
   useEffect(()=>{
     setTimeout(() => {
       if(user.id === ""){
-        Navigate("/")
+        Navigate("/login")
       }
     }, 100);
   }, []);
