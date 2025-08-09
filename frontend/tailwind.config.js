@@ -13,12 +13,12 @@ export default {
         },
         'fill-right': {
           '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(180deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         }
       },
       animation: {
-        'fill-left': 'fill-left 1s linear both',
-        'fill-right': 'fill-right 1s linear both 1s',
+        'fill-left': 'fill-left 1s linear infinite',
+        'fill-right': 'fill-right 1s linear infinite',
       }
     },
   },

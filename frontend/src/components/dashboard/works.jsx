@@ -1,13 +1,13 @@
-import { useState, useEffect , useCallback , memo } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { useWorksMutation, useTaskstatusMutation } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
-import { FaExclamationTriangle, FaClipboardList, FaChevronDown, FaClipboard, FaCheck, FaPlus , FaSpinner} from 'react-icons/fa';
+import { FaExclamationTriangle, FaClipboardList, FaChevronDown, FaClipboard, FaCheck, FaPlus, FaSpinner } from 'react-icons/fa';
 import { FcCancel } from "react-icons/fc";
 import { useAddtaskMutation } from '../../redux/apislice';
 
 const Works = () => {
     const [addtask] = useAddtaskMutation();
-    const [taskstatus , { isLoading: isLoadingTaskStatus, isError: isErrorTaskStatus }] = useTaskstatusMutation();
+    const [taskstatus, { isLoading: isLoadingTaskStatus, isError: isErrorTaskStatus }] = useTaskstatusMutation();
     const [works, { isLoading, isError, refetch }] = useWorksMutation();
     const id = useSelector((state) => state.user.id);
     const [work, setWork] = useState([]);
@@ -293,7 +293,7 @@ const Works = () => {
                                                 >
                                                     <div
                                                         onClick={() => handleTaskstatus(workItem._id, task._id)}
-                                                        className={`flex-shrink-0 p-1 xs:p-2 cursor-pointer rounded-full border-2 transition-all duration-300
+                                                        className={`flex-shrink-0 p-1 xs:p-2 cursor-pointer rounded-full flex items-center justify-center border-2 transition-all duration-300
                                                             ${task.status
                                                                 ? "bg-green-200 text-green-700 border-green-400 hover:bg-green-300"
                                                                 : "bg-red-200 text-red-700 border-red-400 hover:bg-red-300"
@@ -304,7 +304,7 @@ const Works = () => {
                                                     >
                                                         {
                                                             isLoadingTaskStatus && task._id === currentTaskId ? (
-                                                                <FaSpinner className="h-4 w-4 xs:h-5 xs:w-5 animate-spin" />
+                                                                <FaSpinner className="h-4 w-4 xs:h-5 xs:w-5 animate-fill-right" />
                                                             ) : (
                                                                 <>
                                                                     {task.status ? (
