@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {  Link } from 'react-router-dom';
+import {  Link , useNavigate} from 'react-router-dom';
 import { useGetimageMutation } from '../../redux/apislice';
 import { useScreenshotMutation } from '../../redux/apislice';
 
 const Nav = () => {
   const user = useSelector((state) => state.user);
+  const Navigate = useNavigate();
   const [getimage] = useGetimageMutation();
   const [screenshot] = useScreenshotMutation();
   const [image, setImage] = useState(null);
@@ -26,6 +27,14 @@ const Nav = () => {
     }
     return window.btoa(binary);
   };
+
+  useEffect(()=>{
+    setTimeout(() => {
+      if(user.id === ""){
+        Navigate("/")
+      }
+    }, 100);
+  }, []);
 
   useEffect(() => {
     const fetchImage = async () => {
