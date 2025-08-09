@@ -2,6 +2,7 @@ import React from 'react'
 import { useGetAllProjectsQuery } from '../../../redux/adminapislice'
 // import { useGetallmemebersMutation } from '../../../redux/apislice'
 import { Link } from 'react-router-dom'
+import Loader from '../../loader'
 
 const Assinproject = () => {
     const { data: projects, isLoading: projectsLoading } = useGetAllProjectsQuery()
@@ -12,9 +13,7 @@ const Assinproject = () => {
 
     if (projectsLoading) {
         return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
-            </div>
+            <Loader/>
         )
     }
 

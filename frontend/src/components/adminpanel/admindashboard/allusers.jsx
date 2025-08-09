@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useGetAllUsersQuery } from '../../../redux/adminapislice';
+import { Link } from 'react-router-dom';
 
 const AllUsers = () => {
     const { data: users, isLoading, error } = useGetAllUsersQuery();
@@ -59,9 +60,9 @@ const AllUsers = () => {
                             </div>
                             <p className="text-xl font-semibold text-gray-800 mb-2">{user.name}</p>
                             <p className="text-sm text-gray-500 mb-4">{user.email}</p>
-                            <button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white py-2 px-6 rounded-full font-medium shadow hover:from-blue-500 hover:to-purple-500 transition-colors duration-200">
+                            <Link to={`/admin/employee/${user.userid}`} className="bg-gradient-to-r from-purple-500 to-blue-500 text-white py-2 px-6 rounded-full font-medium shadow hover:from-blue-500 hover:to-purple-500 transition-colors duration-200">
                                 View Profile
-                            </button>
+                            </Link>
                         </div>
                     );
                 })}

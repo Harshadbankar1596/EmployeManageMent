@@ -7,6 +7,7 @@ import { HiOutlinePlus } from 'react-icons/hi';
 import { MdOutlineCalendarToday, MdOutlineCalendarMonth } from 'react-icons/md';
 import { FaRegCheckCircle } from 'react-icons/fa';
 import { BsExclamationCircle } from 'react-icons/bs';
+import Loader from '../../loader';
 
 const ShimmerProjectHeader = () => (
   <div className="flex flex-col sm:flex-row items-center justify-between gap-10 mt-12 w-full max-w-4xl mx-auto">
@@ -109,6 +110,7 @@ const Projectdetails = () => {
       Addmemberinproject(membersToAdd)
         .then(() => {
           if (typeof refetchMembers === "function") refetchMembers();
+          else refetchMembers()
           setMembersRefreshKey(prev => prev + 1);
           setSelectedMembers([]);
         })
@@ -135,26 +137,11 @@ const Projectdetails = () => {
     }
   };
 }
-  if (addmemberloading || a1 || a2 || a3 || addtaskloading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-lg font-medium text-gray-700">Loading your works...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen py-10 ">
+
       {addmemberloading || a1 || a2 || a3 && (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mx-auto mb-4"></div>
-            <p className="text-lg font-medium text-gray-700">Loading your works...</p>
-          </div>
-        </div>
+        <Loader/>
       )}
 
       <nav className="relative bg-gradient-to-br from-yellow-200 via-yellow-100 to-yellow-50 rounded-3xl px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-10 mt-8 w-full max-w-4xl mx-auto shadow-2xl border border-yellow-300">

@@ -73,8 +73,16 @@ export const adminapi = createApi({
                 body : {userid , projectid , task}
             }),
             invalidatesTags : ["users" , "projects"]
+        }),
+
+        employee : builder.mutation({
+            query : (userid)=>({
+                url : "/employee",
+                method : "post",
+                body : {userid}
+            })
         })
     }),
 });
 
-export const { useGetAllProjectsQuery, useAddmemberinprojectMutation , useGetallmembersnameQuery, useGetAllUsersQuery , useVerifyisadminMutation , useAddprojectMutation , useGetprojectMutation , useAddtaskMutation} = adminapi;
+export const { useGetAllProjectsQuery, useAddmemberinprojectMutation , useGetallmembersnameQuery, useGetAllUsersQuery , useVerifyisadminMutation , useAddprojectMutation , useGetprojectMutation , useAddtaskMutation , useEmployeeMutation} = adminapi;

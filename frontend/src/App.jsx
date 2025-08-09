@@ -22,6 +22,8 @@ import Adminleaves from "./components/adminpanel/admindashboard/adminleaves.jsx"
 import Addproject from "./components/adminpanel/admindashboard/addproject.jsx";
 import Assinproject from "./components/adminpanel/admindashboard/assinproject.jsx";
 import Projectdetails from "./components/adminpanel/admindashboard/projectdetails.jsx";
+import Employee from "./components/adminpanel/admindashboard/Employee.jsx";
+
 
 const App = () => {
   const location = useLocation();
@@ -65,6 +67,7 @@ const App = () => {
             <Route path="addproject" element={<Addproject/>}/>
             <Route path="assinTask" element={<Assinproject/>}/>
             <Route path="assinTask/:id" element={<Projectdetails/>}/>
+            <Route path="employee/:id" element={<Employee />} />
             <Route path="*" element={<Navigate to="" />} />
           </Route>
         </Routes>

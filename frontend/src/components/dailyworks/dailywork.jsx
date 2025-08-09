@@ -314,6 +314,7 @@ import { useSelector } from 'react-redux';
 import { useGetworkQuery, useAddworkMutation } from '../../redux/apislice';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlus, FaTimes, FaCalendarAlt, FaClock, FaEdit } from 'react-icons/fa';
+import Loader from '../loader';
 
 // Helper to group works by month and year
 function groupWorksByMonth(works) {
@@ -348,8 +349,8 @@ const Dailywork = () => {
   const [date, setdate] = useState("");
   const [time, settime] = useState("");
   const id = useSelector((state) => state.user.id);
-  const { data: workdata, refetch } = useGetworkQuery(id);
-  const [addwork] = useAddworkMutation();
+  const { data: workdata, refetch , isLoading : getwork } = useGetworkQuery(id);
+  const [addwork , {isLoading : addingload}] = useAddworkMutation();
 
   // Group works by month
   const worksByMonth = groupWorksByMonth(workdata?.works || []);
@@ -369,7 +370,6 @@ const Dailywork = () => {
 
   return (
     <div className="w-full min-h-screen px-2 sm:px-4 py-6">
-      {/* Modal */}
       <AnimatePresence>
         {showmodal && (
           <motion.div 
@@ -509,7 +509,7 @@ const Dailywork = () => {
       </div>
 
       {/* Work Entries Table */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+      {getwork ? <Loader/> : addingload ? <Loader/> : (<div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
         {Object.keys(worksByMonth).length > 0 ? (
           Object.entries(worksByMonth)
             .sort((a, b) => {
@@ -614,7 +614,7 @@ const Dailywork = () => {
             </motion.button>
           </motion.div>
         )}
-      </div>
+      </div>)}
     </div>
   );
 };

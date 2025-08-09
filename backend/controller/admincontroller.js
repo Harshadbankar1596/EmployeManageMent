@@ -203,3 +203,22 @@ export const addtask = async (req, res) => {
         res.status(500).json({ message: "erver error : " + error })
     }
 }
+
+export const employee = async (req , res)=>{
+    try {
+
+        const {userid} = req.body
+
+        if(!userid) res.status(400).json({message : "UserId Not Found"});
+
+        const user = await User.findById(userid)
+
+        if(!user) res.status(422).json({mesage : "Invalid Id"});
+
+        res.status(200).json(user)
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message : "Server error"})
+    }
+}

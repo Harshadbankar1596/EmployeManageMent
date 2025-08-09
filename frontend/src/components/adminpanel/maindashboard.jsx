@@ -1,39 +1,30 @@
-import { React, useState, useEffect , useRef } from 'react'
+import { React, useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, useLocation, Outlet } from 'react-router-dom'
-import AllUsers from './admindashboard/allusers'
-import ProjectSummary from './admindashboard/projectsummary'
 import Adminaction from './admindashboard/adminaction.jsx'
-import CalendarComponent from '../calender/calender.jsx'
-import Chat from '../groupchats/chat.jsx'
 import { useVerifyisadminMutation } from '../../redux/adminapislice.js'
 import { useSelector } from 'react-redux'
+import Loader from '../loader.jsx'
 const MainDashboard = () => {
-  const location = useLocation();
 
   const id = useSelector((state) => state.user.id)
   // const isActive = (path) => location.pathname === `/admin/${path}`;
   const [isadmin, setisadmin] = useState(false)
-  const [veryify , { isLoading , isError }] = useVerifyisadminMutation()
-  const [pendingleaves , setpendingleaves] = useState(0)
+  const [veryify, { isLoading, isError }] = useVerifyisadminMutation()
+  const [pendingleaves, setpendingleaves] = useState(0)
 
   useEffect(() => {
     veryify(id).unwrap().then((v) => {
-      console.log("is admin" , v)
+      console.log("is admin", v)
       setpendingleaves(v.pendingleaves)
       setisadmin(true)
     })
   }, [])
 
-  if (isadmin) {
-
-    
-
+  if(isadmin){
     return (
       <div>
         {isLoading ? (
-          <div className="flex justify-center items-center h-screen">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
-          </div>
+          <Loader />
         ) : (
           <>
             <Adminaction pendingleaves={pendingleaves} />

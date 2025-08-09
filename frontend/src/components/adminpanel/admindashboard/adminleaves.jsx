@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useGetallleavesQuery, useApprovedleaveMutation, useRejectleaveMutation } from '../../../redux/leaveslice'
-
+import Loader from '../../loader'
 const Adminleaves = () => {
 
     const { data: leaves, refetch , isLoading : fetchloading } = useGetallleavesQuery()
@@ -27,9 +27,7 @@ const Adminleaves = () => {
     return (
         <div>
         {(mutationloading || amutationloading || fetchloading) && (
-            <div className="flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full border-8 border-t-8 border-gray-200 border-t-blue-500 h-16 w-16"></div>
-            </div>
+            <Loader/>
         )}
 
         <div className="p-6  min-h-screen">

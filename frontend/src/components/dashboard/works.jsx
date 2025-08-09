@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux';
 import { FaExclamationTriangle, FaClipboardList, FaChevronDown, FaClipboard, FaCheck, FaPlus, FaSpinner } from 'react-icons/fa';
 import { FcCancel } from "react-icons/fc";
 import { useAddtaskMutation } from '../../redux/apislice';
+import Loader from '../loader';
 
 const Works = () => {
-    const [addtask] = useAddtaskMutation();
+    const [addtask , {isLoading : addloading}] = useAddtaskMutation();
     const [taskstatus, { isLoading: isLoadingTaskStatus, isError: isErrorTaskStatus }] = useTaskstatusMutation();
     const [works, { isLoading, isError, refetch }] = useWorksMutation();
     const id = useSelector((state) => state.user.id);
@@ -62,12 +63,7 @@ const Works = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mx-auto mb-4"></div>
-                    <p className="text-lg font-medium text-gray-700">Loading your works...</p>
-                </div>
-            </div>
+            <Loader/>
         );
     }
 
@@ -214,7 +210,8 @@ const Works = () => {
                                     transitionProperty: "max-height, opacity, padding ",
                                 }}
                             >
-                                <div className="transition-opacity duration-700">
+                                {addloading ? <Loader/> : (<div className="transition-opacity duration-700">
+                                     
                                     <div className="mb-4 xs:mb-6">
                                         <h2 className="text-base xs:text-lg font-bold text-indigo-700 mb-2 xs:mb-3 flex items-center gap-2">
                                             <FaClipboard className="inline-block text-indigo-400" />
@@ -222,6 +219,7 @@ const Works = () => {
                                         </h2>
                                     </div>
                                     <div className=" flex flex-col xs:flex-row xs:items-center xs:justify-between mb-3 xs:mb-5 gap-2 xs:gap-0">
+                                       
                                         <h3 className="font-semibold text-gray-700 flex items-center gap-2 text-base xs:text-lg">
                                             <FaClipboardList className="h-5 w-5 text-indigo-500 animate-fade-in" />
                                             Tasks
@@ -331,7 +329,7 @@ const Works = () => {
                                             No tasks yet. Add your first task!
                                         </div>
                                     )}
-                                </div>
+                                </div>)}
                             </div>
                         </div>
                     ))}

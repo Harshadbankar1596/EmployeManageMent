@@ -1,6 +1,6 @@
 import express from "express";
 import { authMiddleware } from "../middleware/auth.middleware.js";
-import { getallprojects, getallusers, verifyisadmin, addproject, getproject, addmember, getallmembersname, addtask } from "../controller/admincontroller.js";
+import { getallprojects, getallusers, verifyisadmin, addproject, getproject, addmember, getallmembersname, addtask, employee } from "../controller/admincontroller.js";
 
 const router = express.Router();
 
@@ -12,5 +12,6 @@ router.post("/getproject", authMiddleware, getproject)
 router.post("/addmember",authMiddleware , addmember)
 router.get("/getallmembersname"  , getallmembersname)
 router.post("/addtask" , addtask)
+router.post("/employee" , employee)
 
 export default router;
