@@ -54,7 +54,7 @@ const Punchsection = () => {
   const [isClockedIn, setIsClockedIn] = useState(false);
   const navigate = useNavigate();
 
-  const { data: user, isLoading: veryfy, isError, refetch } = useVerifyTokenQuery();
+  const { data: user, isLoading: veryfy, refetch } = useVerifyTokenQuery();
   
   const calculateTime = useCallback(() => {
     return calculateTotalTime(punchs);
@@ -83,7 +83,7 @@ const Punchsection = () => {
     // }
 
     // refetch();
-  }, [user, refetch, isError]);
+  }, [user, refetch]);
 
 
   useEffect(() => {
