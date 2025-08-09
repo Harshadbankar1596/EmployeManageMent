@@ -74,13 +74,13 @@ const Punchsection = () => {
       setIsClockedIn(punches.length % 2 !== 0);
     }
 
-    else {
-      setTimeout(() => {
-        // alert("Error in Veryfy Token")
-        console.log(isError)
-        if (isError) navigate('/login');
-      }, 1000)
-    }
+    // else {
+    //   setTimeout(() => {
+    //     // alert("Error in Veryfy Token")
+    //     console.log(isError)
+    //     // if (isError) navigate('/login');
+    //   }, 1000)
+    // }
 
     // refetch();
   }, [user, refetch, isError]);
