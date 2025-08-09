@@ -513,7 +513,7 @@ export const screenshot = async (req, res) => {
 
 export const getallmembers = async (req, res) => {
     try {
-        console.log("get members => " , req.body)
+        // console.log("get members => " , req.body)
         const { userid, projectid } = req.body;
 
         if (!userid || !Array.isArray(userid) || userid.length === 0) {
@@ -521,6 +521,7 @@ export const getallmembers = async (req, res) => {
         }
 
         const members = await User.find({ _id: { $in: userid } });
+        
 
         if (!members || members.length === 0) {
             return res.status(404).json({ message: "Users Not Found" });
@@ -529,9 +530,7 @@ export const getallmembers = async (req, res) => {
 
 
         const membersobj = members.map((user) => {
-            const projectInfo = Array.isArray(user.workingOn)
-                ? user.workingOn.find((work) => String(work._id) === String(projectid))
-                : null;
+            const projectInfo = user.workingOn.find((work) => String(work.projectid) === projectid)
 
             // Debug log for project info of each user
             console.log('Project info for user', user._id, ':', projectInfo);

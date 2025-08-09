@@ -33,7 +33,7 @@ const Nav = () => {
       if(user.id === ""){
         Navigate("/login")
       }
-    }, 100);
+    }, 1);
   }, []);
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const Nav = () => {
               animation: 'navTextFadeIn 1.2s cubic-bezier(0.4,0,0.2,1) 0.35s both'
             }}
           >
-            {user.name || 'Don'}
+            {user.name || 'None'}
           </p>
           <p
             className='text-white text-xs sm:text-sm lg:text-base opacity-90 truncate'

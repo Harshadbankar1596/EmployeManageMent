@@ -1,11 +1,10 @@
 import React from 'react'
 import { useGetAllProjectsQuery } from '../../../redux/adminapislice'
-import { useGetallmemebersMutation } from '../../../redux/apislice'
+// import { useGetallmemebersMutation } from '../../../redux/apislice'
 import { Link } from 'react-router-dom'
 
 const Assinproject = () => {
     const { data: projects, isLoading: projectsLoading } = useGetAllProjectsQuery()
-    const [getallmembers] = useGetallmemebersMutation()
 
     function openproject(projectid) {
         console.log('ids', projectid)

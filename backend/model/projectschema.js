@@ -5,7 +5,7 @@ const projectSchema = new mongoose.Schema({
     members: [{ type: mongoose.Schema.Types.ObjectId}],
     startdate: { type: Date, required: true },
     enddate: { type: Date },
-    staus : {type : Boolean , default : false}
+    status : {type : Boolean , default : false}
 });
 
 export default mongoose.model("Project", projectSchema);

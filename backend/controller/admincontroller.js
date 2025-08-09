@@ -60,18 +60,21 @@ export const addproject = async (req, res) => {
 
         const savedProject = await newProject.save();
         projectid = savedProject._id;
-        // console.log(work)
-        // console.log(projectid)
-
-        const newprojectas = await project.findById(projectid)
-        // console.log(newprojectas)
-
         for (let i = 0; i < obj.membersid.length; i++) {
             try {
                 let newwork = await User.findById(obj.membersid[i])
-                // console.log("user finded")
-                newwork.workingOn.unshift(newprojectas)
-                // console.log("user add work")
+
+                const pro = {
+                    projectid: projectid,
+                    title: obj.details.title,
+                    task: [],
+                    members: obj.membersid,
+                    status: false,
+                    startdate: obj.details.startDate,
+                    enddate: obj.details.endDate,
+                }
+
+                newwork.workingOn.unshift(pro)
                 await newwork.save()
             } catch (error) {
                 console.log("errorin save user work", error)
@@ -137,11 +140,25 @@ export const addmember = async (req, res) => {
 
         if (!newproject) res.status(422).json({ message: "Project not Found" })
 
+        const user = await User.findById(memberId)
+
+        user.workingOn.push({
+            projectid: projectid,
+            title: newproject.title,
+            task: [],
+            members: newproject.members,
+            status: newproject.status,
+            startdate: newproject.startdate,
+            enddate: newproject.enddate
+        })
+
         await newproject.save()
+        await user.save()
 
         res.status(200).json({ message: "Member added Sucssesfully" })
 
     } catch (error) {
+        console.log("error in add member =>", error)
         res.status(500).json({ mesage: "Server Error" })
     }
 }
@@ -168,11 +185,14 @@ export const addtask = async (req, res) => {
 
         if (!user) res.status(422).json({ message: "user not found" });
 
-        if (!user.workingOn.find(work => work._id.toString() === projectid).task) {
-            user.workingOn.find(work => work._id.toString() === projectid).task.push({ title: task, status: false })
-        }
-        else {
-            user?.workingOn?.find(work => work._id.toString() === projectid).task?.unshift({ title: task, status: false })
+        const projectWork = user.workingOn.find(work => work.projectid === projectid);
+
+        if (projectWork) {
+            if (projectWork.task && projectWork.task.length > 0) {
+                projectWork.task.push({ title: task, status: false });
+            } else {
+                projectWork.task = [{ title: task, status: false }];
+            }
         }
         await user.save()
 

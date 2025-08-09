@@ -36,7 +36,7 @@ const ShimmerEmployeeCard = () => (
   </div>
 );
 
-const Projectdetails = memo(() => {
+const Projectdetails = () => {
   const { id: projectid } = useParams();
   const [getproject, { isLoading: a1 }] = useGetprojectMutation();
   const [getallmembers, { isLoading: a2, refetch: refetchMembers }] = useGetallmemebersMutation();
@@ -83,7 +83,7 @@ const Projectdetails = memo(() => {
     };
     if (projectid && projectdetail) fetchMembers();
     // eslint-disable-next-line
-  }, [getallmembers, projectid, projectdetail, membersRefreshKey]);
+  }, [getallmembers, projectid, projectdetail, membersRefreshKey , refetchMembers]);
 
   const getImageSrc = (img) => {
     if (!img?.data) return null;
@@ -135,7 +135,7 @@ const Projectdetails = memo(() => {
     }
   };
 }
-  if (addmemberloading || a1 || a2 || a3) {
+  if (addmemberloading || a1 || a2 || a3 || addtaskloading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
         <div className="text-center">
@@ -378,6 +378,6 @@ const Projectdetails = memo(() => {
       </div>
     </div>
   );
-});
+};
 
 export default Projectdetails;

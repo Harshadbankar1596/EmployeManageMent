@@ -71,7 +71,7 @@ const userSchema = new mongoose.Schema({
     workingOn: {
         type: [
             {
-                projectid:String,
+                projectid: String,
                 title: { type: String, default: 'Project' },
                 task: [
                     {
@@ -82,10 +82,11 @@ const userSchema = new mongoose.Schema({
                 members: [{
                     type: mongoose.Schema.Types.ObjectId,
                     ref: 'User'
-            }],
+                }],
                 status: { type: Boolean, default: false },
-                startdate: { type: Date, default: new Date().toLocaleDateString() },
-                enddate : {type : Date , default : new Date().toLocaleDateString()}
+                startdate: { type: Date, default: Date.now },
+                enddate: { type: Date, default: Date.now }
+
             }
         ]
     }
