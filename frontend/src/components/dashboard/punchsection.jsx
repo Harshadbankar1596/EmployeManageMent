@@ -3,7 +3,6 @@ import Switch from './togle';
 import { useAddpunchMutation, useVerifyTokenQuery } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import SmoothScroll from '../../lenis';
 
 function fixTime(timeStr) {
   if (!timeStr) return '';
@@ -54,6 +53,7 @@ const Punchsection = () => {
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [isClockedIn, setIsClockedIn] = useState(false);
   const navigate = useNavigate();
+
   const { data: user, isLoading: veryfy, isError, refetch } = useVerifyTokenQuery();
   
   const calculateTime = useCallback(() => {
@@ -99,7 +99,7 @@ const Punchsection = () => {
 
   const handlePunch = async () => {
     try {
-      const res = await addpunch({ id, currentHours }).unwrap();
+      const res = await addpunch({ id , currentHours }).unwrap();
       if (res?.log?.punchs) {
         const newPunchs = res.log.punchs;
         setPunchs(newPunchs);
@@ -107,7 +107,8 @@ const Punchsection = () => {
       }
       await refetch();
     } catch (err) {
-      navigate('/login');
+      alert("Error in Punching");
+      // navigate('/login');
     }
 
   };
@@ -164,7 +165,7 @@ const Punchsection = () => {
         </div>
 
         <div data-lenis-prevent className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full flex-1">
-          <SmoothScroll />
+         
           {punchs.length === 0 && (
             <div className="text-center text-gray-400">No punches yet today.</div>
           )}
@@ -188,4 +189,7 @@ const Punchsection = () => {
 };
 
 export default Punchsection;
+
+
+
 

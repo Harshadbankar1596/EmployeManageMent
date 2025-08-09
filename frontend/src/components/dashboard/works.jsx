@@ -1,19 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect , useCallback , memo } from 'react';
 import { useWorksMutation, useTaskstatusMutation } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
-import { FaExclamationTriangle, FaClipboardList, FaChevronDown, FaClipboard, FaCheck, FaPlus } from 'react-icons/fa';
+import { FaExclamationTriangle, FaClipboardList, FaChevronDown, FaClipboard, FaCheck, FaPlus , FaSpinner} from 'react-icons/fa';
 import { FcCancel } from "react-icons/fc";
 import { useAddtaskMutation } from '../../redux/apislice';
 
 const Works = () => {
     const [addtask] = useAddtaskMutation();
-    const [taskstatus] = useTaskstatusMutation();
+    const [taskstatus , { isLoading: isLoadingTaskStatus, isError: isErrorTaskStatus }] = useTaskstatusMutation();
     const [works, { isLoading, isError, refetch }] = useWorksMutation();
     const id = useSelector((state) => state.user.id);
     const [work, setWork] = useState([]);
     const [expandedItems, setExpandedItems] = useState({});
     const [taskModalFor, setTaskModalFor] = useState(null);
     const [inputtask, setInputtask] = useState('');
+    const [currentTaskId, setCurrentTaskId] = useState(null);
 
     useEffect(() => {
         const fetchWorks = async () => {
@@ -33,15 +34,16 @@ const Works = () => {
         fetchWorks();
     }, [id]);
 
-    const toggleWorkItem = (objid) => {
+    const toggleWorkItem = useCallback((objid) => {
         setExpandedItems(prev => ({
             ...prev,
             [objid]: !prev[objid]
         }));
-    };
+    }, []);
 
     const handleTaskstatus = async (objid, taskid) => {
         try {
+            setCurrentTaskId(taskid);
             const res = await taskstatus({ userid: id, objid: objid, taskid: taskid });
             setWork(res.data.taskstatus);
         } catch (err) {
@@ -205,11 +207,11 @@ const Works = () => {
                             <div
                                 className={`
                                     bg-white transition-all duration-700 ease-in-out overflow-hidden
-                                    ${expandedItems[workItem._id] ? "max-h-[600px] opacity-100 py-4 px-2 xs:py-6 xs:px-4 sm:px-8" : "max-h-0 opacity-0 py-0 px-0"}
+                                    ${expandedItems[workItem._id] ? "h-auto opacity-100 py-4 px-2 xs:py-6 xs:px-4 sm:px-8" : "max-h-0 opacity-0 py-0 px-0"}
                                     border-t border-gray-100
                                 `}
                                 style={{
-                                    transitionProperty: "max-height, opacity, padding",
+                                    transitionProperty: "max-height, opacity, padding ",
                                 }}
                             >
                                 <div className="transition-opacity duration-700">
@@ -219,7 +221,7 @@ const Works = () => {
                                             Members In Project
                                         </h2>
                                     </div>
-                                    <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between mb-3 xs:mb-5 gap-2 xs:gap-0">
+                                    <div className=" flex flex-col xs:flex-row xs:items-center xs:justify-between mb-3 xs:mb-5 gap-2 xs:gap-0">
                                         <h3 className="font-semibold text-gray-700 flex items-center gap-2 text-base xs:text-lg">
                                             <FaClipboardList className="h-5 w-5 text-indigo-500 animate-fade-in" />
                                             Tasks
@@ -274,12 +276,12 @@ const Works = () => {
                                     </div>
 
                                     {workItem.task && workItem.task.length > 0 ? (
-                                        <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 xs:gap-4 animate-fade-in-slow">
+                                        <div className="grid overflow-auto grid-cols-1 xs:grid-cols-2 gap-3 xs:gap-4 animate-fade-in-slow">
                                             {workItem.task.map((task, tIdx) => (
                                                 <div
                                                     key={task._id}
                                                     className={`
-                                                        p-3 xs:p-4 rounded-xl border transition-all duration-400 ease-in-out hover:shadow-lg
+                                                        p-3 xs:p-4 rounded-xl border transition-all duration-400 ease-in-out hover:shadow-md
                                                         flex items-center min-w-0 gap-2 xs:gap-3
                                                         ${task.status
                                                             ? "border-green-200 bg-gradient-to-r from-green-50 to-green-100"
@@ -300,11 +302,19 @@ const Works = () => {
                                                         `}
                                                         title={task.status ? "Mark as Incomplete" : "Mark as Complete"}
                                                     >
-                                                        {task.status ? (
-                                                            <FaCheck className="h-4 w-4 xs:h-5 xs:w-5" />
-                                                        ) : (
-                                                            <FcCancel className="h-4 w-4 xs:h-5 xs:w-5" />
-                                                        )}
+                                                        {
+                                                            isLoadingTaskStatus && task._id === currentTaskId ? (
+                                                                <FaSpinner className="h-4 w-4 xs:h-5 xs:w-5 animate-spin" />
+                                                            ) : (
+                                                                <>
+                                                                    {task.status ? (
+                                                                        <FaCheck className="h-4 w-4 xs:h-5 xs:w-5" />
+                                                                    ) : (
+                                                                        <FcCancel className="h-4 w-4 xs:h-5 xs:w-5" />
+                                                                    )}
+                                                                </>
+                                                            )
+                                                        }
                                                     </div>
                                                     <p
                                                         className={`font-medium truncate min-w-0 text-sm xs:text-base ${task.status ? "text-green-800" : "text-red-800"

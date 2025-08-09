@@ -1,7 +1,7 @@
 process.env.TZ = 'Asia/Kolkata';
 import User from "../model/userschema.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 import dotenv from "dotenv";
 import Screenshot from "../model/screenshot.js";
 dotenv.config();
@@ -99,6 +99,8 @@ export const verifyToken = async (req, res) => {
         }
 
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "secretkey");
+
+        console.log("veryfy tocen decoded line 103 => " , decoded)
 
         const user = await User.findById(decoded.id).select('-password');
 

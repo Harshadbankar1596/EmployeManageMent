@@ -1,6 +1,5 @@
 import React from 'react'
 import Punchsection from './punchsection'
-import { useVerifyTokenQuery } from '../../redux/apislice'
 
 
 

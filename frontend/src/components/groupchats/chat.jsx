@@ -77,7 +77,7 @@ const Chat = () => {
     return () => {
       socket.off("receive-message", handleReceive)
     }
-  }, [groupname, refetch])
+  }, [groupname])
 
   useEffect(() => {
     if (data?.message?.message) {
@@ -116,7 +116,6 @@ const Chat = () => {
     }
   }, [error])
 
-  // Compose messages list with pending message if sending
   const displayedMessages = sending && pendingMessage
     ? [...localMessages, { ...pendingMessage, pending: true }]
     : localMessages
@@ -227,7 +226,7 @@ const Chat = () => {
         {/* Messages */}
         <div
           data-lenis-prevent
-          className="overflow-y-auto flex-1 px-2 sm:px-4 md:px-6 py-3 md:py-4 space-y-3 bg-blue-50 scroll-smooth"
+          className="overflow-y-auto scrollbar-hide flex-1 px-2 sm:px-4 md:px-6 py-3 md:py-4 space-y-3 bg-blue-50 scroll-smooth"
           style={{ minHeight: 0 }}
         >
           {isLoading && (
@@ -250,7 +249,7 @@ const Chat = () => {
           )}
 
           <AnimatePresence>
-            <SmoothScroll/>
+            {/* <SmoothScroll/> */}
             {displayedMessages.map((msg, idx) => (
               <motion.div
                 ref={idx === displayedMessages.length - 1 ? bottomRef : null}
@@ -263,7 +262,7 @@ const Chat = () => {
                 layout
               >
                 <div
-                  className={`rounded-xl px-4 py-2 flex flex-col max-w-[90%] sm:max-w-[80%] break-words text-base md:text-lg shadow-sm transition-all duration-300 ${
+                  className={`rounded-xl border-2  px-4 py-2 flex flex-col max-w-[90%] sm:max-w-[80%] break-words text-base md:text-lg shadow-sm transition-all duration-300 ${
                     msg.username === name
                       ? "bg-gradient-to-br from-green-400 to-green-500 text-white self-end"
                       : "bg-gradient-to-br from-yellow-300 to-yellow-400 text-black self-start"

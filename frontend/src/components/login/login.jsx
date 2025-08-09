@@ -6,13 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/userslice/userslice";
 import { useLoginUserMutation } from "../../redux/apislice";
 import { useMatchFaceMutation } from "../../redux/apislice";
+import { FaSpinner } from "react-icons/fa";
+
 
 const Login = () => {
   const [matchFace, { isLoading }] = useMatchFaceMutation();
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", remember: false });
   const dispatch = useDispatch();
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, { isLoading: isLoadingLogin, isError }] = useLoginUserMutation();
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
 
-    
+
     e.preventDefault();
     setErrors({});
     setSubmitError("");
@@ -45,9 +47,11 @@ const Login = () => {
 
       const res = await loginUser(form).unwrap();
       console.log("res", res)
+
       dispatch(setUser(res.user));
       setSuccess(true);
       setForm({ email: "", password: "", remember: false });
+
 
 
       if (res.user.isadmin) {
@@ -56,15 +60,16 @@ const Login = () => {
           navigate("/admin");
         }, 1000);
       }
-
-
       else {
         setTimeout(() => {
           setSuccess(false);
           navigate("/");
         }, 1000);
       }
-
+      
+      if (isError) {
+        alert("Login failed" + " " + res.message);
+      }
 
     } catch (err) {
 
@@ -302,10 +307,11 @@ const Login = () => {
             )}
             <button
               type="submit"
-              className="w-full py-2 sm:py-3 bg-blue-900 text-white font-semibold rounded-md hover:bg-blue-800 transition text-sm sm:text-base"
-            >
-              Sign In
-            </button>
+              className={`w-full py-2 sm:py-3 bg-blue-900 text-white font-semibold rounded-md hover:bg-blue-800 transition text-sm sm:text-base flex items-center justify-center ${isLoadingLogin ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={isLoadingLogin}
+            >{
+                isLoadingLogin ? <FaSpinner className="animate-spin h-5 w-5" /> : "Sign In"
+              }</button>
           </form>
           <div className="text-center mt-4 sm:mt-6 text-gray-600 text-sm">
             Don't have an account?{" "}
