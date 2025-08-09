@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { IoPerson } from "react-icons/io5";
 import { FaBookOpen } from "react-icons/fa";
 import { RiTaskLine } from "react-icons/ri";
+import { BiSpreadsheet } from "react-icons/bi";
 import { FaPen } from "react-icons/fa";
 const Adminaction = (props) => {
   return (
     <div className="my-5 mx-2 sm:mx-4 md:mx-8">
       <div
         className="
-          grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4
+          grid grid-cols-2 3 md:grid-cols-5 sm:grid-cols-4 lg:grid-cols-5
           gap-3 sm:gap-5 md:gap-6
           justify-items-center
           w-full
@@ -281,6 +282,69 @@ const Adminaction = (props) => {
             }}
           >
             Add Project
+          </span>
+        </Link>
+        <Link
+          to="/admin/employeedailyreport"
+          className={`
+            group
+            flex flex-col items-center justify-center
+            relative
+            rounded-full
+            border border-gray-200
+            bg-red-100
+            shadow-sm
+            transition-all duration-300
+            hover:border-red-400
+            hover:shadow-lg
+            focus:outline-none
+            w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32
+            p-0
+            overflow-visible
+            animate-fade-in-up
+          `}
+          style={{
+            animation: `fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both`
+          }}
+        >
+          <div
+            className={`
+              flex items-center justify-center
+              bg-red-200 group-hover:bg-red-300
+              rounded-full
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28
+              transition-colors duration-300
+              text-center
+            `}
+          >
+            <BiSpreadsheet
+              className={`
+                text-red-700
+                text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+                transition-transform duration-300
+                group-hover:scale-110
+              `}
+            />
+          </div>
+          <span
+            className={`
+              mt-2
+              px-3 py-1
+              rounded-md
+              bg-white
+              shadow
+              text-xs sm:text-sm md:text-base
+              font-semibold
+              text-red-800
+              transition-all duration-300
+              text-center
+              select-none
+            `}
+            style={{
+              minWidth: '90px'
+            }}
+          >
+            EmployeeReport
           </span>
         </Link>
       </div>
