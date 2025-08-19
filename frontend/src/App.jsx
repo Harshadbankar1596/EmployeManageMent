@@ -278,6 +278,14 @@ const App = () => {
               }
             />
             <Route
+              path="reports/:id"
+              element={
+                <ProtectedRoute>
+                  <Employeedailyreport />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="leaves"
               element={
                 <ProtectedRoute>

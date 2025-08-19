@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetallemployeesQuery } from '../../../redux/superadminslice';
 import Loader from "../../loader.jsx";
 import { Link } from "react-router-dom";
+import { 
+  FaUsers, 
+  FaSearch, 
+  FaFilter, 
+  FaEye, 
+  FaUserCheck, 
+  FaUserTimes,
+  FaCalendarAlt,
+  FaChartBar,
+  FaSort,
+  FaSortUp,
+  FaSortDown
+} from 'react-icons/fa';
+import { MdDashboard, MdPerson, MdWork } from 'react-icons/md';
 
-// Helper to get image src
 function getImageSrc(image) {
   if (!image || !image.data || !image.contentType) return null;
   let byteArray = Array.isArray(image.data.data) ? image.data.data : image.data;
@@ -14,166 +27,329 @@ function getImageSrc(image) {
   return `data:${image.contentType};base64,${base64String}`;
 }
 
-// Animated status badge
 const StatusBadge = ({ isPresent }) => (
-  <span
-    className={`inline-block px-4 py-1 rounded-full font-bold text-xs shadow-md border transition-all
-      ${isPresent
-        ? "bg-gradient-to-r from-green-300 via-green-400 to-green-500 text-white border-green-300 animate-bounceIn"
-        : "bg-gradient-to-r from-red-200 via-red-300 to-red-400 text-white border-red-200 animate-fadePulse"
-      }`}
-  >
-    {isPresent ? "Present" : "Absent"}
-  </span>
+  <div className="relative">
+    <span
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-lg border-2 transition-all duration-300 transform hover:scale-105
+        ${isPresent
+          ? "bg-gradient-to-r from-green-400 to-green-600 text-white border-green-300 shadow-green-200"
+          : "bg-gradient-to-r from-red-400 to-red-600 text-white border-red-300 shadow-red-200"
+        }`}
+    >
+      {isPresent ? (
+        <>
+          <FaUserCheck className="text-sm animate-pulse" />
+          Present
+        </>
+      ) : (
+        <>
+          <FaUserTimes className="text-sm animate-pulse" />
+          Absent
+        </>
+      )}
+    </span>
+    <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${isPresent ? 'bg-green-400' : 'bg-red-400'} animate-ping`}></div>
+  </div>
 );
+
+const SearchFilter = ({ searchTerm, setSearchTerm, filterStatus, setFilterStatus }) => (
+  <div className=" rounded-xl shadow-lg p-4 mb-6 border border-gray-100">
+    <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex-1 relative">
+        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search employees by name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        />
+      </div>
+      <div className="flex gap-2">
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        >
+          <option value="all">All Status</option>
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+        </select>
+        <button className="px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2">
+          <FaFilter />
+          Filter
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+// Stats summary component
+const StatsSummary = ({ employees, todaydate }) => {
+  const presentCount = employees?.data?.filter(emp => emp?.log?.date === todaydate).length || 0;
+  const totalCount = employees?.data?.length || 0;
+  const absentCount = totalCount - presentCount;
+  const attendanceRate = totalCount > 0 ? Math.round((presentCount / totalCount) * 100) : 0;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-blue-100 text-sm font-medium">Total Employees</p>
+            <p className="text-2xl font-bold">{totalCount}</p>
+          </div>
+          <FaUsers className="text-3xl opacity-80" />
+        </div>
+      </div>
+      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-4 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-green-100 text-sm font-medium">Present Today</p>
+            <p className="text-2xl font-bold">{presentCount}</p>
+          </div>
+          <FaUserCheck className="text-3xl opacity-80" />
+        </div>
+      </div>
+      <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl p-4 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-red-100 text-sm font-medium">Absent Today</p>
+            <p className="text-2xl font-bold">{absentCount}</p>
+          </div>
+          <FaUserTimes className="text-3xl opacity-80" />
+        </div>
+      </div>
+      <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-4 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-purple-100 text-sm font-medium">Attendance Rate</p>
+            <p className="text-2xl font-bold">{attendanceRate}%</p>
+          </div>
+          <FaChartBar className="text-3xl opacity-80" />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Employees = () => {
   const { data: employees, isLoading, isError, error } = useGetallemployeesQuery();
   const todaydate = new Date().toLocaleDateString();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [sortField, setSortField] = useState('name');
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  const filteredEmployees = employees?.data?.filter(emp => {
+    const matchesSearch = emp.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const isPresent = emp?.log?.date === todaydate;
+    const matchesStatus = filterStatus === 'all' || 
+      (filterStatus === 'present' && isPresent) || 
+      (filterStatus === 'absent' && !isPresent);
+    return matchesSearch && matchesStatus;
+  }) || [];
+
+  const sortedEmployees = [...filteredEmployees].sort((a, b) => {
+    let aValue = a[sortField];
+    let bValue = b[sortField];
+    
+    if (sortField === 'status') {
+      aValue = a?.log?.date === todaydate;
+      bValue = b?.log?.date === todaydate;
+    }
+    
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const getSortIcon = (field) => {
+    if (sortField !== field) return <FaSort className="text-gray-400" />;
+    return sortDirection === 'asc' ? <FaSortUp className="text-blue-600" /> : <FaSortDown className="text-blue-600" />;
+  };
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
-        <Loader />
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-center h-64">
+            <div className="flex flex-col items-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+              <p className="mt-4 text-gray-600 font-medium">Loading employee data...</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm animate-shake">
-          {error?.data?.message || "Failed to load employees."}
+      <div className=" p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="p-4 bg-red-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <FaUserTimes className="text-red-500 text-2xl" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Data</h3>
+              <p className="text-gray-600">{error?.data?.message || "Failed to load employees."}</p>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-12 bg-gradient-to-br from-blue-50 via-white to-indigo-100 rounded-3xl shadow-2xl border border-slate-200 p-8 sm:p-12 animate-fadein">
-      <div className="flex flex-col items-center mb-8">
-        <div className="relative">
-          <span className="absolute -top-4 -left-4 w-8 h-8 bg-blue-200 rounded-full blur-lg opacity-60 animate-pulse"></span>
-          <span className="absolute -bottom-4 -right-4 w-8 h-8 bg-indigo-200 rounded-full blur-lg opacity-60 animate-pulse"></span>
-          <h1 className="font-extrabold text-transparent text-4xl sm:text-5xl bg-clip-text bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-400 drop-shadow-lg tracking-wider select-none animate-titlePop">
-            Employees
-          </h1>
+    <div className=" p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+              <FaUsers className="text-white text-2xl" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">Employee Management</h1>
+              <p className="text-gray-600 mt-1">Monitor and manage your team's attendance</p>
+            </div>
+          </div>
         </div>
-        <div className="mt-2 text-blue-500 font-medium text-lg tracking-wide animate-fadein-slow">Today's Attendance Overview</div>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-[700px] w-full bg-white/80 rounded-2xl shadow-lg border border-slate-200 text-slate-700 text-base backdrop-blur-md">
-          <thead className="bg-gradient-to-r from-blue-100 via-indigo-100 to-blue-50">
-            <tr>
-              <th className="py-4 px-6 text-left font-bold border-b border-slate-200 text-indigo-700 tracking-wider">#</th>
-              <th className="py-4 px-6 text-left font-bold border-b border-slate-200 text-indigo-700 tracking-wider">Photo</th>
-              <th className="py-4 px-6 text-left font-bold border-b border-slate-200 text-indigo-700 tracking-wider">Name</th>
-              <th className="py-4 px-6 text-left font-bold border-b border-slate-200 text-indigo-700 tracking-wider">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(employees?.data) && employees.data.length > 0 ? (
-              employees.data.map((emp, idx) => {
-                const isPresent = emp?.log?.date === todaydate;
-                return (
-                  <tr
-                    key={emp.userid || idx}
-                    className={`group transition-all duration-300 hover:scale-[1.015] hover:shadow-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 ${idx % 2 === 0 ? 'bg-white/90' : 'bg-slate-50/80'} animate-rowFadeIn`}
-                    style={{ animationDelay: `${idx * 60}ms` }}
-                  >
-                    <td className="py-4 px-6 border-b border-slate-200 font-semibold text-lg">
-                      <span className="inline-block animate-popIn">{idx + 1}</span>
-                    </td>
-                    <td className="py-4 px-6 border-b border-slate-200">
-                      <Link to={emp.userid} className="block group-hover:scale-110 transition-transform duration-300">
-                        <div className="relative w-14 h-14">
-                          <img
-                            src={getImageSrc(emp.image) || "/dp.svg"}
-                            alt={emp.name}
-                            className="w-14 h-14 rounded-full border-4 border-blue-200 object-cover shadow-lg transition-all duration-300 group-hover:border-indigo-400 group-hover:shadow-indigo-200"
-                          />
-                          <span className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${isPresent ? "bg-green-400 animate-pulse" : "bg-red-300 animate-pulse-slow"}`}></span>
-                        </div>
-                      </Link>
-                    </td>
-                    <td className="py-4 px-6 border-b border-slate-200 font-semibold text-slate-800 text-lg">
-                      <Link to={emp.userid} className="hover:underline hover:text-indigo-600 transition-colors duration-200">
-                        <span className="animate-fadein">{emp.name}</span>
-                      </Link>
-                    </td>
-                    <td className="py-4 px-6 border-b border-slate-200 font-semibold">
-                      <StatusBadge isPresent={isPresent} />
-                      
+
+     <StatsSummary employees={employees} todaydate={todaydate} />
+
+        <SearchFilter 
+          searchTerm={searchTerm} 
+          setSearchTerm={setSearchTerm}
+          filterStatus={filterStatus}
+          setFilterStatus={setFilterStatus}
+        />
+
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                <tr>
+                  <th className="py-4 px-6 text-left">
+                    <button 
+                      onClick={() => handleSort('id')}
+                      className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                    >
+                      # {getSortIcon('id')}
+                    </button>
+                  </th>
+                  <th className="py-4 px-6 text-left font-semibold text-gray-700">Photo</th>
+                  <th className="py-4 px-6 text-left">
+                    <button 
+                      onClick={() => handleSort('name')}
+                      className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                    >
+                      Name {getSortIcon('name')}
+                    </button>
+                  </th>
+                  <th className="py-4 px-6 text-left">
+                    <button 
+                      onClick={() => handleSort('status')}
+                      className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                    >
+                      Status {getSortIcon('status')}
+                    </button>
+                  </th>
+                  <th className="py-4 px-6 text-left font-semibold text-gray-700">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedEmployees.length > 0 ? (
+                  sortedEmployees.map((emp, idx) => {
+                    const isPresent = emp?.log?.date === todaydate;
+                    return (
+                      <tr
+                        key={emp.userid || idx}
+                        className="group hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-100"
+                      >
+                        <td className="py-4 px-6">
+                          <span className="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full font-semibold text-sm">
+                            {idx + 1}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6">
+                          <Link to={emp.userid} className="block group-hover:scale-110 transition-transform duration-300">
+                            <div className="relative w-12 h-12">
+                              <img
+                                src={getImageSrc(emp.image) || "/dp.svg"}
+                                alt={emp.name}
+                                className="w-12 h-12 rounded-full border-3 border-gray-200 object-cover shadow-md transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg"
+                              />
+                              <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${isPresent ? "bg-green-400" : "bg-red-400"}`}></div>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className="py-4 px-6">
+                          <Link to={emp.userid} className="hover:text-blue-600 transition-colors duration-200">
+                            <div className="font-semibold text-gray-800">{emp.name}</div>
+                            <div className="text-sm text-gray-500">Employee ID: {emp.userid}</div>
+                          </Link>
+                        </td>
+                        <td className="py-4 px-6">
+                          <StatusBadge isPresent={isPresent} />
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-2">
+                            <Link 
+                              to={emp.userid}
+                              className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                              title="View Details"
+                            >
+                              <FaEye className="text-sm" />
+                            </Link>
+                            
+                            <Link
+                              to={`/superadmin/reports/${emp.userid}`}
+                              className="p-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 transition-colors duration-200"
+                              title="Work History"
+                            >
+                              <MdWork className="text-sm" />
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="py-12 text-center">
+                      <div className="flex flex-col items-center">
+                        <FaUsers className="text-4xl text-gray-300 mb-4" />
+                        <h3 className="text-lg font-semibold text-gray-600 mb-2">No employees found</h3>
+                        <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                      </div>
                     </td>
                   </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={4} className="py-12 text-center text-slate-400 text-xl animate-fadein-slow">
-                  <span className="inline-block animate-bounce">No employees found.</span>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {sortedEmployees.length > 0 && (
+          <div className="mt-6 bg-white rounded-xl shadow-lg p-4 border border-gray-100">
+            <div className="flex items-center justify-between text-sm text-gray-600">
+              <span>Showing {sortedEmployees.length} of {employees?.data?.length || 0} employees</span>
+              <span>Last updated: {new Date().toLocaleTimeString()}</span>
+            </div>
+          </div>
+        )}
       </div>
-      {/* Animations & Custom Styles */}
-      <style>
-        {`
-          @keyframes fadein {
-            from { opacity: 0; transform: translateY(30px);}
-            to { opacity: 1; transform: translateY(0);}
-          }
-          @keyframes fadein-slow {
-            from { opacity: 0; transform: translateY(40px);}
-            to { opacity: 1; transform: translateY(0);}
-          }
-          @keyframes popIn {
-            0% { transform: scale(0.7); opacity: 0; }
-            80% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); }
-          }
-          @keyframes bounceIn {
-            0% { transform: scale(0.7); opacity: 0.5; }
-            60% { transform: scale(1.15); opacity: 1; }
-            100% { transform: scale(1); }
-          }
-          @keyframes fadePulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-          }
-          @keyframes rowFadeIn {
-            from { opacity: 0; transform: translateY(20px);}
-            to { opacity: 1; transform: translateY(0);}
-          }
-          @keyframes titlePop {
-            0% { letter-spacing: 0.1em; opacity: 0; transform: scale(0.9);}
-            60% { letter-spacing: 0.2em; opacity: 1; transform: scale(1.08);}
-            100% { letter-spacing: 0.1em; transform: scale(1);}
-          }
-          @keyframes shake {
-            0% { transform: translateX(0);}
-            20% { transform: translateX(-6px);}
-            40% { transform: translateX(6px);}
-            60% { transform: translateX(-4px);}
-            80% { transform: translateX(4px);}
-            100% { transform: translateX(0);}
-          }
-          .animate-fadein { animation: fadein 0.7s both; }
-          .animate-fadein-slow { animation: fadein-slow 1.2s both; }
-          .animate-popIn { animation: popIn 0.5s; }
-          .animate-bounceIn { animation: bounceIn 0.7s; }
-          .animate-fadePulse { animation: fadePulse 1.5s infinite; }
-          .animate-rowFadeIn { animation: rowFadeIn 0.7s both; }
-          .animate-titlePop { animation: titlePop 1.1s both; }
-          .animate-shake { animation: shake 0.5s; }
-          .animate-bounce { animation: bounceIn 1.2s; }
-          .animate-pulse { animation: fadePulse 1.2s infinite; }
-          .animate-pulse-slow { animation: fadePulse 2.2s infinite; }
-        `}
-      </style>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaTachometerAlt, FaUsers, FaCalendarCheck, FaProjectDiagram, FaChartBar } from "react-icons/fa";
@@ -10,110 +9,75 @@ const actions = [
   { name: "Projects", icon: <FaProjectDiagram size={28} />, path: "/superadmin/projects" },
   { name: "Reports", icon: <FaChartBar size={28} />, path: "/superadmin/reports" },
   { name: "Leaves", icon: <FaCalendarCheck size={28} />, path: "/superadmin/leaves" }
-
 ];
 
 const Superadminactions = () => {
   return (
-    <div>
-      <div>
-        <h1
-          className="
-          text-4xl
-          md:text-5xl
-          font-extrabold
-          mb-10
-          text-black          text-center
-          bg-gradient-to-r from-black via-black to-black
-          bg-clip-text
-          text-transparent
-          drop-shadow-lg
-          animate-superadmin-title
-        "
-          style={{
-            letterSpacing: "0.04em",
-            animation: "superadmin-title-pop 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both"
-          }}
-        >
-          Super Admin Panel
-        </h1>
-        <style>
-          {`
-          @keyframes superadmin-title-pop {
-            0% {
-              opacity: 0;
-              transform: scale(0.8) translateY(-30px);
-              filter: blur(4px);
-            }
-            60% {
-              opacity: 1;
-              transform: scale(1.08) translateY(4px);
-              filter: blur(0);
-            }
-            100% {
-              opacity: 1;
-              transform: scale(1) translateY(0);
-              filter: blur(0);
-            }
-          }
-          .animate-superadmin-title {
-            animation: superadmin-title-pop 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both;
-          }
-        `}
-        </style>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 mx-auto">
+    <div className="p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-red-500 to-green-500 mb-4">
+            Super Admin Panel
+          </h1>
+        </div>
+
+        {/* Actions Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
           {actions.map((action, idx) => (
             <Link
               key={action.name}
               to={action.path}
-              className={`
-              group
-              rounded-xl
-              shadow-lg
-              bg-white
-              flex flex-col items-center justify-center
-              py-6 px-4
-              transition
-              duration-300
-              hover:scale-105
-              hover:shadow-2xl
-              focus:outline-none
-              focus:ring-2 focus:ring-yellow-400
-              relative
-              overflow-hidden
-              animate-fade-in-up
-            `}
+              className="group relative overflow-hidden"
               style={{
-                animationDelay: `${0.1 + idx * 0.07}s`,
+                animationDelay: `${idx * 0.1}s`,
                 animationFillMode: "both"
               }}
             >
-              <span className="mb-2 text-yellow-400 group-hover:scale-110 group-hover:text-yellow-500 transition-transform duration-300">
-                {/* Make icon smaller by overriding size */}
-                {React.cloneElement(action.icon, { size: 20 })}
-              </span>
-              <span className="text-base font-semibold text-gray-800 group-hover:text-yellow-600 transition-colors duration-300">
-                {action.name}
-              </span>
-              <span
-                className="absolute inset-0 pointer-events-none rounded-xl border-2 border-transparent group-hover:border-yellow-300 transition-all duration-300"
-                aria-hidden="true"
-              />
+              <div className="relative bg-gradient-to-br from-blue-900/80 to-blue-900/60 backdrop-blur-xl rounded-3xl border border-blue-200/20 p-8 h-48 flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:border-red-500/50 group-hover:shadow-2xl group-hover:shadow-green-500/25">
+                
+                {/* Icon Container */}
+                <div className="relative mb-6">
+                  <div className="bg-gradient-to-br from-blue-900/40 to-blue-900/20 backdrop-blur-sm rounded-2xl p-4 border border-blue-200/30 group-hover:border-red-500/50 transition-all duration-300">
+                    <div className="text-yellow-500 group-hover:text-green-500 transition-colors duration-300 transform group-hover:scale-110">
+                      {React.cloneElement(action.icon, { size: 32 })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-bold text-white group-hover:text-yellow-500 transition-colors duration-300 text-center tracking-wide">
+                  {action.name}
+                </h3>
+
+                {/* Hover Indicator */}
+                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-2 h-2 bg-gradient-to-r from-yellow-500 to-green-500 rounded-full"></div>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
-        <style>
-          {`
-          @keyframes fade-in-up {
-            0% { opacity: 0; transform: translateY(24px);}
-            100% { opacity: 1; transform: translateY(0);}
+      </div>
+
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { 
+              opacity: 0; 
+              transform: translateY(20px);
+            }
+            to { 
+              opacity: 1; 
+              transform: translateY(0);
+            }
           }
-          .animate-fade-in-up {
-            animation: fade-in-up 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+          
+          .group {
+            animation: fadeIn 0.6s ease-out both;
           }
         `}
-        </style>
-      </div>
+      </style>
     </div>
   );
 }

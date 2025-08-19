@@ -1,158 +1,250 @@
 import { useState, useEffect } from 'react'
 import { useGetallleavesQuery, useApprovedleaveMutation, useRejectleaveMutation } from '../../../redux/leaveslice'
 import Loader from '../../loader'
+import { 
+  FaCalendarAlt, 
+  FaUser, 
+  FaClock, 
+  FaCheckCircle, 
+  FaTimesCircle,
+  FaHourglassHalf,
+  FaFileAlt,
+  FaCalendarCheck
+} from 'react-icons/fa';
+import { MdDashboard, MdPendingActions } from 'react-icons/md';
+
 const Adminleaves = () => {
 
-    const { data: leaves, refetch , isLoading : fetchloading } = useGetallleavesQuery()
-    // console.log(leaves?.allleavs || [])
-
-    const [rejectleave , {isLoading : mutationloading}] = useRejectleaveMutation()
-    const [approveleave , {isLoading : amutationloading}] = useApprovedleaveMutation()
-
+    const { data: leaves, refetch, isLoading: fetchloading } = useGetallleavesQuery()
+    console.log(leaves)
+    const [rejectleave, { isLoading: mutationloading }] = useRejectleaveMutation()
+    const [approveleave, { isLoading: amutationloading }] = useApprovedleaveMutation()
 
     function reject(id) {
-        rejectleave(id).unwrap().then((v)=>{
+        rejectleave(id).unwrap().then((v) => {
             console.log("rejected leave")
             refetch()
         })
     }
 
     function approve(id) {
-        approveleave(id).unwrap().then((v)=>{
+        approveleave(id).unwrap().then((v) => {
             console.log("approved leave")
             refetch()
         })
     }
 
-    return (
-        <div>
-        {(mutationloading || amutationloading || fetchloading) && (
-            <Loader/>
-        )}
+    // Calculate statistics
+    const totalLeaves = leaves?.allleavs?.length || 0;
+    const pendingLeaves = leaves?.allleavs?.filter(leave => leave.status === "pending").length || 0;
+    const approvedLeaves = leaves?.allleavs?.filter(leave => leave.status === "approved").length || 0;
+    const rejectedLeaves = leaves?.allleavs?.filter(leave => leave.status === "rejected").length || 0;
 
-        <div className="p-6  min-h-screen">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">All Leave Requests</h2>
-            <div className="grid gap-8">
-                {leaves?.allleavs?.length === 0 && (
-                    <div className="text-center text-gray-400 py-12 text-lg font-medium">
-                        <svg className="mx-auto mb-2 w-12 h-12 text-gray-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        No leave requests found.
+    // Stats Cards Component
+    const StatsCards = () => (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-blue-100 text-sm font-medium">Total Requests</p>
+                        <p className="text-2xl font-bold">{totalLeaves}</p>
                     </div>
-                )}
-                {leaves?.allleavs?.map((leave, idx) => {
-                    const statusColor = leave.status === "approved"
-                        ? "bg-green-50 border-green-400"
-                        : leave.status === "pending"
-                            ? "bg-yellow-50 border-yellow-400"
-                            : "bg-red-50 border-red-400";
-                    const statusTextColor = leave.status === "approved"
-                        ? "text-green-700"
-                        : leave.status === "pending"
-                            ? "text-yellow-700"
-                            : "text-red-700";
-                    const statusLabel = leave.status === "pending"
-                        ? "Pending"
-                        : leave.status === "approved"
-                            ? "Approved"
-                            : "Rejected";
-                    const statusDotColor = leave.status === "approved"
-                        ? "bg-green-400"
-                        : leave.status === "pending"
-                            ? "bg-yellow-400"
-                            : "bg-red-400";
-                    return (
-                        <div
-                            key={leave._id || idx}
-                            className={`relative border-l-8 ${statusColor} rounded-xl shadow-lg p-6 flex flex-col md:flex-row md:items-center md:justify-between transition-all duration-300 hover:shadow-xl animate-fadeIn`}
-                            style={{ animationDelay: `${0.2 + idx * 0.07}s` }}
-                        >
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <span className={`inline-block w-3 h-3 rounded-full ${statusDotColor}`}></span>
-                                    <p className="text-xl font-bold text-gray-800 truncate">{leave.name}</p>
-                                </div>
-                                <p className="text-gray-600 mb-2 italic">{leave.description}</p>
-                                <div className="flex flex-wrap gap-3 text-sm mb-2">
-                                    <span className="inline-flex items-center bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
-                                        <svg className="w-4 h-4 mr-1 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2a4 4 0 014-4h4" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 11h.01" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 15h.01" />
-                                        </svg>
-                                        {leave.leaveType}
-                                    </span>
-                                    <span className="inline-flex items-center bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
-                                        <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        {leave.startDate
-                                            ? new Date(leave.startDate).toLocaleDateString()
-                                            : ""}{" "}
-                                        -{" "}
-                                        {leave.endDate
-                                            ? new Date(leave.endDate).toLocaleDateString()
-                                            : ""}
-                                    </span>
-                                </div>
-                                <span
-                                    className={`inline-block mt-1 px-4 py-1 rounded-full text-xs font-bold border ${statusTextColor} ${statusColor} border-opacity-60 shadow-sm`}
-                                >
-                                    {statusLabel}
-                                </span>
-                            </div>
-                            <div className="flex gap-3 mt-6 md:mt-0 md:ml-8">
-                                <button
-                                    onClick={() => reject(leave._id)}
-                                    disabled={leave.status !== "pending"}
-                                    className={`flex items-center gap-2 px-5 py-2 rounded-lg font-semibold border transition focus:outline-none focus:ring-2 focus:ring-red-300
-                                        ${leave.status !== "pending"
-                                            ? "bg-red-100 text-red-300 border-red-100 cursor-not-allowed"
-                                            : "bg-red-50 text-red-700 border-red-300 hover:bg-red-200 hover:text-red-800"}
-                                    `}
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Reject
-                                </button>
-                                <button
-                                    onClick={() => approve(leave._id)}
-                                    disabled={leave.status !== "pending"}
-                                    className={`flex items-center gap-2 px-5 py-2 rounded-lg font-semibold border transition focus:outline-none focus:ring-2 focus:ring-green-300
-                                        ${leave.status !== "pending"
-                                            ? "bg-green-100 text-green-300 border-green-100 cursor-not-allowed"
-                                            : "bg-green-50 text-green-700 border-green-300 hover:bg-green-200 hover:text-green-800"}
-                                    `}
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Approve
-                                </button>
-                            </div>
-                        </div>
-                    );
-                })}
+                    <FaFileAlt className="text-3xl opacity-80" />
+                </div>
             </div>
-            <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease both;
-        }
-      `}</style>
+            <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-xl p-4 shadow-lg">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-yellow-100 text-sm font-medium">Pending</p>
+                        <p className="text-2xl font-bold">{pendingLeaves}</p>
+                    </div>
+                    <FaHourglassHalf className="text-3xl opacity-80" />
+                </div>
+            </div>
+            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-4 shadow-lg">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-green-100 text-sm font-medium">Approved</p>
+                        <p className="text-2xl font-bold">{approvedLeaves}</p>
+                    </div>
+                    <FaCheckCircle className="text-3xl opacity-80" />
+                </div>
+            </div>
+            <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl p-4 shadow-lg">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-red-100 text-sm font-medium">Rejected</p>
+                        <p className="text-2xl font-bold">{rejectedLeaves}</p>
+                    </div>
+                    <FaTimesCircle className="text-3xl opacity-80" />
+                </div>
+            </div>
         </div>
+    );
+
+    return (
+        <div className="min-h-screen p-6">
+            <div className="max-w-7xl mx-auto">
+                {(mutationloading || amutationloading || fetchloading) && (
+                    <Loader />
+                )}
+
+                {/* Header Section */}
+                <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+                            <FaCalendarCheck className="text-white text-2xl" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-800">Leave Management</h1>
+                            <p className="text-gray-600 mt-1">Review and manage employee leave requests</p>
+                        </div>
+                    </div>
+                </div>
+
+                <StatsCards />
+
+                {/* Leave Requests Section */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
+                            <MdPendingActions className="text-white text-lg" />
+                        </div>
+                        <h2 className="text-xl font-semibold text-gray-800">Leave Requests</h2>
+                    </div>
+
+                    {leaves?.allleavs?.length === 0 ? (
+                        <div className="text-center py-12">
+                            <div className="p-4 bg-gray-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                                <FaCalendarAlt className="text-gray-400 text-2xl" />
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-600 mb-2">No Leave Requests</h3>
+                            <p className="text-gray-500">There are no pending leave requests at the moment.</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {(leaves?.allleavs ?? []).slice().reverse().map((leave, idx) => {
+                                const statusConfig = {
+                                    approved: {
+                                        color: "green",
+                                        bgColor: "bg-green-50",
+                                        borderColor: "border-green-200",
+                                        textColor: "text-green-700",
+                                        icon: FaCheckCircle,
+                                        label: "Approved"
+                                    },
+                                    pending: {
+                                        color: "yellow",
+                                        bgColor: "bg-yellow-50",
+                                        borderColor: "border-yellow-200",
+                                        textColor: "text-yellow-700",
+                                        icon: FaHourglassHalf,
+                                        label: "Pending"
+                                    },
+                                    reject: {
+                                        color: "red",
+                                        bgColor: "bg-red-50",
+                                        borderColor: "border-red-200",
+                                        textColor: "text-red-700",
+                                        icon: FaTimesCircle,
+                                        label: "Rejected"
+                                    }
+                                };
+
+                                const config = statusConfig[leave.status] || statusConfig.pending;
+                                const StatusIcon = config.icon;
+
+                                return (
+                                    <div
+                                        key={leave._id || idx}
+                                        className={`group relative ${config.bgColor} ${config.borderColor} border rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]`}
+                                        style={{ animationDelay: `${idx * 0.1}s` }}
+                                    >
+                                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                            {/* Leave Details */}
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-3 mb-3">
+                                                    <div className={`p-2 bg-${config.color}-100 rounded-lg`}>
+                                                        <StatusIcon className={`text-${config.color}-600 text-lg`} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-lg font-semibold text-gray-800">{leave.name}</h3>
+                                                        <p className="text-sm text-gray-500">Employee ID: {leave._id}</p>
+                                                    </div>
+                                                </div>
+
+                                                <p className="text-gray-700 mb-4 italic">"{leave.description}"</p>
+
+                                                <div className="flex flex-wrap gap-3 mb-3">
+                                                    <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                                                        <FaFileAlt className="text-sm" />
+                                                        {leave.leaveType}
+                                                    </span>
+                                                    <span className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+                                                        <FaCalendarAlt className="text-sm" />
+                                                        {leave.startDate ? new Date(leave.startDate).toLocaleDateString() : ""} - {leave.endDate ? new Date(leave.endDate).toLocaleDateString() : ""}
+                                                    </span>
+                                                </div>
+
+                                                <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold ${config.textColor} bg-${config.color}-100`}>
+                                                    <StatusIcon className="text-sm" />
+                                                    {config.label}
+                                                </span>
+                                            </div>
+
+                                            {/* Action Buttons */}
+                                            {leave.status === "pending" && (
+                                                <div className="flex gap-3 lg:flex-col">
+                                                    <button
+                                                        onClick={() => approve(leave._id)}
+                                                        className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200 font-medium"
+                                                    >
+                                                        <FaCheckCircle className="text-sm" />
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        onClick={() => reject(leave._id)}
+                                                        className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 font-medium"
+                                                    >
+                                                        <FaTimesCircle className="text-sm" />
+                                                        Reject
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {leave.status !== "pending" && (
+                                                <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-lg font-medium">
+                                                    <StatusIcon className="text-sm" />
+                                                    {config.label}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <style>
+                {`
+                    @keyframes fadeInUp {
+                        from { 
+                            opacity: 0; 
+                            transform: translateY(20px);
+                        }
+                        to { 
+                            opacity: 1; 
+                            transform: translateY(0);
+                        }
+                    }
+                    
+                    .group {
+                        animation: fadeInUp 0.6s ease-out both;
+                    }
+                `}
+            </style>
         </div>
     )
 }

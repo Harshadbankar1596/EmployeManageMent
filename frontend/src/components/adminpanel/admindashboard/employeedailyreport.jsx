@@ -3,14 +3,23 @@ import { useGetallmembersnameQuery } from '../../../redux/adminapislice'
 import { useGetemployeedailyreportMutation } from '../../../redux/adminapislice'
 import Loader from '../../loader.jsx'
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { useParams } from 'react-router-dom';
 ModuleRegistry.registerModules([AllCommunityModule]);
 import { AgGridReact } from 'ag-grid-react';
+import { useEffect } from 'react';
 const Employeedailyreport = () => {
     const [getworks, { isLoading: workloading }] = useGetemployeedailyreportMutation()
     const [openworkmodal, setopenworkmodal] = useState(false)
 
+    const { id } = useParams()
+    useEffect(() => {
+        if (id) {
+            getwork(id)
+        }
+
+    }, [])
+
     const getwork = useCallback((userid) => {
-        console.log(userid);
         getworks(userid).then((data) => {
             const demoworks = data.data.work?.work?.map((works) => ({
                 date: works.date,
@@ -21,7 +30,6 @@ const Employeedailyreport = () => {
             setrowdata(demoworks);
         });
     }, []);
-
 
     const { data: users, isLoading: loadingusernames } = useGetallmembersnameQuery()
 

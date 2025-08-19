@@ -244,11 +244,11 @@ const Projectdetails = () => {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xl sm:text-2xl font-bold text-gray-800">{employee.name}</span>
                       {employee.projectinfo?.status ? (
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200 animate-pulse">
+                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
                           Completed
                         </span>
                       ) : (
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200 animate-pulse">
+                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">
                           Active
                         </span>
                       )}
