@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { useGetMessagesQuery, useCreateGroupMutation } from '../../redux/apislice'
 import { motion, AnimatePresence } from 'framer-motion'
 import SmoothScroll from '../../lenis'
+import { FiSend, FiImage, FiSmile } from 'react-icons/fi'
 
 const socket = io(import.meta.env.VITE_BACKEND_URL)
 
@@ -121,21 +122,21 @@ const Chat = () => {
     : localMessages
 
   return (
-    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen  p-2 md:p-6">
+    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen p-2 md:p-6 bg-gradient-to-br from-white via-gray-50 to-gray-100">
       <motion.aside
-        className="w-full sm:w-80 md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-2xl shadow-lg bg-white p-4 md:p-6 mb-4 md:mb-0 md:mr-8"
+        className="w-full sm:w-80 md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-2xl shadow-sm bg-white p-4 md:p-6 mb-4 md:mb-0 md:mr-8"
         initial="hidden"
         animate="visible"
         variants={sidebarVariants}
       >
         <motion.div
-          className="flex flex-col items-center justify-center mb-8 w-full bg-gradient-to-r from-blue-200 to-blue-300 rounded-xl shadow-md p-4"
+          className="flex flex-col items-center justify-center mb-6 w-full rounded-xl p-4 border bg-gray-50"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1, transition: { delay: 0.1 } }}
         >
           <label
             htmlFor="groupname"
-            className="text-lg font-bold text-blue-800 mb-3 tracking-wide"
+            className="text-base font-semibold text-gray-800 mb-3 tracking-wide"
             style={{ letterSpacing: "0.03em" }}
           >
             Create Group
@@ -146,16 +147,16 @@ const Chat = () => {
               onChange={(e) => setCreategroup(e.target.value)}
               type="text"
               placeholder="Enter Group Name"
-              className="flex-1 border border-blue-300 bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 placeholder-gray-400 shadow-sm text-sm"
+              className="flex-1 border border-gray-300 bg-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900 placeholder-gray-400 shadow-sm text-sm"
               style={{ minWidth: 0 }}
             />
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className={`px-4 py-2 rounded-r-md font-semibold transition-colors shadow-md border border-blue-600
-                ${isCreating || !creategroup.trim()
+              className={`px-4 py-2 rounded-md font-semibold transition-colors shadow-sm border border-blue-600 ${
+                isCreating || !creategroup.trim()
                   ? "bg-blue-300 text-white cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"}
-              `}
+                  : "bg-[#3797F0] hover:bg-[#2f86d6] text-white"
+              }`}
               onClick={createnewgroup}
               disabled={isCreating || !creategroup.trim()}
             >
@@ -175,7 +176,7 @@ const Chat = () => {
         </motion.div>
 
         <div className="flex flex-col items-start w-full gap-2">
-          <span className="text-xs text-gray-400 mb-1">Your Groups</span>
+          <span className="text-xs text-gray-500 mb-1">Your Groups</span>
           <div data-lenis-prevent className="flex flex-col gap-1 w-full max-h-60 overflow-y-auto">
             {data?.groups?.length === 0 && (
               <span className="text-gray-400 text-sm px-2 py-1">No groups yet.</span>
@@ -185,10 +186,11 @@ const Chat = () => {
                 <motion.button
                   key={group}
                   onClick={() => setGroupname(group)}
-                  className={`w-full text-left px-3 py-2 rounded-md transition-colors duration-200 text-sm ${group === groupname
-                      ? "bg-blue-100 text-blue-700 font-bold"
-                      : "bg-gray-100 hover:bg-blue-50 text-blue-500"
-                    }`}
+                  className={`w-full text-left px-3 py-2 rounded-md transition-colors duration-200 text-sm ${
+                    group === groupname
+                      ? "bg-gray-200 text-gray-900 font-semibold"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  }`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
@@ -203,25 +205,32 @@ const Chat = () => {
       </motion.aside>
 
       <motion.section
-        className="w-full max-w-2xl bg-white rounded-2xl shadow-xl flex flex-col h-[70vh] min-h-[400px] relative"
+        className="w-full max-w-2xl bg-white rounded-2xl shadow-md flex flex-col h-[70vh] min-h-[400px] relative border"
         initial="hidden"
         animate="visible"
         variants={chatVariants}
       >
         <motion.div
-          className="px-4 md:px-6 py-3 md:py-4 border-b flex items-center justify-between bg-blue-900 rounded-t-2xl"
+          className="px-4 md:px-6 py-3 md:py-4 border-b flex items-center justify-between bg-white rounded-t-2xl"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0, transition: { delay: 0.1 } }}
         >
-          <h1 className="text-lg md:text-2xl font-bold text-white">Group Chat</h1>
-          <span className="text-xs md:text-sm text-blue-200 font-medium truncate ml-2">
-            {groupname}
-          </span>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 to-pink-500" />
+            <div className="flex flex-col">
+              <h1 className="text-base md:text-lg font-bold text-gray-900">Group Chat</h1>
+              <span className="text-xs md:text-xs text-gray-500 font-medium truncate">{groupname}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 text-gray-500">
+            <FiImage className="hidden sm:block" />
+            <FiSmile className="hidden sm:block" />
+          </div>
         </motion.div>
 
         <div
           data-lenis-prevent
-          className="overflow-y-auto scrollbar-hide flex-1 px-2 sm:px-4 md:px-6 py-3 md:py-4 space-y-3 bg-blue-50 scroll-smooth"
+          className="overflow-y-auto scrollbar-hide flex-1 px-2 sm:px-4 md:px-6 py-3 md:py-4 space-y-3 bg-gray-50 scroll-smooth"
           style={{ minHeight: 0 }}
         >
           {isLoading && (
@@ -256,14 +265,15 @@ const Chat = () => {
                 layout
               >
                 <div
-                  className={`rounded-xl   px-4 py-2 flex flex-col max-w-[90%] sm:max-w-[80%] break-words text-base md:text-lg shadow-sm transition-all duration-300 ${msg.username === name
-                      ? "bg-gradient-to-br from-green-400 to-green-500 text-white self-end"
-                      : "bg-gradient-to-br from-yellow-300 to-yellow-400 text-black self-start"
-                    }`}
+                  className={`px-4 py-2 flex flex-col max-w-[90%] sm:max-w-[80%] break-words text-[15px] md:text-base shadow-sm transition-all duration-300 ${
+                    msg.username === name
+                      ? "bg-[#3797F0] text-white self-end rounded-2xl rounded-br-sm"
+                      : "bg-white text-gray-900 self-start rounded-2xl rounded-bl-sm border"
+                  }`}
                   style={msg.pending ? { opacity: 0.7, filter: "blur(0.5px)" } : {}}
                 >
                   {msg.username !== name && (
-                    <p className="text-red-600 text-xs font-semibold mb-1">{msg.username}</p>
+                    <p className="text-gray-500 text-xs font-semibold mb-1">{msg.username}</p>
                   )}
                   <div className="flex items-center justify-between gap-5">
                     <p className="break-words">{msg.text}</p>
@@ -289,7 +299,7 @@ const Chat = () => {
         </div>
 
         <motion.div
-          className="px-2 sm:px-4 md:px-6 py-3 border-t flex items-center bg-gray-50 rounded-b-2xl"
+          className="px-2 sm:px-4 md:px-6 py-3 border-t flex items-center bg-white rounded-b-2xl"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0, transition: { delay: 0.15 } }}
         >
@@ -303,21 +313,29 @@ const Chat = () => {
               }
             }}
           >
-            <input
-              onChange={(e) => setMessage(e.target.value)}
-              value={message}
-              type="text"
-              placeholder="Type a message"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm md:text-base"
-              disabled={sending}
-            />
+            <div className="flex items-center gap-2 flex-1 bg-gray-50 border border-gray-200 rounded-full px-3 py-2">
+              <button type="button" className="text-gray-500 hover:text-gray-700">
+                <FiImage />
+              </button>
+              <input
+                onChange={(e) => setMessage(e.target.value)}
+                value={message}
+                type="text"
+                placeholder="Message..."
+                className="flex-1 bg-transparent focus:outline-none text-sm md:text-base"
+                disabled={sending}
+              />
+              <button type="button" className="text-gray-500 hover:text-gray-700">
+                <FiSmile />
+              </button>
+            </div>
             <motion.button
               type="submit"
-              className={`bg-blue-600 text-white px-4 md:px-5 py-2 rounded-r-md hover:bg-blue-700 transition-colors text-sm md:text-base font-semibold ${sending ? "opacity-60 cursor-not-allowed" : ""}`}
+              className={`flex items-center justify-center bg-[#3797F0] text-white w-10 h-10 rounded-full hover:bg-[#2f86d6] transition-colors ${sending ? "opacity-60 cursor-not-allowed" : ""}`}
               disabled={message.trim() === "" || sending}
-              whileTap={{ scale: 0.97 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {sending ? <DotsLoader /> : "Send"}
+              {sending ? <DotsLoader /> : <FiSend />}
             </motion.button>
           </form>
         </motion.div>

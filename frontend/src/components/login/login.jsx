@@ -57,7 +57,7 @@ const Login = () => {
       if (res.user.isadmin) {
         setTimeout(() => {
           setSuccess(false);
-          navigate("/admin");
+          navigate("/admin/employees");
         }, 1000);
       }
       else {

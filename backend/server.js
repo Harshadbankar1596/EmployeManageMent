@@ -8,6 +8,7 @@ import chatRouter from "./routes/chatrouts.js";
 import worksRouter from "./routes/worksrouts.js";
 import adminRouter from "./routes/adminrouts.js";
 import superadminrouts from "./routes/superadminrouts.js"
+import Jobs from "./routes/jobsrouts.js"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import http from "http";
@@ -48,6 +49,7 @@ app.use("/works" , worksRouter);
 app.use("/admin" , adminRouter)
 app.use("/leave" , leaverouts)
 app.use("/superadmin" , superadminrouts)
+app.use("/jobs" , Jobs)
 
 connectDB().then(() => {
     server.listen(PORT, () => { 

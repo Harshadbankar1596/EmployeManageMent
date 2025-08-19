@@ -84,10 +84,10 @@ const Addproject = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center py-8 px-4">
-                <div className="bg-white shadow-2xl rounded-2xl p-6 md:p-8 w-full max-w-lg flex flex-col items-center">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-6 text-blue-700 text-center animate-fade-in">
-                        Add New Project
+            <div className="min-h-screen flex items-center justify-center py-8 px-4 bg-gray-50">
+                <div className="bg-white shadow-md rounded-xl border border-gray-200 p-6 md:p-8 w-full max-w-lg flex flex-col items-center">
+                    <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-gray-900 text-center">
+                        Add new project
                     </h2>
                     <div className="w-full">
                         <div className="space-y-2">
@@ -95,7 +95,7 @@ const Addproject = () => {
                                 <UserSkeleton key={index} />
                             ))}
                         </div>
-                        <div className="mt-4 text-center text-gray-500">Loading users...</div>
+                        <div className="mt-4 text-center text-gray-500 text-sm">Loading users…</div>
                     </div>
                 </div>
                 <style jsx>{`
@@ -120,13 +120,13 @@ const Addproject = () => {
         )}
 
         {mutationloading && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center animate-fade-in">
-                    <svg className="animate-spin h-12 w-12 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                <div className="bg-white rounded-xl shadow-md border border-gray-200 p-8 flex flex-col items-center animate-fade-in">
+                    <svg className="animate-spin h-12 w-12 text-[#1a73e8] mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
-                    <div className="text-blue-700 font-semibold text-lg">Adding Project...</div>
+                    <div className="text-gray-800 font-medium text-base">Adding project…</div>
                 </div>
                 <style jsx>{`
                     @keyframes fade-in {
@@ -139,10 +139,10 @@ const Addproject = () => {
                 `}</style>
             </div>
         )}
-        <div className="min-h-screen flex items-center justify-center py-8 px-4">
-            <div className="bg-white shadow-2xl rounded-2xl p-6 md:p-8 w-full max-w-lg transform transition-all duration-300 hover:scale-[1.02]">
-                <h2 className="text-2xl md:text-3xl font-bold mb-6 text-blue-700 text-center animate-fade-in">
-                    Add New Project
+        <div className="min-h-screen flex items-center justify-center py-8 px-4 bg-gray-50">
+            <div className="bg-white shadow-md rounded-xl border border-gray-200 p-6 md:p-8 w-full max-w-lg">
+                <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-gray-900 text-center">
+                    Add new project
                 </h2>
                 <form onSubmit={handlesubmit} className="space-y-6">
                     <div className="space-y-2">
@@ -156,7 +156,7 @@ const Addproject = () => {
                             placeholder="Enter Project Title..."
                             value={form.title}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 hover:border-blue-300"
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#1a73e8] focus:border-[#1a73e8] bg-white text-gray-900"
                             required
                         />
                     </div>
@@ -172,7 +172,7 @@ const Addproject = () => {
                                 name="startDate"
                                 value={form.startDate}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 hover:border-blue-300"
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#1a73e8] focus:border-[#1a73e8] bg-white text-gray-900"
                                 required
                             />
                         </div>
@@ -186,7 +186,7 @@ const Addproject = () => {
                                 name="endDate"
                                 value={form.endDate}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 hover:border-blue-300"
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#1a73e8] focus:border-[#1a73e8] bg-white text-gray-900"
                                 required
                             />
                         </div>
@@ -196,7 +196,7 @@ const Addproject = () => {
                         <label className="block text-gray-700 font-medium mb-2" htmlFor="members">
                             Select Members
                         </label>
-                        <div className="w-full px-4 py-3 border border-gray-300 rounded-xl focus-within:ring-2 focus-within:ring-blue-400 focus-within:border-transparent transition-all duration-200 hover:border-blue-300 h-48 overflow-y-auto">
+                        <div className="w-full px-4 py-3 border border-gray-300 rounded-lg focus-within:ring-1 focus-within:ring-[#1a73e8] focus-within:border-[#1a73e8] transition-all duration-200 h-48 overflow-y-auto bg-white">
                             <div data-lenis-prevent className="space-y-2">
                                 {userList.map((user) => {
                                     const isSelected = members.includes(user.userid)
@@ -205,9 +205,9 @@ const Addproject = () => {
                                             type="button"
                                             key={user.userid}
                                             onClick={() => handleMemberClick(user.userid)}
-                                            className={`flex items-center px-3 py-2 rounded-lg text-left transition-all duration-200 transform hover:scale-[1.02] ${isSelected
-                                                    ? 'bg-blue-100 border border-blue-400 text-blue-700 font-semibold shadow-md'
-                                                    : 'bg-gray-50 hover:bg-blue-50 text-gray-700 hover:shadow-sm'
+                                            className={`flex items-center px-3 py-2 rounded-md text-left transition-colors duration-150 ${isSelected
+                                                    ? 'bg-[#E8F0FE] border border-[#1a73e8] text-[#1a73e8] font-medium'
+                                                    : 'bg-gray-50 hover:bg-gray-100 text-gray-800 border border-transparent'
                                                 }`}
                                         >
                                             <div className="relative">
@@ -220,8 +220,8 @@ const Addproject = () => {
                                                     }}
                                                 />
                                                 {isSelected && (
-                                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                                                        <span className="text-white text-xs font-bold">✓</span>
+                                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#1a73e8] rounded-full flex items-center justify-center">
+                                                        <span className="text-white text-[10px] font-bold">✓</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -242,7 +242,7 @@ const Addproject = () => {
                                     {selectedMembers.map((user, index) => (
                                         <span
                                             key={user.userid}
-                                            className="flex items-center bg-blue-100 rounded-full px-3 py-2 text-sm font-medium text-blue-700 animate-slide-in"
+                                            className="flex items-center bg-[#E8F0FE] rounded-full px-3 py-1.5 text-sm font-medium text-[#1a73e8] animate-slide-in"
                                             style={{ animationDelay: `${index * 100}ms` }}
                                         >
                                             <img
@@ -257,7 +257,7 @@ const Addproject = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => handleMemberClick(user.userid)}
-                                                className="ml-2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+                                                className="ml-2 text-[#1a73e8] hover:text-[#1558d6] transition-colors duration-200"
                                             >
                                                 ×
                                             </button>
@@ -270,9 +270,9 @@ const Addproject = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+                        className="w-full text-white py-3 rounded-lg font-medium transition-colors duration-150 shadow-sm bg-[#1a73e8] hover:bg-[#1558d6] active:bg-[#1558d6]"
                     >
-                        Add Project
+                        Add project
                     </button>
                 </form>
             </div>

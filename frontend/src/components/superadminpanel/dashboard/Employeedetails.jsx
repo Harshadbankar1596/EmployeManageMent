@@ -254,18 +254,18 @@ const Employeedetails = () => {
                 {/* Profile Image */}
                 <div className="relative">
                   <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-4 border-blue-200 shadow-lg overflow-hidden bg-gray-100">
-                    {employee.image && employee.image.data ? (
-                      <img
-                        src={`data:${employee.image.contentType};base64,${bufferToBase64(employee.image.data.data)}`}
-                        alt={employee.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
+            {employee.image && employee.image.data ? (
+              <img
+              src={`data:${employee.image.contentType};base64,${bufferToBase64(employee.image.data.data)}`}
+              alt={employee.name}
+              className="w-full h-full object-cover"
+            />
+            ) : (
                       <div className="w-full h-full flex items-center justify-center text-4xl text-gray-400 font-bold bg-gray-200">
-                        {employee.name ? employee.name.charAt(0).toUpperCase() : "?"}
-                      </div>
-                    )}
-                  </div>
+                {employee.name ? employee.name.charAt(0).toUpperCase() : "?"}
+              </div>
+            )}
+          </div>
                   <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-400 border-2 border-white rounded-full"></div>
                 </div>
 
@@ -282,16 +282,16 @@ const Employeedetails = () => {
                     <div className="flex items-center gap-2 bg-purple-50 text-purple-700 px-3 py-2 rounded-lg">
                       <FaPhone className="text-sm" />
                       <span className="text-sm font-medium">{employee.phone}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
             {/* Stats Cards */}
             <StatsCards />
 
-            {/* Calendar Section */}
+          {/* Calendar Section */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 mb-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
@@ -300,85 +300,85 @@ const Employeedetails = () => {
                 <h2 className="text-xl font-semibold text-gray-800">Attendance Calendar</h2>
               </div>
 
-              {/* Calendar Header */}
+            {/* Calendar Header */}
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between">
-                  <button
-                    onClick={handlePrevMonth}
+              <button
+                onClick={handlePrevMonth}
                     className="text-white hover:bg-blue-600 rounded-full p-2 transition-all duration-200"
-                    aria-label="Previous Month"
-                  >
+                aria-label="Previous Month"
+              >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M15 19l-7-7 7-7" />
                     </svg>
-                  </button>
+              </button>
                   <h3 className="text-lg font-bold text-white">{monthYear}</h3>
-                  <button
-                    onClick={handleNextMonth}
+              <button
+                onClick={handleNextMonth}
                     className="text-white hover:bg-blue-600 rounded-full p-2 transition-all duration-200"
-                    aria-label="Next Month"
-                  >
+                aria-label="Next Month"
+              >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M9 5l7 7-7 7" />
                     </svg>
-                  </button>
+              </button>
                 </div>
-              </div>
-
-              {/* Week Days Header */}
-              <div className="grid grid-cols-7 bg-gray-50 rounded-t-lg border">
-                {weekDays.map(day => (
-                  <div
-                    key={day}
-                    className="py-3 text-center font-semibold text-gray-700 text-sm"
-                  >
-                    {day}
-                  </div>
-                ))}
-              </div>
-
-              {/* Calendar Days */}
-              <div className="border-l border-r border-b rounded-b-lg overflow-hidden">
-                {calendar.map((week, weekIndex) => (
-                  <div key={weekIndex} className="grid grid-cols-7">
-                    {week.map((day, dayIndex) => {
-                      const config = statusConfig[day.status] || statusConfig.absent;
-                      const textColor = day.currentMonth ? 'text-gray-800' : 'text-gray-400';
-                      const todayBorder = day.isToday ? 'ring-2 ring-blue-500' : '';
-
-                      return (
-                        <div
-                          key={dayIndex}
-                          className={`h-16 p-1 border-r ${dayIndex === 6 ? 'border-r-0' : ''} ${day.isToday ? 'bg-blue-50' : ''}`}
-                        >
-                          <div className="h-full flex flex-col">
-                            <span className={`text-xs font-medium ${textColor} self-end px-1`}>
-                              {day.date}
-                            </span>
-                            <div className="flex-1 flex items-center justify-center">
-                              {day.currentMonth && day.status !== 'absent' && (
-                                <div className={`${config.bgColor} ${todayBorder} rounded-full w-8 h-8 flex items-center justify-center text-white font-medium transition-all duration-200 text-xs`}>
-                                  {day.status.charAt(0).toUpperCase()}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {/* Legend */}
+            {/* Week Days Header */}
+              <div className="grid grid-cols-7 bg-gray-50 rounded-t-lg border">
+              {weekDays.map(day => (
+                <div
+                  key={day}
+                    className="py-3 text-center font-semibold text-gray-700 text-sm"
+                >
+                  {day}
+                </div>
+              ))}
+            </div>
+
+            {/* Calendar Days */}
+              <div className="border-l border-r border-b rounded-b-lg overflow-hidden">
+              {calendar.map((week, weekIndex) => (
+                <div key={weekIndex} className="grid grid-cols-7">
+                  {week.map((day, dayIndex) => {
+                      const config = statusConfig[day.status] || statusConfig.absent;
+                    const textColor = day.currentMonth ? 'text-gray-800' : 'text-gray-400';
+                      const todayBorder = day.isToday ? 'ring-2 ring-blue-500' : '';
+
+                    return (
+                      <div
+                        key={dayIndex}
+                          className={`h-16 p-1 border-r ${dayIndex === 6 ? 'border-r-0' : ''} ${day.isToday ? 'bg-blue-50' : ''}`}
+                      >
+                        <div className="h-full flex flex-col">
+                            <span className={`text-xs font-medium ${textColor} self-end px-1`}>
+                            {day.date}
+                          </span>
+                          <div className="flex-1 flex items-center justify-center">
+                            {day.currentMonth && day.status !== 'absent' && (
+                                <div className={`${config.bgColor} ${todayBorder} rounded-full w-8 h-8 flex items-center justify-center text-white font-medium transition-all duration-200 text-xs`}>
+                                {day.status.charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Legend */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-gradient-to-r from-gray-500 to-gray-600 rounded-lg">
                   <FaChartBar className="text-white text-lg" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800">Status Legend</h3>
-              </div>
+                </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {Object.entries(statusConfig).map(([status, config]) => {
                   const StatusIcon = config.icon;
@@ -387,13 +387,13 @@ const Employeedetails = () => {
                       <div className={`w-4 h-4 rounded-full ${config.bgColor}`}></div>
                       <StatusIcon className={`text-lg ${config.textColor}`} />
                       <span className="text-gray-700 text-sm font-medium">{config.label}</span>
-                    </div>
+            </div>
                   );
                 })}
-              </div>
-            </div>
+          </div>
+        </div>
           </>
-        )}
+      )}
       </div>
     </div>
   );

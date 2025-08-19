@@ -14,11 +14,11 @@ const MainDashboard = () => {
   useEffect(() => {
     veryify(id).unwrap().then((v) => {
       setpendingleaves(v.pendingleaves)
-      setisadmin(true)
+      setisadmin("admin")
     })
   }, [])
 
-  if (isadmin) {
+  if (isadmin === "admin") {
     return (
       <div>
 
@@ -27,7 +27,12 @@ const MainDashboard = () => {
         )}
 
         <div>
-          <Adminaction pendingleaves={pendingleaves} />
+          
+          <div className="lg:hidden ">
+            
+              <Adminaction pendingleaves={pendingleaves} />
+            
+          </div>
           <Outlet />
 
         </div>

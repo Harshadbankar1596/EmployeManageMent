@@ -14,9 +14,13 @@ const userSchema = new mongoose.Schema({
         lowercase: true
     },
     isadmin: {
-        type: Boolean,
-        default: false
+        type: String,
+        default: "employee"
     },
+    // isadmin: {
+    //     type: Boolean,
+    //     default: false
+    // },
     password: {
         type: String,
         required: true,
@@ -39,7 +43,6 @@ const userSchema = new mongoose.Schema({
     },
     profileimg: {
         data: mongoose.Schema.Types.Buffer,
-        contentType: String,
     },
 
     logs: [

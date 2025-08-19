@@ -74,14 +74,14 @@ const Maindashboard = () => {
           </div>
         </div>
 
-        {isLoading ? (
+      {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <div className="flex flex-col items-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
               <p className="mt-4 text-gray-600 font-medium">Loading dashboard data...</p>
             </div>
           </div>
-        ) : info ? (
+      ) : info ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {statsCards.map((card, index) => {
@@ -154,16 +154,16 @@ const Maindashboard = () => {
                     <FaClock className="text-white text-lg" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800">Today's Summary</h3>
-                </div>
+          </div>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                     <span className="text-gray-700 font-medium">Present Employees</span>
                     <span className="text-green-600 font-bold text-lg">{info.presentemployee}</span>
-                  </div>
+          </div>
                   <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
                     <span className="text-gray-700 font-medium">Absent Employees</span>
                     <span className="text-red-600 font-bold text-lg">
-                      {info.totalemployee - info.presentemployee}
+              {info.totalemployee - info.presentemployee}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
@@ -172,9 +172,9 @@ const Maindashboard = () => {
                       {info.totalemployee ? Math.round((info.presentemployee / info.totalemployee) * 100) : 0}%
                     </span>
                   </div>
-                </div>
-              </div>
             </div>
+          </div>
+        </div>
           </>
         ) : (
           <div className="flex items-center justify-center h-64">

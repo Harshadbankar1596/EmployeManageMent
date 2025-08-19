@@ -32,7 +32,7 @@ export const verifyisadmin = async (req, res) => {
 
         // console.log("leaves => " , leave)
 
-        if (user.isadmin) res.status(200).json({ message: "true", pendingleaves: leave.length })
+        if (user.isadmin === "admin") res.status(200).json({ message: "true", pendingleaves: leave.length })
 
     } catch (error) {
         res.status(500).json({ message: "error in vryfy admin" })

@@ -85,7 +85,7 @@ const Adminleaves = () => {
     return (
         <div className="min-h-screen p-6">
             <div className="max-w-7xl mx-auto">
-                {(mutationloading || amutationloading || fetchloading) && (
+        {(mutationloading || amutationloading || fetchloading) && (
                     <Loader />
                 )}
 
@@ -120,7 +120,7 @@ const Adminleaves = () => {
                             </div>
                             <h3 className="text-lg font-semibold text-gray-600 mb-2">No Leave Requests</h3>
                             <p className="text-gray-500">There are no pending leave requests at the moment.</p>
-                        </div>
+                    </div>
                     ) : (
                         <div className="space-y-4">
                             {(leaves?.allleavs ?? []).slice().reverse().map((leave, idx) => {
@@ -154,9 +154,9 @@ const Adminleaves = () => {
                                 const config = statusConfig[leave.status] || statusConfig.pending;
                                 const StatusIcon = config.icon;
 
-                                return (
-                                    <div
-                                        key={leave._id || idx}
+                    return (
+                        <div
+                            key={leave._id || idx}
                                         className={`group relative ${config.bgColor} ${config.borderColor} border rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]`}
                                         style={{ animationDelay: `${idx * 0.1}s` }}
                                     >
@@ -171,26 +171,26 @@ const Adminleaves = () => {
                                                         <h3 className="text-lg font-semibold text-gray-800">{leave.name}</h3>
                                                         <p className="text-sm text-gray-500">Employee ID: {leave._id}</p>
                                                     </div>
-                                                </div>
+                                </div>
 
                                                 <p className="text-gray-700 mb-4 italic">"{leave.description}"</p>
 
                                                 <div className="flex flex-wrap gap-3 mb-3">
                                                     <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
                                                         <FaFileAlt className="text-sm" />
-                                                        {leave.leaveType}
-                                                    </span>
+                                        {leave.leaveType}
+                                    </span>
                                                     <span className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
                                                         <FaCalendarAlt className="text-sm" />
                                                         {leave.startDate ? new Date(leave.startDate).toLocaleDateString() : ""} - {leave.endDate ? new Date(leave.endDate).toLocaleDateString() : ""}
-                                                    </span>
-                                                </div>
+                                    </span>
+                                </div>
 
                                                 <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold ${config.textColor} bg-${config.color}-100`}>
                                                     <StatusIcon className="text-sm" />
                                                     {config.label}
-                                                </span>
-                                            </div>
+                                </span>
+                            </div>
 
                                             {/* Action Buttons */}
                                             {leave.status === "pending" && (
@@ -202,13 +202,13 @@ const Adminleaves = () => {
                                                         <FaCheckCircle className="text-sm" />
                                                         Approve
                                                     </button>
-                                                    <button
-                                                        onClick={() => reject(leave._id)}
+                                <button
+                                    onClick={() => reject(leave._id)}
                                                         className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 font-medium"
                                                     >
                                                         <FaTimesCircle className="text-sm" />
-                                                        Reject
-                                                    </button>
+                                    Reject
+                                </button>
                                                 </div>
                                             )}
 
@@ -218,11 +218,11 @@ const Adminleaves = () => {
                                                     {config.label}
                                                 </div>
                                             )}
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                            </div>
                         </div>
+                    );
+                })}
+            </div>
                     )}
                 </div>
             </div>
@@ -230,19 +230,19 @@ const Adminleaves = () => {
             <style>
                 {`
                     @keyframes fadeInUp {
-                        from { 
-                            opacity: 0; 
-                            transform: translateY(20px);
-                        }
-                        to { 
-                            opacity: 1; 
-                            transform: translateY(0);
-                        }
-                    }
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
                     
                     .group {
                         animation: fadeInUp 0.6s ease-out both;
-                    }
+        }
                 `}
             </style>
         </div>

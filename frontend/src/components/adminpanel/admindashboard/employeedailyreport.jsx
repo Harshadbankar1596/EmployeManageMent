@@ -16,7 +16,6 @@ const Employeedailyreport = () => {
         if (id) {
             getwork(id)
         }
-
     }, [])
 
     const getwork = useCallback((userid) => {

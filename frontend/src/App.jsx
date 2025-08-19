@@ -11,6 +11,8 @@ import Works from "./components/dashboard/works";
 import Nav from "./components/dashboard/nav";
 import Quickaction from "./components/dashboard/quickaction";
 import Side from "./components/aside/side";
+import AdminSidebar from "./components/adminpanel/AdminSidebar.jsx";
+import SuperAdminSidebar from "./components/superadminpanel/SuperAdminSidebar.jsx";
 import CalendarComponent from "./components/calender/calender.jsx";
 import Summary from "./components/summary/summary.jsx";
 import Employeprofile from "./components/profie/employeprofile.jsx";
@@ -25,8 +27,8 @@ import Adminleaves from "./components/adminpanel/admindashboard/adminleaves.jsx"
 import Addproject from "./components/adminpanel/admindashboard/addproject.jsx";
 import Assinproject from "./components/adminpanel/admindashboard/assinproject.jsx";
 import Projectdetails from "./components/adminpanel/admindashboard/projectdetails.jsx";
-import Employee from "./components/adminpanel/admindashboard/Employee.jsx";
 import Employeedailyreport from "./components/adminpanel/admindashboard/employeedailyreport.jsx";
+import Jobs from "./components/adminpanel/admindashboard/jobs.jsx";
 
 // Super Admin Panel
 import Superadminactions from "./components/superadminpanel/superadminactions.jsx";
@@ -53,13 +55,22 @@ const App = () => {
   const shouldHideNav =
     hideNavPaths.includes(pathname) || pathname.startsWith("/superadmin");
 
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isSuperAdminRoute = pathname.startsWith("/superadmin");
+
   return (
     <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen scrollbar-hide">
       <SmoothScroll />
 
-      {/* Sidebar */}
+      
       <div className="w-full lg:w-1/4 xl:w-1/5 mb-4 lg:mb-0">
-        <Side />
+        {isAdminRoute ? (
+          <AdminSidebar />
+        ) : isSuperAdminRoute ? (
+          <SuperAdminSidebar />
+        ) : (
+          <Side />
+        )}
       </div>
 
       {/* Main Content */}
@@ -146,7 +157,7 @@ const App = () => {
             }
           >
             <Route
-              path="employee"
+              path="employees"
               element={
                 <ProtectedRoute>
                   <AllUsers />
@@ -205,7 +216,7 @@ const App = () => {
               path="employee/:id"
               element={
                 <ProtectedRoute>
-                  <Employee />
+                  <Employeedetails />
                 </ProtectedRoute>
               }
             />
@@ -217,8 +228,22 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="jobs"
+              element={
+                <ProtectedRoute>
+                  <Jobs />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<Navigate to="" />} />
           </Route>
+
+
+
+
+
+
 
           {/* Super Admin Routes */}
           <Route

@@ -5,7 +5,11 @@ import Superadminactions from "../superadminactions";
 const Superadminmain = () => {
   return (
     <div className="p-4">
+
+      <div className="lg:hidden">
       <Superadminactions/>
+      </div>
+
       <Outlet />
     </div>
   );

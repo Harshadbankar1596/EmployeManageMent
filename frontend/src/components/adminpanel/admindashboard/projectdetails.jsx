@@ -144,39 +144,39 @@ const Projectdetails = () => {
         <Loader/>
       )}
 
-      <nav className="relative bg-gradient-to-br from-yellow-200 via-yellow-100 to-yellow-50 rounded-3xl px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-10 mt-8 w-full max-w-4xl mx-auto shadow-2xl border border-yellow-300">
+      <nav className="relative bg-white rounded-xl px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-8 mt-8 w-full max-w-4xl mx-auto shadow-sm border border-gray-200">
         {loadingProject ? (
           <ShimmerProjectHeader />
         ) : (
           <>
             <div className="flex flex-col gap-4 flex-1 z-10 min-w-0">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-green-500 animate-gradient-x truncate drop-shadow-lg">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 truncate">
                 {projectdetail?.title || "Project Title"}
               </h1>
-              <div className="flex flex-wrap gap-6 text-gray-700 mt-4 text-base md:text-lg">
+              <div className="flex flex-wrap gap-6 text-gray-700 mt-2 text-base md:text-lg">
                 <span className="flex items-center gap-2 min-w-[150px]">
-                  <MdOutlineCalendarToday className="w-6 h-6 text-blue-400" />
+                  <MdOutlineCalendarToday className="w-5 h-5 text-gray-500" />
                   <span>
-                    <span className="font-semibold text-blue-800">Start:</span>{" "}
+                    <span className="font-semibold text-gray-800">Start:</span>{" "}
                     {projectdetail?.startdate ? new Date(projectdetail.startdate).toLocaleDateString() : "--"}
                   </span>
                 </span>
                 <span className="flex items-center gap-2 min-w-[150px]">
-                  <MdOutlineCalendarMonth className="w-6 h-6 text-green-400" />
+                  <MdOutlineCalendarMonth className="w-5 h-5 text-gray-500" />
                   <span>
-                    <span className="font-semibold text-green-800">End:</span>{" "}
+                    <span className="font-semibold text-gray-800">End:</span>{" "}
                     {projectdetail?.enddate ? new Date(projectdetail.enddate).toLocaleDateString() : "--"}
                   </span>
                 </span>
                 <span className="flex items-center gap-2 min-w-[150px]">
                   {projectdetail?.staus ? (
-                    <span className="inline-flex items-center px-4 py-2 text-base font-semibold rounded-full bg-green-100 text-green-800 border border-green-300 shadow ">
-                      <FaRegCheckCircle className="w-5 h-5 mr-2 text-green-500" />
+                    <span className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full bg-green-100 text-green-800 border border-green-200">
+                      <FaRegCheckCircle className="w-4 h-4 mr-2 text-green-600" />
                       Completed
                     </span>
                   ) : (
-                    <span className="inline-flex items-center px-4 py-2 text-base font-semibold rounded-full bg-red-100 text-red-800 border border-red-300 shadow ">
-                      <BsExclamationCircle className="w-5 h-5 mr-2 text-red-500" />
+                    <span className="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200">
+                      <BsExclamationCircle className="w-4 h-4 mr-2 text-yellow-600" />
                       Active
                     </span>
                   )}
@@ -189,7 +189,7 @@ const Projectdetails = () => {
                   onChange={handleselect}
                   name="members"
                   id="members"
-                  className="px-4 py-2 rounded-lg border border-blue-300 bg-white shadow focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 font-semibold"
+                  className="px-4 py-2 rounded-md border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                 >
                   <option value="">Add Member</option>
                   {membersname?.usersname?.map((user) => (
@@ -201,7 +201,7 @@ const Projectdetails = () => {
               </div>
               <button
                 onClick={handleadd}
-                className="ml-2 px-5 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold shadow hover:scale-105 hover:from-blue-600 hover:to-green-500 transition-transform duration-200"
+                className="ml-2 px-5 py-2 rounded-md bg-blue-600 text-white font-medium shadow-sm hover:bg-blue-700 transition-colors"
                 type="button"
               >
                 Add
@@ -218,10 +218,10 @@ const Projectdetails = () => {
             employeeProject.map((employee, idx) => (
               <div
                 key={idx}
-                className="flex flex-col  gap-6 md:gap-10 bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-blue-100 hover:shadow-2xl transition-shadow duration-200 group w-full animate-fade-in"
+                className="flex flex-col gap-6 md:gap-8 bg-white rounded-xl shadow-sm p-6 md:p-7 border border-gray-200 hover:shadow-md transition-shadow duration-200 w-full"
               >
 
-                <div className="flex flex-col md:flex-row items-center md:items-start w-full gap-6 p-4 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 relative group">
+                <div className="flex flex-col md:flex-row items-center md:items-start w-full gap-6 p-4 bg-white rounded-xl shadow-sm border border-gray-200">
 
                   {/* Employee Image */}
                   <div className="relative flex-shrink-0">
@@ -229,10 +229,10 @@ const Projectdetails = () => {
                       <img
                         src={getImageSrc(employee.img)}
                         alt={employee.name}
-                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-indigo-400 shadow-md group-hover:scale-105 transition-transform duration-300"
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-gray-300 shadow"
                       />
                     ) : (
-                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-indigo-100 via-white to-indigo-100 flex items-center justify-center text-2xl sm:text-3xl text-indigo-500 font-bold shadow-md">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-100 flex items-center justify-center text-2xl sm:text-3xl text-gray-500 font-bold shadow">
                         {employee.name?.[0] || "?"}
                       </div>
                     )}
@@ -267,7 +267,7 @@ const Projectdetails = () => {
                     {/* Add Task Button */}
                     <button
                       onClick={() => setTaskModalFor(employee.userid)}
-                      className="mt-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 flex items-center gap-2 animate-bounce"
+                      className="mt-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
                       type="button"
                       style={{ minWidth: 100 }}
                     >
@@ -278,8 +278,8 @@ const Projectdetails = () => {
 
                   {/* Modal */}
                   {taskModalFor === employee.userid && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2 animate-fade-in-fast">
-                      <div className="relative bg-white w-full max-w-sm mx-auto rounded-2xl shadow-2xl p-6 flex flex-col gap-4 border border-indigo-100 animate-pop-in">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2">
+                      <div className="relative bg-white w-full max-w-sm mx-auto rounded-xl shadow-lg p-6 flex flex-col gap-4 border border-gray-200">
                         {/* Close Button */}
                         <button
                           className="absolute top-3 right-3 text-gray-400 hover:text-indigo-600 transition"
@@ -290,7 +290,7 @@ const Projectdetails = () => {
                           <div className='p-1 rounded-full text-lg font-bold hover:bg-gray-100 transition'>×</div>
                         </button>
 
-                        <h3 className="text-xl font-bold text-indigo-700 text-center">Add Task</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 text-center">Add Task</h3>
 
                         {/* Input */}
                         <input
@@ -299,12 +299,12 @@ const Projectdetails = () => {
                           onChange={(e) => setTasktext(e.target.value)}
                           type="text"
                           placeholder="Enter Task"
-                          className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+                          className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                         />
 
                         {/* Add Button */}
                         <button
-                          className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-2 rounded-lg shadow-md transition-all duration-300"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md shadow-sm transition-colors duration-200"
                           type="button"
                           onClick={async () => {
                             await handleAddTask(employee.userid);
@@ -322,22 +322,22 @@ const Projectdetails = () => {
                 <div className="flex-1 w-full">
                   <div className="font-semibold text-gray-800 mb-2 text-lg">Tasks</div>
                   <div className="overflow-x-auto w-full">
-                    <table className="min-w-full border border-gray-200 rounded-lg shadow-sm bg-white animate-fade-in">
+                    <table className="min-w-full border border-gray-200 rounded-lg shadow-sm bg-white">
                       <thead>
-                        <tr className="bg-blue-50">
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-blue-900 border-b">#</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-blue-900 border-b">Title</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-blue-900 border-b">Status</th>
+                        <tr className="bg-gray-50">
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">#</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">Title</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         {employee.projectinfo?.task && employee.projectinfo.task.length > 0 ? (
                           employee.projectinfo.task.map((task, tIdx) => (
-                            <tr key={tIdx} className="hover:bg-blue-50 transition animate-fade-in">
+                            <tr key={tIdx} className="hover:bg-gray-50 transition-colors">
                               <td className="px-4 py-2 border-b text-gray-700">{tIdx + 1}</td>
-                              <td className="px-4 py-2 border-b font-medium text-blue-800">{task.title}</td>
+                              <td className="px-4 py-2 border-b font-medium text-gray-800">{task.title}</td>
                               <td className="px-4 py-2 border-b">
-                                <span className={`px-2 py-0.5 rounded text-xs font-semibold ${task.status ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'} border ${task.status ? 'border-green-200' : 'border-yellow-200'} animate-pulse`}>
+                                <span className={`px-2 py-0.5 rounded text-xs font-medium ${task.status ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'} border ${task.status ? 'border-green-200' : 'border-yellow-200'}`}>
                                   {task.status ? "Completed" : "Active"}
                                 </span>
                               </td>
