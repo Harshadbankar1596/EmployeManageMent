@@ -277,6 +277,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="leaves"
+              element={
+                <ProtectedRoute>
+                  <Adminleaves />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </div>

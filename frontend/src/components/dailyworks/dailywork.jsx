@@ -401,8 +401,8 @@ const Dailywork = () => {
               transition={{ type: "spring", damping: 25 }}
               className="w-full max-w-md mx-2 sm:mx-0"
             >
-              <div className="bg-gradient-to-br from-yellow-50 to-white rounded-xl shadow-2xl border border-yellow-200 overflow-hidden">
-                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-yellow-400 to-yellow-500">
+              <div className="bg-green-300 rounded-xl shadow-2xl overflow-hidden">
+                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-900 to-blue-800">
                   <h2 className="text-xl font-bold text-white">Add Daily Work</h2>
                   <button
                     onClick={() => setshowmodal(false)}
@@ -519,7 +519,7 @@ const Dailywork = () => {
                   <div className="pt-4">
                     <button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg"
+                      className="w-full bg-gradient-to-r from-blue-900 to-blue-800 hover:from-blue-800 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg"
                     >
                       Add Work Entry
                     </button>
@@ -540,7 +540,7 @@ const Dailywork = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg mt-4 sm:mt-0"
+          className="flex items-center gap-2 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg mt-4 sm:mt-0"
           onClick={() => setshowmodal(true)}
         >
           <FaPlus className="text-sm" />
@@ -658,5 +658,4 @@ const Dailywork = () => {
     </div>
   );
 };
-
 export default Dailywork;

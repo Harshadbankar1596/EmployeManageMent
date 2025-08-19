@@ -7,9 +7,9 @@ import { FaTachometerAlt, FaUsers, FaCalendarCheck, FaProjectDiagram, FaChartBar
 const actions = [
   { name: "Dashboard", icon: <FaTachometerAlt size={28} />, path: "/superadmin/dashboard" },
   { name: "Employees", icon: <FaUsers size={28} />, path: "/superadmin/employees" },
-  // { name: "Attendance", icon: <FaCalendarCheck size={28} />, path: "/superadmin/attendance" },
   { name: "Projects", icon: <FaProjectDiagram size={28} />, path: "/superadmin/projects" },
   { name: "Reports", icon: <FaChartBar size={28} />, path: "/superadmin/reports" },
+  { name: "Leaves", icon: <FaCalendarCheck size={28} />, path: "/superadmin/leaves" }
 
 ];
 
