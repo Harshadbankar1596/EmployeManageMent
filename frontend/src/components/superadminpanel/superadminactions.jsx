@@ -8,7 +8,8 @@ const actions = [
   { name: "Employees", icon: <FaUsers size={28} />, path: "/superadmin/employees" },
   { name: "Projects", icon: <FaProjectDiagram size={28} />, path: "/superadmin/projects" },
   { name: "Reports", icon: <FaChartBar size={28} />, path: "/superadmin/reports" },
-  { name: "Leaves", icon: <FaCalendarCheck size={28} />, path: "/superadmin/leaves" }
+  { name: "Leaves", icon: <FaCalendarCheck size={28} />, path: "/superadmin/leaves" },
+  { name: "Job requirements", icon: <FaChartBar size={28} />, path: "/superadmin/jobs" }
 ];
 
 const Superadminactions = () => {

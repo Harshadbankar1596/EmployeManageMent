@@ -115,8 +115,17 @@ export const adminapi = createApi({
             }),
             invalidatesTags : ["job"]
         }),
+
+        deletejobs : builder.mutation({
+            query : (jobid)=>({
+                url :  `${import.meta.env.VITE_BACKEND_URL}/jobs/deletejobs`,
+                method : "POST",
+                body : {jobid}
+            }),
+            invalidatesTags : ["job"]
+        })
     }),
 });
 
 
-export const { useGetallmemebersadminMutation, useGetAllProjectsQuery, useAddmemberinprojectMutation, useGetallmembersnameQuery, useGetAllUsersQuery, useVerifyisadminMutation, useAddprojectMutation, useGetprojectMutation, useAddtaskMutation, useEmployeeMutation, useGetemployeedailyreportMutation, useUploadjobMutation, useGetjobsQuery } = adminapi;
+export const { useGetallmemebersadminMutation, useGetAllProjectsQuery, useAddmemberinprojectMutation, useGetallmembersnameQuery, useGetAllUsersQuery, useVerifyisadminMutation, useAddprojectMutation, useGetprojectMutation, useAddtaskMutation, useEmployeeMutation, useGetemployeedailyreportMutation, useUploadjobMutation, useGetjobsQuery , useDeletejobsMutation} = adminapi;

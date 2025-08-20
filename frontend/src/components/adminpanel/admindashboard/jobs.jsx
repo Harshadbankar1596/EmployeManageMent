@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useUploadjobMutation, useGetjobsQuery } from "../../../redux/adminapislice";
+import { useUploadjobMutation, useGetjobsQuery, useDeletejobsMutation } from "../../../redux/adminapislice";
 import { FiPlus, FiEdit, FiTrash2, FiX, FiUpload, FiDownload } from "react-icons/fi";
-import { UploadJobFail , Successmodal} from "../../modals/modal";
+import { FcCancel } from "react-icons/fc";
 
+import { UploadJobFail, Successmodal } from "../../modals/modal";
+import { FaSpinner } from "react-icons/fa";
 const Jobs = () => {
   const [openmodal, setopenmodal] = useState(false);
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
@@ -10,6 +12,10 @@ const Jobs = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [uploadError, setUploadError] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [deletejob, { isLoading: loadingdelete }] = useDeletejobsMutation();
+  const [deleteid, setdeleteid] = useState(null);
+  const [deletemodal, setdeletemodal] = useState(false);
+  const [deletetrue, setdeletetrue] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -78,7 +84,7 @@ const Jobs = () => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      const base64Data = reader.result.split(",")[1]; // remove prefix
+      const base64Data = reader.result.split(",")[1];
       setFormData({
         ...formData,
         resume: {
@@ -114,10 +120,56 @@ const Jobs = () => {
     }
   };
 
-  console.log(rowData)
+  function deletejobrequirements(jobid) {
+    deletejob(jobid).unwrap().then(() => {
+      refetch();
+    });
+  }
 
   return (
     <div>
+
+      {deletemodal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-900 rounded-2xl shadow-xl w-full max-w-md p-6 sm:p-8 text-center animate-fadeIn">
+            <div className="flex justify-center mb-4">
+              <FcCancel className="w-16 h-16" />
+            </div>
+
+            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-3">
+              Are you sure?
+            </h2>
+
+            <p className="text-gray-300 mb-6">
+              Do you really want to delete this job requirement?
+              This action cannot be undone.
+            </p>
+
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  setdeletetrue(true);
+                  setdeletemodal(false);
+                  deletejobrequirements(deleteid);
+                }}
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md transition"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={() => {
+                  setdeletetrue(false);
+                  setdeletemodal(false);
+                }}
+                className="px-5 py-2 bg-gray-700 hover:bg-gray-800 text-gray-200 rounded-lg shadow-md transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="z-50">
         {uploadError && <UploadJobFail errorMessage="Failed to upload job." />}
       </div>
@@ -126,12 +178,12 @@ const Jobs = () => {
       </div>
       <div className="p-6 ">
         <div className="mb-6 flex justify-between items-center flex-wrap gap-3">
-          <h1 className="text-2xl font-bold text-gray-800">Job Applications</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Job requirements Applications</h1>
           <button
             onClick={() => setopenmodal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors flex items-center gap-2"
           >
-            <FiPlus /> Add New Job
+            <FiPlus /> Add New Job requirements
           </button>
         </div>
 
@@ -177,9 +229,14 @@ const Jobs = () => {
                     </td>
                     <td className="p-3">
                       <div className="flex space-x-3">
-                      
-                        <button className="text-red-600 hover:text-red-800">
-                          <FiTrash2 size={18} />
+
+                        <button
+                          onClick={() => {
+                            setdeletemodal(true);
+                            setdeleteid(job._id)
+                          }}
+                          className="text-red-600 hover:text-red-800">
+                          {loadingdelete && job._id === deleteid ? <FaSpinner className="animate-spin" /> : <FiTrash2 size={18} />}
                         </button>
                       </div>
                     </td>
@@ -213,7 +270,7 @@ const Jobs = () => {
           </div>
         )}
 
-        {/* Resume Modal */}
+
         {resumeModalOpen && selectedResume && (
           <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-20">
             <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6">
@@ -223,7 +280,7 @@ const Jobs = () => {
                 {(() => {
                   if (!selectedResume) return null;
 
-                  // Buffer -> Base64
+
                   const base64String = btoa(
                     new Uint8Array(selectedResume.data?.data).reduce(
                       (data, byte) => data + String.fromCharCode(byte),

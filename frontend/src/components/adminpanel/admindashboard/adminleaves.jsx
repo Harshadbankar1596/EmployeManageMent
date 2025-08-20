@@ -38,7 +38,7 @@ const Adminleaves = () => {
     const totalLeaves = leaves?.allleavs?.length || 0;
     const pendingLeaves = leaves?.allleavs?.filter(leave => leave.status === "pending").length || 0;
     const approvedLeaves = leaves?.allleavs?.filter(leave => leave.status === "approved").length || 0;
-    const rejectedLeaves = leaves?.allleavs?.filter(leave => leave.status === "rejected").length || 0;
+    const rejectedLeaves = leaves?.allleavs?.filter(leave => leave.status === "reject").length || 0;
 
     // Stats Cards Component
     const StatsCards = () => (

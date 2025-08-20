@@ -4,29 +4,27 @@ import { useLogoutUserMutation } from '../../redux/apislice';
 import { logoutuser } from '../../redux/userslice/userslice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { FaChartBar , FaCalendarAlt , FaRegCalendarTimes , FaBusinessTime} from "react-icons/fa";
 import {
   FaTachometerAlt,
   FaUsers,
-  FaCalendarAlt,
   FaComments,
   FaCalendarCheck,
   FaPlusSquare,
-  FaTasks,
   FaClipboardList,
 } from "react-icons/fa";
 
 const navItems = [
-  // { label: "Dashboard", icon: FaTachometerAlt, to: "/admin" },
-  { label: "Employees", icon: FaUsers, to: "/admin/employees" },
-  { label: "Chat", icon: FaComments, to: "/admin/chat" },
-  { label: "Leaves", icon: FaCalendarCheck, to: "/admin/leaves" },
-  { label: "Add Project", icon: FaPlusSquare, to: "/admin/addproject" },
-  { label: "Assign Task", icon: FaTasks, to: "/admin/assinTask" },
-  { label: "Reports", icon: FaClipboardList, to: "/admin/employeedailyreport" },
-  { label: "job requirement", icon: FaClipboardList, to: "/admin/Jobs" },
+  { label: "Dashboard", icon: FaBusinessTime, to: "/" },
+  { label: "Apply For Leave", icon: FaRegCalendarTimes, to: "/leave" },
+  { label: "Working On", icon: FaCalendarCheck, to: "/works" },
+  { label: "Calendar", icon: FaCalendarAlt, to: "/calender" },
+  { label: "Summary", icon: FaChartBar, to: "/summary" },
+  { label: "Group Chat", icon: FaComments, to: "/groupchat" },
+  { label: "Daily Work", icon: FaClipboardList, to: "/dailywork" },
 ];
 
-const AdminSidebar = () => {
+const EmployeeSidebar = () => {
   const navigate = useNavigate();
   const [logoutUser] = useLogoutUserMutation();
   const dispatch = useDispatch();
@@ -99,6 +97,6 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default EmployeeSidebar;
 
 

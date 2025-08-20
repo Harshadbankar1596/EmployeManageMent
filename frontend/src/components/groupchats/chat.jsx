@@ -122,7 +122,7 @@ const Chat = () => {
     : localMessages
 
   return (
-    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen p-2 md:p-6 bg-gradient-to-br from-white via-gray-50 to-gray-100">
+    <div className="lenis-ignore flex flex-col md:flex-row items-center justify-center min-h-screen p-2 md:p-6 ">
       <motion.aside
         className="w-full sm:w-80 md:w-72 flex-shrink-0 flex flex-col items-center justify-start border rounded-2xl shadow-sm bg-white p-4 md:p-6 mb-4 md:mb-0 md:mr-8"
         initial="hidden"

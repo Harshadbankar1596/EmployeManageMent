@@ -106,7 +106,7 @@ function CalendarComponent() {
   )
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 my-5">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-3">Attendance Calendar</h2>
 
       <div className="calendar-container">

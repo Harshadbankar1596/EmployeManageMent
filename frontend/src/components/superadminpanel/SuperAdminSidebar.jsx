@@ -12,6 +12,7 @@ const navItems = [
   { label: "Projects", icon: MdWork, to: "/superadmin/projects" },
   { label: "Reports", icon: MdAssessment, to: "/superadmin/reports" },
   { label: "Leaves", icon: MdEventNote, to: "/superadmin/leaves" },
+  { label: "Job requirements", icon: MdAssessment, to: "/superadmin/jobs" },
 ];
 
 const SuperAdminSidebar = () => {

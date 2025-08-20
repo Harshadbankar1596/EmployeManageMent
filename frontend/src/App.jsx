@@ -19,7 +19,7 @@ import Employeprofile from "./components/profie/employeprofile.jsx";
 import Chat from "./components/groupchats/chat.jsx";
 import Dailywork from "./components/dailyworks/dailywork.jsx";
 import Leave from "./components/leaves/leave.jsx";
-
+import EmployeeSidebar from "./components/dashboard/employeesidebar.jsx";
 // Admin Panel
 import MainDashboard from "./components/adminpanel/maindashboard.jsx";
 import AllUsers from "./components/adminpanel/admindashboard/allusers.jsx";
@@ -57,9 +57,11 @@ const App = () => {
 
   const isAdminRoute = pathname.startsWith("/admin");
   const isSuperAdminRoute = pathname.startsWith("/superadmin");
+  const loginRoute = pathname.startsWith("/login");
+  const registerRoute = pathname.startsWith("/register");
 
   return (
-    <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen scrollbar-hide">
+    <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen scrollbar-hide bg-no-repeat bg-cover bg-fixed bg-[url('')]">
       <SmoothScroll />
 
       
@@ -68,8 +70,10 @@ const App = () => {
           <AdminSidebar />
         ) : isSuperAdminRoute ? (
           <SuperAdminSidebar />
-        ) : (
+        ) : loginRoute || registerRoute ? (
           <Side />
+        ) : (
+          <EmployeeSidebar />
         )}
       </div>
 
@@ -148,18 +152,22 @@ const App = () => {
           />
 
           {/* Admin Routes */}
+
+
+          
           <Route
             path="/admin/*"
             element={
-              <ProtectedRoute>
-                <MainDashboard />
-              </ProtectedRoute>
+                <ProtectedRoute>
+                  <MainDashboard />
+                </ProtectedRoute>
             }
           >
-            <Route
-              path="employees"
-              element={
-                <ProtectedRoute>
+
+          <Route
+            path="employees"
+            element={
+              <ProtectedRoute>
                   <AllUsers />
                 </ProtectedRoute>
               }
@@ -315,6 +323,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Adminleaves />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="jobs"
+              element={
+                <ProtectedRoute>
+                  <Jobs />
                 </ProtectedRoute>
               }
             />

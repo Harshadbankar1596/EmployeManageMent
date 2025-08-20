@@ -2,6 +2,7 @@ import User from "../model/userschema.js";
 import project from "../model/projectschema.js";
 import leaves from "../model/leaveschema.js";
 import dailywork from "../model/dailyworkschema.js";
+import { equal } from "@tensorflow/tfjs";
 
 
 export const getallusers = async (req, res) => {
@@ -29,8 +30,6 @@ export const verifyisadmin = async (req, res) => {
         if (!user) res.status(422).json({ message: "user not found" });
 
         const leave = await leaves.find({ status: "pending" })
-
-        // console.log("leaves => " , leave)
 
         if (user.isadmin === "admin") res.status(200).json({ message: "true", pendingleaves: leave.length })
 
