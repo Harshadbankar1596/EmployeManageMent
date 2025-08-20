@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const adminapi = createApi({
     reducerPath: "adminapi",
     baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_BACKEND_URL}/admin`, credentials: "include" }),
-    tagTypes: ["projects", "users"],
+    tagTypes: ["projects", "users" , "job"],
 
     endpoints: (builder) => ({
 
@@ -104,7 +104,8 @@ export const adminapi = createApi({
                 url: `${import.meta.env.VITE_BACKEND_URL}/jobs/uploadjob`,
                 method: "POST",
                 body: { data }
-            })
+            }),
+            invalidatesTags : ["job"]
         }),
 
         getjobs: builder.query({
@@ -112,6 +113,7 @@ export const adminapi = createApi({
                 url: `${import.meta.env.VITE_BACKEND_URL}/jobs/getjobs`,
                 method: "GET",
             }),
+            invalidatesTags : ["job"]
         }),
     }),
 });

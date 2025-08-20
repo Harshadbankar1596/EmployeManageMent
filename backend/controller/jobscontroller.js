@@ -1,37 +1,74 @@
 import Job from "../model/jobs.js"
 
-export const uploadjob = async (req , res)=>{
-    try {
+// export const uploadjob = async (req , res)=>{
+//     try {
 
-        const {data} = req.body
+//         console.log(req.body)
 
-        if(!data) res.status(400).json({message : "Data Not Found"});
+//         const {data} = req.body
 
-        let matches = data.img.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+//         if(!data) res.status(400).json({message : "Data Not Found"});
 
-        if (!matches || matches.length !== 3) {
-            return res.status(400).json({ message: "Invalid image format" });
-        }
+//         let matches = data.resume.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
 
-        let contentType = matches[1];
-        let imageBuffer = Buffer.from(matches[2], 'base64');
+//         if (!matches || matches.length !== 3) {
+//             return res.status(400).json({ message: "Invalid image format" });
+//         }
 
-        const job = new Job({
-            name : data.name,
-            email : data.email,
-            phone : data.phone,
-            resume : {data : imageBuffer , contentType , contentType},
-            role : data.role
-        })
+//         let contentType = matches[1];
+//         let imageBuffer = Buffer.from(matches[2], 'base64');
 
-        await job.save()
+//         const job = new Job({
+//             name : data.name,
+//             email : data.email,
+//             phone : data.phone,
+//             resume : {data : data.resume.data , contentType : data.resume.contentType},
+//             role : data.role
+//         })
 
-        res.status(200).json({message : "Resume Saved"})
+//         await job.save()
+
+//         res.status(200).json({message : "Resume Saved"})
         
-    } catch (error) {
-        res.status(500).json({message : "Server Error"})
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({message : "Server Error"})
+//     }
+// }
+
+export const uploadjob = async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const { data } = req.body;
+
+    if (!data) return res.status(400).json({ message: "Data Not Found" });
+
+    // resume object से buffer बनाना
+    if (!data.resume || !data.resume.data || !data.resume.contentType) {
+      return res.status(400).json({ message: "Resume Missing" });
     }
-}
+
+    const buffer = Buffer.from(data.resume.data, "base64"); // base64 → Buffer
+    const contentType = data.resume.contentType;
+
+    const job = new Job({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      resume: { data: buffer, contentType },
+      role: data.role,
+    });
+
+    await job.save();
+
+    res.status(200).json({ message: "Resume Saved Successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 
 
 export const getjobs = async (req , res) => {

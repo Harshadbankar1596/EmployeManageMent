@@ -1,6 +1,6 @@
 import React from "react";
-
-export const RegisterSuccess = () => {
+import { FcOk , FcCancel} from "react-icons/fc";
+export const RegisterSuccess = (props) => {
     return (
         <div className="fixed z-40 top-10 w-full h-full flex justify-center items-start pt-4">
             <div className="z-50 max-w-sm sm:max-w-md w-full mx-4 bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
@@ -236,3 +236,39 @@ export const Addprojectmodal = () => {
         </div>
     );
 };
+
+
+export const UploadJobFail = (props) => {
+    return (
+        <div className="fixed z-50 top-10 w-full h-full flex justify-center items-start pt-4">
+            <div className="z-50 max-w-sm sm:max-w-md w-full mx-4 bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                <div className="max-w-md mx-auto pt-6 sm:pt-8 lg:pt-12 pb-8 sm:pb-10 lg:pb-14 px-4 sm:px-5 text-center">
+                    <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 mb-4 sm:mb-5 rounded-full">
+                        <FcCancel className="w-full h-full object-contain" />
+                    </div>
+                    <h4 className="text-lg sm:text-xl lg:text-2xl text-gray-100 font-semibold mb-3 sm:mb-4 lg:mb-5">
+                        {props.errorMessage ? <span>{props.errorMessage}</span> : "Registration failed."}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+export const Successmodal = (props) => {
+    return (
+        <div className="fixed z-40 top-10 w-full h-full flex justify-center items-start pt-4">
+        <div className="z-50 max-w-sm sm:max-w-md w-full mx-4 bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+            <div className="max-w-md mx-auto pt-6 sm:pt-8 lg:pt-12 pb-8 sm:pb-10 lg:pb-14 px-4 sm:px-5 text-center">
+                <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 mb-4 sm:mb-5 rounded-full">
+                    <FcOk className="w-full h-full object-contain" />
+                </div>
+                <h4 className="text-lg sm:text-xl lg:text-2xl text-gray-100 font-semibold mb-3 sm:mb-4 lg:mb-5">
+                    {props.successMessage ? <span>{props.successMessage}</span> : "Work added successfully."}
+                </h4>
+            </div>
+        </div>
+    </div>
+    )
+}
