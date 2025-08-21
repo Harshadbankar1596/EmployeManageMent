@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useUploadjobMutation, useGetjobsQuery, useDeletejobsMutation } from "../../../redux/adminapislice";
-import { FiPlus, FiEdit, FiTrash2, FiX, FiUpload, FiDownload } from "react-icons/fi";
+import { FiX, FiUpload } from "react-icons/fi";
 import { FcCancel } from "react-icons/fc";
 
 import { UploadJobFail, Successmodal } from "../../modals/modal";

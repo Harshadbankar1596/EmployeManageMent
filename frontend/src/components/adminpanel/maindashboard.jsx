@@ -3,9 +3,10 @@ import { Routes, Route, Link, useLocation, Outlet } from 'react-router-dom'
 import Adminaction from './admindashboard/adminaction.jsx'
 import { useVerifyisadminMutation } from '../../redux/adminapislice.js'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import Loader from '../loader.jsx'
 const MainDashboard = () => {
-
+  const navigate = useNavigate()
   const id = useSelector((state) => state.user.id)
   const [isadmin, setisadmin] = useState(false)
   const [veryify, { isLoading, isError }] = useVerifyisadminMutation()

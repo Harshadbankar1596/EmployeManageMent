@@ -4,6 +4,16 @@ export const superadmin = createApi({
     reducerPath : "superadmin",
     baseQuery : fetchBaseQuery({baseUrl : `${import.meta.env.VITE_BACKEND_URL}/superadmin` , credentials: 'include'} ),
     endpoints : (builder)=>({
+
+
+        veryfyissuperadmin : builder.mutation({
+            query : (userid)=>({
+                url : "/veryfyissuperadmin",
+                method : "POST",
+                body : {userid}
+            })
+        }),
+
         getallemployees : builder.query({
             query : ()=>({
                 url : "/getallemployees",
@@ -24,8 +34,16 @@ export const superadmin = createApi({
                 url : "/superadminveryfy",
                 method : "get",
             })
+        }),
+
+        setadmin : builder.mutation({
+            query : (userid)=>({
+                url : "/setadmin",
+                method : "POST",
+                body : {userid}
+            })
         })
     })
 })
 
-export const {useGetallemployeesQuery , useGetemployeedetailMutation , useSuperadminveryfyQuery} = superadmin
+export const { useVeryfyissuperadminMutation , useGetallemployeesQuery , useGetemployeedetailMutation , useSuperadminveryfyQuery , useSetadminMutation} = superadmin

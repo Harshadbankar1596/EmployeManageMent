@@ -57,7 +57,6 @@ const Employeedetails = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-  // Calendar generation is now dynamic
   useEffect(() => {
     if (employee && employee.logs) {
       generateCalendar(currentYear, currentMonth);
@@ -70,7 +69,6 @@ const Employeedetails = () => {
     const daysInMonth = lastDay.getDate();
     const startDay = firstDay.getDay(); // Sunday = 0
 
-    // Create status map from logs (date string: status)
     const statusMap = {};
     employee.logs.forEach(log => {
       const logDate = new Date(log.date);
@@ -86,7 +84,6 @@ const Employeedetails = () => {
 
     const calendarDays = [];
 
-    // Previous month padding
     const prevMonthDays = new Date(year, month, 0).getDate();
     for (let i = 0; i < startDay; i++) {
       calendarDays.push({
@@ -96,7 +93,6 @@ const Employeedetails = () => {
       });
     }
 
-    // Current month days
     const today = new Date();
     for (let i = 1; i <= daysInMonth; i++) {
       const isToday =
@@ -111,7 +107,6 @@ const Employeedetails = () => {
       });
     }
 
-    // Next month padding
     const totalCells = Math.ceil((calendarDays.length) / 7) * 7;
     const remaining = totalCells - calendarDays.length;
     for (let i = 1; i <= remaining; i++) {
@@ -122,7 +117,6 @@ const Employeedetails = () => {
       });
     }
 
-    // Split into weeks
     const weeks = [];
     for (let i = 0; i < calendarDays.length; i += 7) {
       weeks.push(calendarDays.slice(i, i + 7));
@@ -131,12 +125,10 @@ const Employeedetails = () => {
     setCalendar(weeks);
   };
 
-  // Fetch employee data
   useEffect(() => {
     getEmployee(id).unwrap().then((data) => {
       setEmployee(data.employee);
     });
-    // eslint-disable-next-line
   }, [id]);
 
   // Month navigation handlers
@@ -171,7 +163,6 @@ const Employeedetails = () => {
     return window.btoa(binary);
   };
 
-  // Calculate statistics
   const calculateStats = () => {
     if (!employee?.logs) return { present: 0, pending: 0, halfday: 0, absent: 0, total: 0 };
     
@@ -186,7 +177,6 @@ const Employeedetails = () => {
 
   const stats = calculateStats();
 
-  // Stats Cards Component
   const StatsCards = () => (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-4 shadow-lg">
@@ -229,7 +219,7 @@ const Employeedetails = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
         {isLoading && <Loader />}
 
@@ -288,10 +278,8 @@ const Employeedetails = () => {
       </div>
     </div>
 
-            {/* Stats Cards */}
             <StatsCards />
 
-          {/* Calendar Section */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 mb-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
@@ -300,7 +288,6 @@ const Employeedetails = () => {
                 <h2 className="text-xl font-semibold text-gray-800">Attendance Calendar</h2>
               </div>
 
-            {/* Calendar Header */}
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between">
               <button
@@ -325,7 +312,6 @@ const Employeedetails = () => {
                 </div>
             </div>
 
-            {/* Week Days Header */}
               <div className="grid grid-cols-7 bg-gray-50 rounded-t-lg border">
               {weekDays.map(day => (
                 <div
@@ -371,7 +357,6 @@ const Employeedetails = () => {
             </div>
           </div>
 
-          {/* Legend */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-gradient-to-r from-gray-500 to-gray-600 rounded-lg">

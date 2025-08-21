@@ -1,6 +1,24 @@
 import User from "../model/userschema.js"
 
+export const veryfyissuperadmin = async (req , res)=>{
+    try {
 
+        console.log(req.body)
+
+        const {userid} = req.body
+
+        if(!userid) res.status(400).json({message : "Userid Not Found"});
+
+        const user = await User.findById(userid);
+
+        if(!user) res.status(422).json({message : "User Id Invalid"});
+
+        res.status(200).json({message : user.isadmin})
+        
+    } catch (error) {
+        res.status(500).json({message : "Server Error"})
+    }
+}
 
 export const superadminveryfy = async (req, res) => {
     try {
@@ -50,7 +68,8 @@ export const getallemployees = async (req , res)=> {
                 name : user[i].name,
                 image : user[i].profileimg,
                 log : user[i].logs[0],
-                userid : user[i]._id
+                userid : user[i]._id,
+                isadmin : user[i].isadmin
             }
             userdata.push(data)
         }
@@ -88,5 +107,28 @@ export const getemployeedetail = async (req , res)=>{
         
     } catch (error) {
         res.status(500).json({message : "Server Error"})
+    }
+}
+
+
+export const setadmin = async (req , res)=>{
+    try {
+
+        const {userid} = req.body
+
+        if(!userid) res.status(400).json({message : "Userid Notfoud"});
+
+        const user = await User.findById(userid);
+
+        if(!user) res.status(422).json({message : "User Not Found"});
+
+        user.isadmin = user.isadmin === "admin" ? "employee" : "admin";
+
+        await user.save()
+
+        res.status(200).json({message : "Done"})
+        
+    } catch (error) {
+        res.status(500).json({message : 'Server Error'})
     }
 }

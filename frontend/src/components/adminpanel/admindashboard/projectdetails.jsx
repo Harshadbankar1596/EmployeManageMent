@@ -12,21 +12,21 @@ import Loader from '../../loader';
 const ShimmerProjectHeader = () => (
   <div className="flex flex-col sm:flex-row items-center justify-between gap-10 mt-12 w-full max-w-4xl mx-auto">
     <div className="flex-1 w-full">
-      <div className="h-10 bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 rounded w-2/3 mb-4 animate-pulse"></div>
+      <div className="h-10 bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 rounded w-2/3 mb-4  "></div>
       <div className="flex gap-6 mt-4">
-        <div className="h-6 w-32 bg-gradient-to-r from-blue-100 via-blue-50 to-blue-100 rounded animate-pulse"></div>
-        <div className="h-6 w-32 bg-gradient-to-r from-green-100 via-green-50 to-green-100 rounded animate-pulse"></div>
-        <div className="h-6 w-32 bg-gradient-to-r from-yellow-100 via-yellow-50 to-yellow-100 rounded animate-pulse"></div>
+        <div className="h-6 w-32 bg-gradient-to-r from-blue-100 via-blue-50 to-blue-100 rounded "></div>
+        <div className="h-6 w-32 bg-gradient-to-r from-green-100 via-green-50 to-green-100 rounded "></div>
+        <div className="h-6 w-32 bg-gradient-to-r from-yellow-100 via-yellow-50 to-yellow-100 rounded "></div>
       </div>
     </div>
     <div>
-      <div className="h-12 w-36 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-xl animate-pulse"></div>
+      <div className="h-12 w-36 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-xl "></div>
     </div>
   </div>
 );
 
 const ShimmerEmployeeCard = () => (
-  <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-center gap-6 animate-pulse">
+  <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-center gap-6 ">
     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 via-blue-50 to-blue-100"></div>
     <div className="flex-1 w-full">
       <div className="h-6 w-1/3 bg-gradient-to-r from-blue-200 via-blue-100 to-blue-200 rounded mb-2"></div>

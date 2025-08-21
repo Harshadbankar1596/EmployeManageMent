@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { useGetallemployeesQuery } from '../../../redux/superadminslice';
+import { useGetallemployeesQuery, useSetadminMutation } from '../../../redux/superadminslice';
 import Loader from "../../loader.jsx";
 import { Link } from "react-router-dom";
-import { 
-  FaUsers, 
-  FaSearch, 
-  FaFilter, 
-  FaEye, 
-  FaUserCheck, 
+import { PiShieldPlus, PiShieldCheckFill } from "react-icons/pi";
+import { FcCancel, FcOk } from "react-icons/fc";
+import { ImSpinner7 } from "react-icons/im";
+import {
+  FaUsers,
+  FaSearch,
+  FaFilter,
+  FaEye,
+  FaUserCheck,
   FaUserTimes,
   FaCalendarAlt,
   FaChartBar,
@@ -29,7 +32,7 @@ function getImageSrc(image) {
 
 const StatusBadge = ({ isPresent }) => (
   <div className="relative">
-  <span
+    <span
       className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-lg border-2 transition-all duration-300 transform hover:scale-105
       ${isPresent
           ? "bg-gradient-to-r from-green-400 to-green-600 text-white border-green-300 shadow-green-200"
@@ -47,7 +50,7 @@ const StatusBadge = ({ isPresent }) => (
           Absent
         </>
       )}
-  </span>
+    </span>
     <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${isPresent ? 'bg-green-400' : 'bg-red-400'} animate-ping`}></div>
   </div>
 );
@@ -134,18 +137,22 @@ const StatsSummary = ({ employees, todaydate }) => {
 };
 
 const Employees = () => {
-  const { data: employees, isLoading, isError, error } = useGetallemployeesQuery();
+  const [setadmin , {isLoading : loadingSetAdmin}] = useSetadminMutation();
+  const { data: employees, isLoading : loadingEmployees, isError, error, refetch } = useGetallemployeesQuery();
   const todaydate = new Date().toLocaleDateString();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [sortField, setSortField] = useState('name');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [opensetadminmodal, setopenadminmodal] = useState(false);
+  const [adminid, setadminid] = useState(null);
+  const [opencancelmodal, setopencancelmodal] = useState(false);
 
   const filteredEmployees = employees?.data?.filter(emp => {
     const matchesSearch = emp.name?.toLowerCase().includes(searchTerm.toLowerCase());
     const isPresent = emp?.log?.date === todaydate;
-    const matchesStatus = filterStatus === 'all' || 
-      (filterStatus === 'present' && isPresent) || 
+    const matchesStatus = filterStatus === 'all' ||
+      (filterStatus === 'present' && isPresent) ||
       (filterStatus === 'absent' && !isPresent);
     return matchesSearch && matchesStatus;
   }) || [];
@@ -153,12 +160,12 @@ const Employees = () => {
   const sortedEmployees = [...filteredEmployees].sort((a, b) => {
     let aValue = a[sortField];
     let bValue = b[sortField];
-    
+
     if (sortField === 'status') {
       aValue = a?.log?.date === todaydate;
       bValue = b?.log?.date === todaydate;
     }
-    
+
     if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
     if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
     return 0;
@@ -173,12 +180,20 @@ const Employees = () => {
     }
   };
 
+  const handlesetadmin = () => {
+    setadmin(adminid).unwrap().then(() => {
+      refetch()
+    }).catch((error) => {
+      console.log("err", error)
+    });
+  }
+
   const getSortIcon = (field) => {
     if (sortField !== field) return <FaSort className="text-gray-400" />;
     return sortDirection === 'asc' ? <FaSortUp className="text-blue-600" /> : <FaSortDown className="text-blue-600" />;
   };
 
-  if (isLoading) {
+  if (loadingEmployees) {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
@@ -212,143 +227,225 @@ const Employees = () => {
   }
 
   return (
-    <div className=" p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg">
-              <FaUsers className="text-white text-2xl" />
+    <div>
+
+
+      {opencancelmodal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-900 rounded-2xl shadow-xl w-full max-w-md p-6 sm:p-8 text-center animate-fadeIn">
+            <div className="flex justify-center mb-4">
+              <FcCancel className="w-16 h-16" />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">Employee Management</h1>
-              <p className="text-gray-600 mt-1">Monitor and manage your team's attendance</p>
-            </div>
-        </div>
-      </div>
 
-     <StatsSummary employees={employees} todaydate={todaydate} />
+            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-3">
+              Are you sure?
+            </h2>
 
-        <SearchFilter 
-          searchTerm={searchTerm} 
-          setSearchTerm={setSearchTerm}
-          filterStatus={filterStatus}
-          setFilterStatus={setFilterStatus}
-        />
+            <p className="text-gray-300 mb-6">
+              Do you really want to Set Employee authority ?
+            </p>
 
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-      <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-                <tr>
-                  <th className="py-4 px-6 text-left">
-                    <button 
-                      onClick={() => handleSort('id')}
-                      className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
-                    >
-                      # {getSortIcon('id')}
-                    </button>
-                  </th>
-                  <th className="py-4 px-6 text-left font-semibold text-gray-700">Photo</th>
-                  <th className="py-4 px-6 text-left">
-                    <button 
-                      onClick={() => handleSort('name')}
-                      className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
-                    >
-                      Name {getSortIcon('name')}
-                    </button>
-                  </th>
-                  <th className="py-4 px-6 text-left">
-                    <button 
-                      onClick={() => handleSort('status')}
-                      className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
-                    >
-                      Status {getSortIcon('status')}
-                    </button>
-                  </th>
-                  <th className="py-4 px-6 text-left font-semibold text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-                {sortedEmployees.length > 0 ? (
-                  sortedEmployees.map((emp, idx) => {
-                const isPresent = emp?.log?.date === todaydate;
-                return (
-                  <tr
-                    key={emp.userid || idx}
-                        className="group hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-100"
-                      >
-                        <td className="py-4 px-6">
-                          <span className="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full font-semibold text-sm">
-                            {idx + 1}
-                          </span>
-                    </td>
-                        <td className="py-4 px-6">
-                      <Link to={emp.userid} className="block group-hover:scale-110 transition-transform duration-300">
-                            <div className="relative w-12 h-12">
-                          <img
-                            src={getImageSrc(emp.image) || "/dp.svg"}
-                            alt={emp.name}
-                                className="w-12 h-12 rounded-full border-3 border-gray-200 object-cover shadow-md transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg"
-                          />
-                              <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${isPresent ? "bg-green-400" : "bg-red-400"}`}></div>
-                        </div>
-                      </Link>
-                    </td>
-                        <td className="py-4 px-6">
-                          <Link to={emp.userid} className="hover:text-blue-600 transition-colors duration-200">
-                            <div className="font-semibold text-gray-800">{emp.name}</div>
-                            <div className="text-sm text-gray-500">Employee ID: {emp.userid}</div>
-                      </Link>
-                    </td>
-                        <td className="py-4 px-6">
-                      <StatusBadge isPresent={isPresent} />
-                        </td>
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-2">
-                            <Link 
-                              to={emp.userid}
-                              className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors duration-200"
-                              title="View Details"
-                            >
-                              <FaEye className="text-sm" />
-                            </Link>
-                            
-                            <Link
-                              to={`/superadmin/reports/${emp.userid}`}
-                              className="p-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 transition-colors duration-200"
-                              title="Work History"
-                            >
-                              <MdWork className="text-sm" />
-                            </Link>
-                          </div>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                    <td colSpan={5} className="py-12 text-center">
-                      <div className="flex flex-col items-center">
-                        <FaUsers className="text-4xl text-gray-300 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-600 mb-2">No employees found</h3>
-                        <p className="text-gray-500">Try adjusting your search or filter criteria</p>
-                      </div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-        </div>
-
-        {sortedEmployees.length > 0 && (
-          <div className="mt-6 bg-white rounded-xl shadow-lg p-4 border border-gray-100">
-            <div className="flex items-center justify-between text-sm text-gray-600">
-              <span>Showing {sortedEmployees.length} of {employees?.data?.length || 0} employees</span>
-              <span>Last updated: {new Date().toLocaleTimeString()}</span>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  handlesetadmin();
+                  setopencancelmodal(false);
+                }}
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md transition"
+              >
+                Yes, Give Employee
+              </button>
+              <button
+                onClick={() => {
+                  setopencancelmodal(false);
+                }}
+                className="px-5 py-2 bg-gray-700 hover:bg-gray-800 text-gray-200 rounded-lg shadow-md transition"
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
+
+      {opensetadminmodal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-900 rounded-2xl shadow-xl w-full max-w-md p-6 sm:p-8 text-center animate-fadeIn">
+            <div className="flex justify-center mb-4">
+              <FcOk className="w-16 h-16" />
+            </div>
+
+            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-3">
+              Are you sure?
+            </h2>
+
+            <p className="text-gray-300 mb-6">
+              Do you really want to Give Admin authority ?
+            </p>
+
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  handlesetadmin();
+                  setopenadminmodal(false);
+
+                }}
+                className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md transition"
+              >
+                Yes, Give Admin
+              </button>
+              <button
+                onClick={() => {
+                  setopenadminmodal(false);
+                }}
+                className="px-5 py-2 bg-gray-700 hover:bg-gray-800 text-gray-200 rounded-lg shadow-md transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className=" p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+                <FaUsers className="text-white text-2xl" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">Employee Management</h1>
+                <p className="text-gray-600 mt-1">Monitor and manage your team's attendance</p>
+              </div>
+            </div>
+          </div>
+
+          <StatsSummary employees={employees} todaydate={todaydate} />
+
+          <SearchFilter
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+          />
+
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                  <tr>
+                    <th className="py-4 px-6 text-left">
+                      <button
+                        onClick={() => handleSort('id')}
+                        className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                      >
+                        # {getSortIcon('id')}
+                      </button>
+                    </th>
+                    <th className="py-4 px-6 text-left font-semibold text-gray-700">Photo</th>
+                    <th className="py-4 px-6 text-left">
+                      <button
+                        onClick={() => handleSort('name')}
+                        className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                      >
+                        Name {getSortIcon('name')}
+                      </button>
+                    </th>
+                    <th className="py-4 px-6 text-left">
+                      <button
+                        onClick={() => handleSort('status')}
+                        className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors"
+                      >
+                        Status {getSortIcon('status')}
+                      </button>
+                    </th>
+                    <th className="py-4 px-6 text-left font-semibold text-gray-700">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedEmployees.length > 0 ? (
+                    sortedEmployees.map((emp, idx) => {
+                      const isPresent = emp?.log?.date === todaydate;
+                      return (
+                        <tr
+                          key={emp.userid || idx}
+                          className="group hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-100"
+                        >
+                          <td className="py-4 px-6">
+                            <span className="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full font-semibold text-sm">
+                              {idx + 1}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6">
+                            <Link to={emp.userid} className="block group-hover:scale-110 transition-transform duration-300">
+                              <div className="relative w-12 h-12">
+                                <img
+                                  src={getImageSrc(emp.image) || "/dp.svg"}
+                                  alt={emp.name}
+                                  className="w-12 h-12 rounded-full border-3 border-gray-200 object-cover shadow-md transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg"
+                                />
+                                <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${isPresent ? "bg-green-400" : "bg-red-400"}`}></div>
+                              </div>
+                            </Link>
+                          </td>
+                          <td className="py-4 px-6">
+                            <Link to={emp.userid} className="hover:text-blue-600 transition-colors duration-200">
+                              <div className="font-semibold text-gray-800">{emp.name}</div>
+                              <div className="text-sm text-gray-500">Employee ID: {emp.userid}</div>
+                            </Link>
+                          </td>
+                          <td className="py-4 px-6">
+                            <StatusBadge isPresent={isPresent} />
+                          </td>
+                          <td className="py-4 px-6">
+                            <div className="flex items-center gap-2">
+                              <Link
+                                to={emp.userid}
+                                className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors duration-200"
+                                title="View Details"
+                              >
+                                <FaEye className="text-sm" />
+                              </Link>
+
+                              <Link
+                                to={`/superadmin/reports/${emp.userid}`}
+                                className="p-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 transition-colors duration-200"
+                                title="Work History"
+                              >
+                                <MdWork className="text-sm" />
+                              </Link>
+                              {(loadingEmployees || loadingSetAdmin && adminid === emp.userid) ? <ImSpinner7 className='animate-spin text-xl' /> : emp?.isadmin === "admin" ? <PiShieldCheckFill onClick={() => { setadminid(emp.userid); setopencancelmodal(true); }} className='text-xl cursor-pointer' title='Admin' /> : <PiShieldPlus onClick={() => { setadminid(emp.userid); setopenadminmodal(true); }} className='text-xl cursor-pointer' title='Employee' />}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="py-12 text-center">
+                        <div className="flex flex-col items-center">
+                          <FaUsers className="text-4xl text-gray-300 mb-4" />
+                          <h3 className="text-lg font-semibold text-gray-600 mb-2">No employees found</h3>
+                          <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {sortedEmployees.length > 0 && (
+            <div className="mt-6 bg-white rounded-xl shadow-lg p-4 border border-gray-100">
+              <div className="flex items-center justify-between text-sm text-gray-600">
+                <span>Showing {sortedEmployees.length} of {employees?.data?.length || 0} employees</span>
+                <span>Last updated: {new Date().toLocaleTimeString()}</span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
