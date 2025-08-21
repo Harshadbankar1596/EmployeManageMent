@@ -67,7 +67,7 @@ const Addproject = () => {
             details: form
         }
         addproject(obj).unwrap().then((v) => {
-            console.log(v)
+            // console.log(v)
             setForm({
                 title: '',
                 startDate: '',
@@ -79,7 +79,7 @@ const Addproject = () => {
                 setopenmodal(false)
             }, 1000);
         })
-        console.log(obj)
+        // console.log(obj)
     }
 
     if (isLoading) {

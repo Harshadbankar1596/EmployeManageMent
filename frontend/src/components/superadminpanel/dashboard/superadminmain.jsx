@@ -13,7 +13,7 @@ const Superadminmain = () => {
   useEffect(() => {
     verify(id).unwrap().then((v) => {
       setIsSuperAdmin(v.message);
-      console.log(v.message);
+      // console.log(v.message);
     });
   }, [id, verify]);
 

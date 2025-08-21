@@ -6,7 +6,7 @@ const AllUsers = () => {
     const { data: users, isLoading, error } = useGetAllUsersQuery();
 
     useEffect(() => {
-        console.log(users);
+        // console.log(users);
     }, [users]);
 
     if (isLoading) {

@@ -2,7 +2,7 @@ import ChatSchema from "../model/chatschema.js";
 
 export const socketHandler = (io) => {
   io.on("connection", (socket) => {
-    console.log("A user connected");
+    // console.log("A user connected");
 
     socket.on("send-message", async ({ message, name, groupname }) => {
 
@@ -36,7 +36,7 @@ export const socketHandler = (io) => {
     });
 
     socket.on("disconnect", () => {
-      console.log("A user disconnected");
+      // console.log("A user disconnected");
     });
   });
 };

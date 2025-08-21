@@ -62,7 +62,7 @@ const Register = () => {
         setSuccess(false);
       }, 3000);
 
-      console.log(result);
+      // console.log(result);
       setForm({
         name: "",
         email: "",

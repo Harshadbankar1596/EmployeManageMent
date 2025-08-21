@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useUploadjobMutation, useGetjobsQuery, useDeletejobsMutation } from "../../../redux/adminapislice";
-import { FiX, FiUpload } from "react-icons/fi";
+import { FiX, FiUpload , FiPlus , FiTrash2 } from "react-icons/fi";
 import { FcCancel } from "react-icons/fc";
 
 import { UploadJobFail, Successmodal } from "../../modals/modal";
@@ -32,7 +32,7 @@ const Jobs = () => {
 
   const handleResumeClick = (resumeData, jobData) => {
     setSelectedResume(resumeData);
-    console.log(selectedResume)
+    // console.log(selectedResume)
     setSelectedJob(jobData);
     setResumeModalOpen(true);
   };

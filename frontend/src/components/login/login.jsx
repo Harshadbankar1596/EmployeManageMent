@@ -46,7 +46,7 @@ const Login = () => {
 
 
       const res = await loginUser(form).unwrap();
-      console.log("res", res)
+      // console.log("res", res)
 
       dispatch(setUser({ user: res.user, token: res.token }));
       setSuccess(true);
@@ -111,9 +111,9 @@ const Login = () => {
     const video = document.getElementById("video");
     canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
     const image = canvas.toDataURL("image/jpeg");
-    if (isLoading) console.log("isLoading");
+    // if (isLoading) console.log("isLoading");
     const res = await matchFace(image).unwrap();
-    console.log("res", res);
+    // console.log("res", res);
 
     if (res.success) {
       setSuccess(true);

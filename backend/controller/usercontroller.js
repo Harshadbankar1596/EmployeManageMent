@@ -7,7 +7,7 @@ import Screenshot from "../model/screenshot.js";
 dotenv.config();
 
 export const createUser = async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     try {
 
         const { name, email, phone, password, role } = req.body;
@@ -29,7 +29,7 @@ export const createUser = async (req, res) => {
         await newUser.save();
 
         res.status(201).json({ message: "User registered successfully.", user: newUser });
-        console.log("newUser", newUser);
+        // console.log("newUser", newUser);
     } catch (error) {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Server error.", error: error.message });
@@ -100,7 +100,7 @@ export const verifyToken = async (req, res) => {
 
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "secretkey");
 
-        console.log("veryfy tocen decoded line 103 => " , decoded)
+        // console.log("veryfy tocen decoded line 103 => " , decoded)
 
         const user = await User.findById(decoded.id).select('-password');
 
@@ -265,14 +265,14 @@ export const works = async (req, res) => {
 
 export const workstatus = async (req, res) => {
     try {
-        console.log("workstatus", req.body)
+        // console.log("workstatus", req.body)
         const { userid, objid } = req.body;
         const user = await User.findById(userid);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
         user.workingOn.find(work => work._id.toString() === objid).status = !user.workingOn.find(work => work._id.toString() === objid).status;
-        console.log("user.workingOn", user.workingOn)
+        // console.log("user.workingOn", user.workingOn)
         await user.save();
         res.status(200).json({ message: "Work status", workstatus: user.workingOn });
     } catch (error) {
@@ -530,7 +530,7 @@ export const getallmembers = async (req, res) => {
             const projectInfo = user.workingOn.find((work) => String(work.projectid) === projectid)
 
             // Debug log for project info of each user
-            console.log('Project info for user', user._id, ':', projectInfo);
+            // console.log('Project info for user', user._id, ':', projectInfo);
             const projectdetail = {
                 task : projectInfo?.task,
             }

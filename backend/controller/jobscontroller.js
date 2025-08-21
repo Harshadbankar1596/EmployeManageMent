@@ -1,7 +1,7 @@
 import Job from "../model/jobs.js"
 export const uploadjob = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
     const { data } = req.body;
 
@@ -51,7 +51,7 @@ export const getjobs = async (req , res) => {
 export const deletejobs = async (req , res)=>{
   try {
 
-    console.log(req.body)
+    // console.log(req.body)
 
     const {jobid} = req.body
 

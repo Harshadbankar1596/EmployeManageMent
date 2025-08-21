@@ -16,31 +16,30 @@ import { MdDashboard, MdPendingActions } from 'react-icons/md';
 const Adminleaves = () => {
 
     const { data: leaves, refetch, isLoading: fetchloading } = useGetallleavesQuery()
-    console.log(leaves)
+    // console.log(leaves)
     const [rejectleave, { isLoading: mutationloading }] = useRejectleaveMutation()
     const [approveleave, { isLoading: amutationloading }] = useApprovedleaveMutation()
 
     function reject(id) {
         rejectleave(id).unwrap().then((v) => {
-            console.log("rejected leave")
+            // console.log("rejected leave")
             refetch()
         })
     }
 
     function approve(id) {
         approveleave(id).unwrap().then((v) => {
-            console.log("approved leave")
+            // console.log("approved leave")
             refetch()
         })
     }
 
-    // Calculate statistics
     const totalLeaves = leaves?.allleavs?.length || 0;
     const pendingLeaves = leaves?.allleavs?.filter(leave => leave.status === "pending").length || 0;
     const approvedLeaves = leaves?.allleavs?.filter(leave => leave.status === "approved").length || 0;
     const rejectedLeaves = leaves?.allleavs?.filter(leave => leave.status === "reject").length || 0;
 
-    // Stats Cards Component
+
     const StatsCards = () => (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg">

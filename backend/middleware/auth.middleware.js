@@ -40,21 +40,21 @@ export const authMiddleware = async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-      console.log("Token missing in cookies");
+      // console.log("Token missing in cookies");
       return res.status(401).json({ message: "Token missing" });
     }
 
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "secretkey");
 
     if (!decoded || !decoded.id) {
-      console.log("Token invalid: decoded object missing id");
+      // console.log("Token invalid: decoded object missing id");
       return res.status(401).json({ message: "Invalid token payload" });
     }
 
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
-      console.log("User not found for decoded id:", decoded.id);
+      // console.log("User not found for decoded id:", decoded.id);
       return res.status(401).json({ message: "Invalid token: user not found" });
     }
 

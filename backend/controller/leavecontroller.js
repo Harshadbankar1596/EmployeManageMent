@@ -2,7 +2,7 @@ import leaveschema from "../model/leaveschema.js";
 
 export const applyleaves = async (req , res) =>{
     try {
-        console.log(req.body)
+        // console.log(req.body)
 
         const newleaveapply = new leaveschema({
             name : req.body.formData.name,
@@ -53,7 +53,7 @@ export const allleavs = async (req , res) =>{
 
         if(!allleavs) res.status(422).json({message : "not found leavs"});
 
-        console.log(allleavs)
+        // console.log(allleavs)
 
         res.status(200).json({message : "all leavs" , allleavs : allleavs})
         

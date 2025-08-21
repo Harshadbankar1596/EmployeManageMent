@@ -380,7 +380,7 @@ const Dailywork = () => {
         refetch()
       })
     } catch (error) {
-      console.log("error in delete work")
+      // console.log("error in delete work")
     }
   }
 

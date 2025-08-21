@@ -90,9 +90,12 @@ const Employeedailyreport = () => {
                         headerClass: 'font-bold text-blue-600',
                         cellClass: 'text-black'
                     }}
+
                     pagination={true}
                     paginationPageSize={10}
-                    rowSelection="single"
+                    paginationPageSizeSelector={[10, 20, 50, 100]}
+                    // rowSelection={{ mode: 'single' }}
+                    rowSelection={{ mode: 'multiRow' }}
                     ensureDomOrder={true}
                     suppressCellFocus={true}
                     onGridReady={(params) => params.api.sizeColumnsToFit()}

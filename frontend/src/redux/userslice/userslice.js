@@ -16,7 +16,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            console.log("action.payload", action);
+            // console.log("action.payload", action);
             state.name = action?.payload?.user?.name ;
             state.email = action?.payload?.user?.email;
             state.phone = action?.payload?.user?.phone;
@@ -34,7 +34,7 @@ const userSlice = createSlice({
         builder.addMatcher(
             apiSlice.endpoints.loginUser.matchFulfilled,
             (state , action)=>{
-                console.log("Extra reducer matchfullfeild" , action.payload.user)
+                // console.log("Extra reducer matchfullfeild" , action.payload.user)
                 setUser(action.payload.user)
             },
             

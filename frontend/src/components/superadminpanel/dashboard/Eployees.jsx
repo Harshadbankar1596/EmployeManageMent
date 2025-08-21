@@ -35,8 +35,8 @@ const StatusBadge = ({ isPresent }) => (
     <span
       className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm shadow-lg border-2 transition-all duration-300 transform hover:scale-105
       ${isPresent
-          ? "bg-gradient-to-r from-green-400 to-green-600 text-white border-green-300 shadow-green-200"
-          : "bg-gradient-to-r from-red-400 to-red-600 text-white border-red-300 shadow-red-200"
+          ? "bg-green-500 text-white border-green-300 "
+          : "bg-red-500 text-white border-red-300 "
         }`}
     >
       {isPresent ? (
@@ -51,7 +51,6 @@ const StatusBadge = ({ isPresent }) => (
         </>
       )}
     </span>
-    <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${isPresent ? 'bg-green-400' : 'bg-red-400'} animate-ping`}></div>
   </div>
 );
 
@@ -72,22 +71,18 @@ const SearchFilter = ({ searchTerm, setSearchTerm, filterStatus, setFilterStatus
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          className="px-5 py-3  border-none rounded-lg  focus:bg-blue-100  transition-all duration-500"
         >
-          <option value="all">All Status</option>
-          <option value="present">Present</option>
-          <option value="absent">Absent</option>
+          <option value="all" className=''>All Status</option>
+          <option value="present" className=''>Present</option>
+          <option value="absent" className=''>Absent</option>
         </select>
-        <button className="px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2">
-          <FaFilter />
-          Filter
-        </button>
+
       </div>
     </div>
   </div>
 );
 
-// Stats summary component
 const StatsSummary = ({ employees, todaydate }) => {
   const presentCount = employees?.data?.filter(emp => emp?.log?.date === todaydate).length || 0;
   const totalCount = employees?.data?.length || 0;
@@ -96,7 +91,7 @@ const StatsSummary = ({ employees, todaydate }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg">
+      <div className="bg-blue-900 text-white rounded-xl p-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-blue-100 text-sm font-medium">Total Employees</p>
@@ -105,7 +100,7 @@ const StatsSummary = ({ employees, todaydate }) => {
           <FaUsers className="text-3xl opacity-80" />
         </div>
       </div>
-      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-4 shadow-lg">
+      <div className="bg-green-500 text-white rounded-xl p-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-green-100 text-sm font-medium">Present Today</p>
@@ -114,7 +109,7 @@ const StatsSummary = ({ employees, todaydate }) => {
           <FaUserCheck className="text-3xl opacity-80" />
         </div>
       </div>
-      <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl p-4 shadow-lg">
+      <div className="bg-red-500 text-white rounded-xl p-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-red-100 text-sm font-medium">Absent Today</p>
@@ -123,7 +118,7 @@ const StatsSummary = ({ employees, todaydate }) => {
           <FaUserTimes className="text-3xl opacity-80" />
         </div>
       </div>
-      <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-4 shadow-lg">
+      <div className="bg-yellow-500 text-white rounded-xl p-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-purple-100 text-sm font-medium">Attendance Rate</p>
@@ -137,8 +132,8 @@ const StatsSummary = ({ employees, todaydate }) => {
 };
 
 const Employees = () => {
-  const [setadmin , {isLoading : loadingSetAdmin}] = useSetadminMutation();
-  const { data: employees, isLoading : loadingEmployees, isError, error, refetch } = useGetallemployeesQuery();
+  const [setadmin, { isLoading: loadingSetAdmin }] = useSetadminMutation();
+  const { data: employees, isLoading: loadingEmployees, isError, error, refetch } = useGetallemployeesQuery();
   const todaydate = new Date().toLocaleDateString();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -311,7 +306,7 @@ const Employees = () => {
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+              <div className="p-3 bg-blue-900 rounded-xl shadow-lg">
                 <FaUsers className="text-white text-2xl" />
               </div>
               <div>

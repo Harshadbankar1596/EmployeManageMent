@@ -37,7 +37,7 @@ const Leave = () => {
     e.preventDefault();
     try {
       await applyleave({ id: id, formData }).unwrap();
-      console.log("apply leave posted");
+      // console.log("apply leave posted");
       setopenmodal(false);
       if (typeof refetch === "function") {
         refetch();
@@ -53,7 +53,7 @@ const Leave = () => {
     } catch (err) {
       console.error("Failed to apply leave:", err);
     }
-    console.log(formData);
+    // console.log(formData);
   };
 
   return (

@@ -8,7 +8,7 @@ const Assinproject = () => {
     const { data: projects, isLoading: projectsLoading } = useGetAllProjectsQuery()
 
     function openproject(projectid) {
-        console.log('ids', projectid)
+        // console.log('ids', projectid)
     }
 
     if (projectsLoading) {

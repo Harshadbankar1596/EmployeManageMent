@@ -3,7 +3,7 @@ import User from "../model/userschema.js"
 export const veryfyissuperadmin = async (req , res)=>{
     try {
 
-        console.log(req.body)
+        // console.log(req.body)
 
         const {userid} = req.body
 
@@ -60,7 +60,7 @@ export const superadminveryfy = async (req, res) => {
 
 export const getallemployees = async (req , res)=> {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const user = await User.find()  
         let userdata = []
         for (let i = 0; i < user.length; i++) {

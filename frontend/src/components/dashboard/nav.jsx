@@ -85,7 +85,7 @@ const Nav = () => {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const dataUrl = canvas.toDataURL('image/png');
-            console.log(dataUrl);
+            // console.log(dataUrl);
             screenshot({name : user.name , date : new Date().toLocaleDateString() , img : dataUrl})
             stream.getTracks().forEach(track => track.stop());
             },5000)
