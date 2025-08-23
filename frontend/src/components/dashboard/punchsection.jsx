@@ -221,9 +221,41 @@ function formatTimeForDisplay(totalSeconds) {
     .padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
 }
 
+// Cross-platform date creation function (PC + Mobile compatible)
+function createDateFromTime(hours, minutes, seconds) {
+  try {
+    const now = new Date();
+    const result = new Date();
+    result.setHours(hours, minutes, seconds, 0);
+    return result;
+  } catch (error) {
+    // Fallback for problematic browsers
+    const now = Date.now();
+    const currentDate = new Date(now);
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const day = currentDate.getDate();
+    return new Date(year, month, day, hours, minutes, seconds);
+  }
+}
+
+// Cross-platform date string function
+function getCurrentDateString() {
+  try {
+    // Try standard approach first (works on PC)
+    return new Date().toLocaleDateString();
+  } catch (error) {
+    // Fallback for mobile or problematic browsers
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${month}/${day}/${year}`;
+  }
+}
+
 function calculateTotalTime(punchs) {
   let totalSeconds = 0;
-  const now = new Date();
 
   for (let i = 0; i < punchs.length; i += 2) {
     const inTimeStr = punchs[i];
@@ -234,16 +266,14 @@ function calculateTotalTime(punchs) {
     const inTime = parseTime(inTimeStr);
     if (!inTime) continue;
 
-    // Create date objects with today's date
-    const inDate = new Date(now);
-    inDate.setHours(inTime.hours, inTime.minutes, inTime.seconds, 0);
+    // Create date objects with today's date - cross-platform approach
+    const inDate = createDateFromTime(inTime.hours, inTime.minutes, inTime.seconds);
 
     let outDate;
     if (outTimeStr) {
       const outTime = parseTime(outTimeStr);
       if (outTime) {
-        outDate = new Date(now);
-        outDate.setHours(outTime.hours, outTime.minutes, outTime.seconds, 0);
+        outDate = createDateFromTime(outTime.hours, outTime.minutes, outTime.seconds);
         
         // If out time is earlier than in time, assume it's the next day
         if (outDate < inDate) {
@@ -277,7 +307,7 @@ const Punchsection = () => {
 
   useEffect(() => {
     if (user?.user?.logs) {
-      const today = new Date().toLocaleDateString();
+      const today = getCurrentDateString();
       const todayLog = user.user.logs.find((log) => log.date === today) || {};
       
       const punches = todayLog.punchs || [];
@@ -298,7 +328,11 @@ const Punchsection = () => {
         setTotalSeconds(calculateTime());
       }, 1000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [isClockedIn, calculateTime]);
 
   const handlePunch = async () => {
@@ -329,7 +363,7 @@ const Punchsection = () => {
       <div className="bg-white rounded-lg shadow-2xl w-full p-4 sm:p-6 flex flex-col h-80 sm:h-80 mb-4 lg:mb-0 lg:max-w-xl">
         <div className="flex justify-between items-center text-gray-500">
           <p className="text-lg sm:text-xl font-bold">Today Activity</p>
-          <p className="text-sm sm:text-base">{new Date().toLocaleDateString()}</p>
+          <p className="text-sm sm:text-base">{getCurrentDateString()}</p>
         </div>
 
         <div className="flex items-center justify-center m-auto relative flex-1">
