@@ -182,158 +182,52 @@
 
 // export default Punchsection;
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Switch from './togle';
 import { useAddpunchMutation, useVerifyTokenQuery } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
 
-function parseTime(timeStr) {
-  if (!timeStr) return null;
+// Get today's date in the exact format used by backend: "8/23/2025"
+function getTodayDateString() {
+  const today = new Date();
+  const month = today.getMonth() + 1;  // 1-12
+  const day = today.getDate();         // 1-31
+  const year = today.getFullYear();    // 2025
   
-  // Handle both 12-hour and 24-hour formats
-  let time = timeStr.trim().toUpperCase();
-  let isPM = time.includes('PM');
-  let isAM = time.includes('AM');
-  
-  // Remove AM/PM indicator
-  time = time.replace(/(AM|PM)/gi, '').trim();
-  
-  const parts = time.split(':').map(part => parseInt(part) || 0);
-  
-  let hours = parts[0] || 0;
-  const minutes = parts[1] || 0;
-  const seconds = parts[2] || 0;
-  
-  // Convert to 24-hour format if needed
-  if (isPM && hours < 12) hours += 12;
-  if (isAM && hours === 12) hours = 0;
-  
-  return { hours, minutes, seconds };
-}
-
-function formatTimeForDisplay(totalSeconds) {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = Math.floor(totalSeconds % 60);
-  
-  return `${hours.toString().padStart(2, '0')} : ${minutes
-    .toString()
-    .padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-}
-
-// Cross-platform date creation function (PC + Mobile compatible)
-function createDateFromTime(hours, minutes, seconds) {
-  try {
-    const now = new Date();
-    const result = new Date();
-    result.setHours(hours, minutes, seconds, 0);
-    return result;
-  } catch (error) {
-    // Fallback for problematic browsers
-    const now = Date.now();
-    const currentDate = new Date(now);
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const day = currentDate.getDate();
-    return new Date(year, month, day, hours, minutes, seconds);
-  }
-}
-
-// Cross-platform date string function
-function getCurrentDateString() {
-  try {
-    // Try standard approach first (works on PC)
-    return new Date().toLocaleDateString();
-  } catch (error) {
-    // Fallback for mobile or problematic browsers
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${month}/${day}/${year}`;
-  }
-}
-
-function calculateTotalTime(punchs) {
-  let totalSeconds = 0;
-
-  for (let i = 0; i < punchs.length; i += 2) {
-    const inTimeStr = punchs[i];
-    const outTimeStr = punchs[i + 1] || null;
-
-    if (!inTimeStr) continue;
-
-    const inTime = parseTime(inTimeStr);
-    if (!inTime) continue;
-
-    // Create date objects with today's date - cross-platform approach
-    const inDate = createDateFromTime(inTime.hours, inTime.minutes, inTime.seconds);
-
-    let outDate;
-    if (outTimeStr) {
-      const outTime = parseTime(outTimeStr);
-      if (outTime) {
-        outDate = createDateFromTime(outTime.hours, outTime.minutes, outTime.seconds);
-        
-        // If out time is earlier than in time, assume it's the next day
-        if (outDate < inDate) {
-          outDate.setDate(outDate.getDate() + 1);
-        }
-      } else {
-        outDate = new Date(); // Current time if parsing failed
-      }
-    } else {
-      outDate = new Date(); // Current time if no out time
-    }
-
-    totalSeconds += (outDate - inDate) / 1000;
-  }
-
-  return totalSeconds;
+  // Backend uses format: "M/D/YYYY" (no leading zeros)
+  return `${month}/${day}/${year}`;
 }
 
 const Punchsection = () => {
   const [addpunch, { isLoading: punchveryfy }] = useAddpunchMutation();
   const id = useSelector((state) => state.user.id);
   const [punchs, setPunchs] = useState([]);
-  const [totalSeconds, setTotalSeconds] = useState(0);
   const [isClockedIn, setIsClockedIn] = useState(false);
 
   const { data: user, isLoading: veryfy, refetch } = useVerifyTokenQuery();
 
-  const calculateTime = useCallback(() => {
-    return calculateTotalTime(punchs);
-  }, [punchs]);
-
   useEffect(() => {
-    if (user?.user?.logs) {
-      const today = getCurrentDateString();
-      const todayLog = user.user.logs.find((log) => log.date === today) || {};
+    if (user?.user?.logs && Array.isArray(user.user.logs)) {
+      const todayDate = getTodayDateString(); 
+      const todayLog = user.user.logs.find((log) => log.date === todayDate);
       
-      const punches = todayLog.punchs || [];
-      setPunchs(punches);
-      setIsClockedIn(punches.length % 2 !== 0);
+      if (todayLog) {
+        const punches = todayLog.punchs || [];
+        setPunchs(punches);
+        setIsClockedIn(punches.length % 2 !== 0);
+      } else {
+        setPunchs([]);
+        setIsClockedIn(false);
+      }
+    } else {
+      setPunchs([]);
+      setIsClockedIn(false);
     }
   }, [user]);
 
   useEffect(() => {
     refetch();
   }, [refetch]);
-
-  useEffect(() => {
-    setTotalSeconds(calculateTime());
-    let interval;
-    if (isClockedIn) {
-      interval = setInterval(() => {
-        setTotalSeconds(calculateTime());
-      }, 1000);
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isClockedIn, calculateTime]);
 
   const handlePunch = async () => {
     try {
@@ -348,9 +242,15 @@ const Punchsection = () => {
     }
   };
 
-  const EIGHT_HOURS = 8 * 3600;
-  const percentage = Math.min(100, (totalSeconds / EIGHT_HOURS) * 100);
-  const liveTime = formatTimeForDisplay(totalSeconds);
+  // Get display date
+  const displayDate = (() => {
+    try {
+      return new Date().toLocaleDateString();
+    } catch (e) {
+      const today = new Date();
+      return `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+    }
+  })();
 
   if (veryfy || punchveryfy) return (
     <div className="flex justify-center items-center h-screen">
@@ -359,60 +259,56 @@ const Punchsection = () => {
   );
 
   return (
-    <div className="flex flex-col w-full gap-4 justify-center items-center lg:flex-row lg:flex-nowrap">
-      <div className="bg-white rounded-lg shadow-2xl w-full p-4 sm:p-6 flex flex-col h-80 sm:h-80 mb-4 lg:mb-0 lg:max-w-xl">
-        <div className="flex justify-between items-center text-gray-500">
-          <p className="text-lg sm:text-xl font-bold">Today Activity</p>
-          <p className="text-sm sm:text-base">{getCurrentDateString()}</p>
-        </div>
-
-        <div className="flex items-center justify-center m-auto relative flex-1">
-          <div className="relative h-40 w-40 sm:h-56 sm:w-56 mx-auto">
-            <div className="absolute inset-0 rounded-full bg-gray-200"></div>
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: `conic-gradient(
-                  #10B981 0%, 
-                  #10B981 ${percentage}%, 
-                  #E5E7EB ${percentage}%, 
-                  #E5E7EB 100%
-                )`
-              }}
-            ></div>
-            <div className="absolute top-3 left-3 right-3 bottom-3 sm:top-4 sm:left-4 sm:right-4 sm:bottom-4 bg-white rounded-full flex flex-col justify-center items-center text-xl sm:text-2xl font-bold z-10">
-              <span className="text-2xl sm:text-3xl">{liveTime}</span>
-              <span className="text-xs sm:text-sm text-gray-500 mt-2">
-                {isClockedIn ? 'Currently Clocked In' : 'Clocked Out'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-2xl w-full p-4 sm:p-6 flex flex-col h-80 sm:h-80 lg:max-w-xl">
+    <div className="flex flex-col w-full gap-4 justify-center items-center">
+      <div className="bg-white rounded-lg shadow-2xl w-full p-4 sm:p-6 flex flex-col lg:max-w-2xl">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
-          <p className="text-xl sm:text-2xl font-bold text-gray-700">Today's Updates</p>
+          <div className="flex flex-col items-center sm:items-start">
+            <p className="text-xl sm:text-2xl font-bold text-gray-700">Today's Updates</p>
+            <p className="text-sm text-gray-500">{displayDate}</p>
+          </div>
           <Switch onClick={handlePunch} punchs={punchs} />
         </div>
 
-        <div data-lenis-prevent className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full flex-1">
+        <div data-lenis-prevent className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full max-h-96">
           {punchs.length === 0 && (
-            <div className="text-center text-gray-400">No punches yet today.</div>
+            <div className="text-center text-gray-400 py-8">
+              <div className="text-lg font-medium">No punches yet today</div>
+              <div className="text-sm mt-1">Click the switch above to start your day</div>
+            </div>
           )}
           {punchs.map((punch, index) => (
             <div
               key={index}
-              className="flex justify-between bg-blue-100 px-3 sm:px-5 py-3 sm:py-5 rounded-sm items-center"
+              className="flex justify-between bg-blue-100 px-3 sm:px-5 py-3 sm:py-5 rounded-lg items-center hover:bg-blue-200 transition-colors"
             >
-              <p className="font-semibold text-gray-700 text-sm sm:text-base">
-                {index % 2 === 0 ? 'Punch In' : 'Punch Out'}
-              </p>
-              <p className={`${index % 2 === 0 ? 'bg-green-500' : 'bg-red-500'} px-2 py-2 rounded-sm text-white text-xs sm:text-base`}>
-                {punch}
-              </p>
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full ${index % 2 === 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-gray-700 text-sm sm:text-base">
+                    {index % 2 === 0 ? 'Punch In' : 'Punch Out'}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Entry #{index + 1}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className={`${index % 2 === 0 ? 'bg-green-500' : 'bg-red-500'} px-3 py-2 rounded-lg text-white text-xs sm:text-base font-medium`}>
+                  {punch}
+                </p>
+              </div>
             </div>
           ))}
+          
+          {/* Current Status Indicator */}
+          {punchs.length > 0 && (
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg text-center">
+              <span className={`inline-flex items-center gap-2 text-sm font-medium ${isClockedIn ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`w-2 h-2 rounded-full ${isClockedIn ? 'bg-green-500' : 'bg-red-500'} ${isClockedIn ? 'animate-pulse' : ''}`}></div>
+                {isClockedIn ? 'Currently Clocked In' : 'Currently Clocked Out'}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
