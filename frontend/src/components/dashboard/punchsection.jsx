@@ -362,7 +362,7 @@ const Punchsection = () => {
           <Switch onClick={handlePunch} punchs={punchs} />
         </div>
 
-        <div className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full flex-1">
+        <div data-lenis-prevent className="flex flex-col overflow-y-auto scrollbar-hide gap-2 mt-4 w-full flex-1">
           {punchs.length === 0 && (
             <div className="text-center text-gray-400">No punches yet today.</div>
           )}
