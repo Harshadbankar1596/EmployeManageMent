@@ -43,10 +43,10 @@ export const apiSlice = createApi({
 
 
         addpunch: builder.mutation({
-            query: ({ id, currentHours }) => ({
+            query: (id) => ({
                 url: '/users/addpunch',
                 method: 'post',
-                body: { id, currentHours }
+                body: { id }
             }),
             invalidatesTags: ['User'],
         }),

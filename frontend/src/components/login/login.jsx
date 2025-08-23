@@ -92,17 +92,17 @@ const Login = () => {
 
   // capture
 
-  useEffect(() => {
-    const video = document.getElementById("video");
-    const constraints = {
-      video: true,
-      audio: false,
-    };
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-      var stream = video.srcObject = stream;
-      video.play();
-    });
-  }, []);
+  // useEffect(() => {
+  //   const video = document.getElementById("video");
+  //   const constraints = {
+  //     video: true,
+  //     audio: false,
+  //   };
+  //   navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+  //     var stream = video.srcObject = stream;
+  //     video.play();
+  //   });
+  // }, []);
 
 
   async function capture() {

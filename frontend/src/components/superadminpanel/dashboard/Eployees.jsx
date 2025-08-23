@@ -661,8 +661,10 @@ const EmployeeCard = ({ emp, idx, handleSort, getSortIcon, loadingEmployees, loa
               <FaEye className="text-sm" />
             </Link>
             {(loadingEmployees || (loadingSetAdmin && adminid === emp.userid)) ? 
-              <ImSpinner7 className='animate-spin text-xl' /> : 
-              emp?.isadmin === "admin" ? 
+              <div className="flex items-center justify-center w-8 h-8">
+                <ImSpinner7 className='animate-spin text-xl' />
+              </div>
+              : emp?.isadmin === "admin" ? 
                 <PiShieldCheckFill 
                   onClick={() => { setadminid(emp.userid); setopencancelmodal(true); }} 
                   className='text-xl cursor-pointer' 
@@ -872,14 +874,13 @@ const Employees = () => {
   };
 
   if (loadingEmployees) {
+    // Center the loader using flex utilities
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center h-64">
-            <div className="flex flex-col items-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-              <p className="mt-4 text-gray-600 font-medium">Loading employee data...</p>
-            </div>
+            {/* Centered Loader */}
+            <Loader />
           </div>
         </div>
       </div>
