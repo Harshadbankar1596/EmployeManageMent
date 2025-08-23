@@ -113,7 +113,7 @@ export const verifyToken = async (req, res) => {
             email: user.email,
             phone: user.phone,
             role: user.role,
-            logs: user.logs,
+            logs: Array(user.logs[0]) || [],
             id: user._id,
         }
 
@@ -126,71 +126,70 @@ export const verifyToken = async (req, res) => {
 
 };
 
+
 // export const addpunch = async (req, res) => {
 //     try {
 //         const { id, currentHours } = req.body;
 
+//         const today = new Date().toLocaleDateString();
+//         const currentTime = new Date().toLocaleTimeString();
+
 //         const user = await User.findById(id);
 
 //         if (!user) {
-
 //             return res.status(404).json({ message: "User not found" });
-
 //         }
 
-//         const today = new Date().toLocaleDateString();
-
-//         const currentTime = new Date().toLocaleTimeString();
-
-//         let logIndex = user.logs.findIndex((log) => log.date === today);
-
-//         let currentlog;
+//         const logIndex = user.logs.findIndex(log => log.date === today);
 
 //         if (logIndex !== -1) {
+            
+//             const punchPath = `logs.${logIndex}.punchs`;
+//             const statusPath = `logs.${logIndex}.status`;
 
-//             if (!Array.isArray(user.logs[logIndex].punchs)) {
+//             const newStatus = currentHours >= 8
+//                 ? "present"
+//                 : currentHours >= 4
+//                     ? "halfday"
+//                     : "pending";
 
-//                 user.logs[logIndex].punchs = [];
-
-//             }
-
-//             user.logs[logIndex].punchs.push(currentTime);
-
-//             currentlog = user.logs[logIndex];
+//             await User.updateOne(
+//                 { _id: id },
+//                 {
+//                     $push: { [punchPath]: currentTime },
+//                     $set: { [statusPath]: newStatus }
+//                 }
+//             );
 
 //         } else {
-
 //             const newlog = {
 //                 date: today,
 //                 punchs: [currentTime],
-//                 status: "pending"
+//                 status:
+//                     currentHours >= 8
+//                         ? "present"
+//                         : currentHours >= 4
+//                             ? "halfday"
+//                             : "pending"
 //             };
 
-//             user.logs.unshift(newlog);
-
-//             currentlog = newlog;
+//             await User.updateOne(
+//                 { _id: id },
+//                 { $push: { logs: { $each: [newlog], $position: 0 } } } 
+//             );
 //         }
 
-//         if (currentHours) {
-//             currentHours >= 8 ? user.logs[0].status = "present" : currentHours >= 4 ? user.logs[0].status = "halfday" : user.logs[0].status = "pending"
-//         }
-
-//         await user.save();
-
-//         return res.status(200).json({ message: "Punch added successfully", log: currentlog });
+//         return res.status(200).json({ message: "Punch added successfully" });
 
 //     } catch (error) {
-
 //         console.error("Error in addpunch:", error);
-
 //         res.status(500).json({ message: "Server error", error: error.message });
-
 //     }
 // };
 
 export const addpunch = async (req, res) => {
     try {
-        const { id, currentHours } = req.body;
+        const {id} = req.body;
 
         const today = new Date().toLocaleDateString();
         const currentTime = new Date().toLocaleTimeString();
@@ -203,40 +202,72 @@ export const addpunch = async (req, res) => {
 
         const logIndex = user.logs.findIndex(log => log.date === today);
 
+        let todaypunches = [];
         if (logIndex !== -1) {
-            
+            todaypunches = user.logs[logIndex].punchs ? [...user.logs[logIndex].punchs] : [];
+        }
+
+        // Add the new punch
+        todaypunches.push(currentTime);
+
+        // Calculate total worked hours from todaypunches
+        let totalMs = 0;
+        for (let i = 0; i < todaypunches.length; i += 2) {
+            const start = todaypunches[i];
+            const end = todaypunches[i + 1];
+            if (start && end) {
+                // Parse time strings to Date objects (using today's date)
+                const todayDate = new Date();
+                const [startTime, startPeriod] = start.split(' ');
+                const [endTime, endPeriod] = end.split(' ');
+                const [startH, startM, startS] = startTime.split(':').map(Number);
+                const [endH, endM, endS] = endTime.split(':').map(Number);
+
+                let startHour = startH % 12 + (startPeriod === 'PM' ? 12 : 0);
+                if (startPeriod === 'AM' && startH === 12) startHour = 0;
+                let endHour = endH % 12 + (endPeriod === 'PM' ? 12 : 0);
+                if (endPeriod === 'AM' && endH === 12) endHour = 0;
+
+                const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), startHour, startM, startS);
+                const endDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), endHour, endM, endS);
+
+                // If end is before start (shouldn't happen, but just in case), skip
+                if (endDate > startDate) {
+                    totalMs += endDate - startDate;
+                }
+            }
+        }
+        // If odd number of punches, treat last as start with no end, so don't add
+        const totalHours = totalMs / (1000 * 60 * 60);
+
+        // Determine status
+        let newStatus = "pending";
+        if (totalHours >= 8) {
+            newStatus = "present";
+        } else if (totalHours >= 4) {
+            newStatus = "halfday";
+        }
+
+        if (logIndex !== -1) {
             const punchPath = `logs.${logIndex}.punchs`;
             const statusPath = `logs.${logIndex}.status`;
-
-            const newStatus = currentHours >= 8
-                ? "present"
-                : currentHours >= 4
-                    ? "halfday"
-                    : "pending";
 
             await User.updateOne(
                 { _id: id },
                 {
-                    $push: { [punchPath]: currentTime },
-                    $set: { [statusPath]: newStatus }
+                    $set: { [punchPath]: todaypunches, [statusPath]: newStatus }
                 }
             );
-
         } else {
             const newlog = {
                 date: today,
                 punchs: [currentTime],
-                status:
-                    currentHours >= 8
-                        ? "present"
-                        : currentHours >= 4
-                            ? "halfday"
-                            : "pending"
+                status: "pending"
             };
 
             await User.updateOne(
                 { _id: id },
-                { $push: { logs: { $each: [newlog], $position: 0 } } } 
+                { $push: { logs: { $each: [newlog], $position: 0 } } }
             );
         }
 

@@ -68,7 +68,8 @@ const Punchsection = () => {
     if (user?.user?.logs) {
       const today = new Date().toLocaleDateString();
       // console.log(today)
-      const todayLog = user.user.logs.find((log) => log.date === today);
+      const todayLog = user?.user?.logs?.find((log) => log?.date === today) || [];
+
       const punches = todayLog?.punchs || [];
       setPunchs(punches);
       setIsClockedIn(punches.length % 2 !== 0);
@@ -162,7 +163,7 @@ const Punchsection = () => {
           {punchs.length === 0 && (
             <div className="text-center text-gray-400">No punches yet today.</div>
           )}
-          {punchs.map((punch, index) => (
+          {punchs?.map((punch, index) => (
             <div
               key={index}
               className="flex justify-between bg-blue-100 px-3 sm:px-5 py-3 sm:py-5 rounded-sm items-center"
@@ -182,7 +183,3 @@ const Punchsection = () => {
 };
 
 export default Punchsection;
-
-
-
-

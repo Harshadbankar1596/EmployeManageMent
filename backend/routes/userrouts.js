@@ -11,9 +11,9 @@ router.post("/logout", logoutUser);
 
 router.get("/verify", verifyToken);
 
-router.post('/addpunch', authMiddleware, addpunch)
+router.post('/addpunch', addpunch)
 
-router.post('/works', works)
+router.post('/works',authMiddleware , works)
 // router.post('/works', authMiddleware, works)
 
 router.post('/workstatus', authMiddleware, workstatus)

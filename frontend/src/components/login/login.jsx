@@ -52,7 +52,7 @@ const Login = () => {
       setSuccess(true);
       setForm({ email: "", password: "", remember: false });
 
-      if (res.user.isadmin === "superadmin") {
+      if (res?.user?.isadmin === "superadmin") {
         setTimeout(() => {
           setSuccess(false);
           navigate("/superadmin/employees");
@@ -71,9 +71,9 @@ const Login = () => {
         }, 1000);
       }
 
-      if (isError) {
-        alert("Login failed" + " " + res.message);
-      }
+      // if (isError) {
+      //   alert("Login failed" + " " + res.message);
+      // }
 
     } catch (err) {
 
