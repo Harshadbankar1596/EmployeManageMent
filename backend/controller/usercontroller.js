@@ -109,10 +109,10 @@ export const verifyToken = async (req, res) => {
         }
 
         let userdata = {
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            role: user.role,
+            // name: user.name,
+            // email: user.email,
+            // phone: user.phone,
+            // role: user.role,
             logs: Array(user.logs[0]) || [],
             id: user._id,
         }

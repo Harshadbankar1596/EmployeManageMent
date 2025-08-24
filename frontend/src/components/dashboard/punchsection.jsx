@@ -194,7 +194,7 @@
 //   const month = today.getMonth() + 1;  // 1-12
 //   const day = today.getDate();         // 1-31
 //   const year = today.getFullYear();    // 2025
-  
+
 //   // Backend uses format: "M/D/YYYY" (no leading zeros)
 //   return `${month}/${day}/${year}`;
 // }
@@ -211,7 +211,7 @@
 //     if (user?.user?.logs && Array.isArray(user.user.logs)) {
 //       const todayDate = getTodayDateString(); 
 //       const todayLog = user.user.logs.find((log) => log.date === todayDate);
-      
+
 //       if (todayLog) {
 //         const punches = todayLog.punchs || [];
 //         setPunchs(punches);
@@ -300,7 +300,7 @@
 //               </div>
 //             </div>
 //           ))}
-          
+
 //           {/* Current Status Indicator */}
 //           {punchs.length > 0 && (
 //             <div className="mt-4 p-3 bg-gray-50 rounded-lg text-center">
@@ -328,24 +328,24 @@
 // // Parse time string like "9:11:3 AM" or "2:12:11 PM"
 // function parseTime(timeStr) {
 //   if (!timeStr) return null;
-  
+
 //   let time = timeStr.trim().toUpperCase();
 //   let isPM = time.includes('PM');
 //   let isAM = time.includes('AM');
-  
+
 //   // Remove AM/PM indicator
 //   time = time.replace(/(AM|PM)/gi, '').trim();
-  
+
 //   const parts = time.split(':').map(part => parseInt(part) || 0);
-  
+
 //   let hours = parts[0] || 0;
 //   const minutes = parts[1] || 0;
 //   const seconds = parts[2] || 0;
-  
+
 //   // Convert to 24-hour format
 //   if (isPM && hours < 12) hours += 12;
 //   if (isAM && hours === 12) hours = 0;
-  
+
 //   return { hours, minutes, seconds };
 // }
 
@@ -354,7 +354,7 @@
 //   const hours = Math.floor(totalSeconds / 3600);
 //   const minutes = Math.floor((totalSeconds % 3600) / 60);
 //   const seconds = Math.floor(totalSeconds % 60);
-  
+
 //   return `${hours.toString().padStart(2, '0')}:${minutes
 //     .toString()
 //     .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -370,7 +370,7 @@
 // // Calculate total working time from punches
 // function calculateTotalTime(punchs) {
 //   if (!punchs || punchs.length === 0) return 0;
-  
+
 //   let totalSeconds = 0;
 
 //   for (let i = 0; i < punchs.length; i += 2) {
@@ -389,7 +389,7 @@
 //       const outTime = parseTime(outTimeStr);
 //       if (outTime) {
 //         outDate = createTimeDate(outTime.hours, outTime.minutes, outTime.seconds);
-        
+
 //         // If out time is earlier than in time, assume it's the next day
 //         if (outDate.getTime() < inDate.getTime()) {
 //           outDate.setTime(outDate.getTime() + (24 * 60 * 60 * 1000));
@@ -415,7 +415,7 @@
 //   const month = today.getMonth() + 1;  // 1-12
 //   const day = today.getDate();         // 1-31
 //   const year = today.getFullYear();    // 2025
-  
+
 //   // Backend uses format: "M/D/YYYY" (no leading zeros)
 //   return `${month}/${day}/${year}`;
 // }
@@ -437,7 +437,7 @@
 //     if (user?.user?.logs && Array.isArray(user.user.logs)) {
 //       const todayDate = getTodayDateString(); 
 //       const todayLog = user.user.logs.find((log) => log.date === todayDate);
-      
+
 //       if (todayLog) {
 //         const punches = todayLog.punchs || [];
 //         setPunchs(punches);
@@ -459,14 +459,14 @@
 //   // Calculate time and update every second if clocked in
 //   useEffect(() => {
 //     setTotalSeconds(calculateTime());
-    
+
 //     let interval;
 //     if (isClockedIn) {
 //       interval = setInterval(() => {
 //         setTotalSeconds(calculateTime());
 //       }, 1000);
 //     }
-    
+
 //     return () => {
 //       if (interval) {
 //         clearInterval(interval);
@@ -519,7 +519,7 @@
 //           <div className="relative h-40 w-40 sm:h-56 sm:w-56 mx-auto">
 //             {/* Background Circle */}
 //             <div className="absolute inset-0 rounded-full bg-gray-200"></div>
-            
+
 //             {/* Progress Circle */}
 //             <div
 //               className="absolute inset-0 rounded-full transition-all duration-1000 ease-out"
@@ -532,7 +532,7 @@
 //                 )`
 //               }}
 //             ></div>
-            
+
 //             {/* Inner Circle with Time Display */}
 //             <div className="absolute top-3 left-3 right-3 bottom-3 sm:top-4 sm:left-4 sm:right-4 sm:bottom-4 bg-white rounded-full flex flex-col justify-center items-center text-xl sm:text-2xl font-bold z-10 shadow-inner">
 //               <span className="text-2xl sm:text-3xl font-mono text-gray-800">
@@ -566,7 +566,7 @@
 //               <div className="text-sm mt-1">Click the switch above to start your day</div>
 //             </div>
 //           )}
-          
+
 //           {punchs.map((punch, index) => (
 //             <div
 //               key={index}
@@ -590,7 +590,7 @@
 //               </div>
 //             </div>
 //           ))}
-          
+
 //           {/* Current Status Indicator */}
 //           {punchs.length > 0 && (
 //             <div className="mt-4 p-3 bg-gray-50 rounded-lg text-center">
@@ -614,28 +614,29 @@ import Switch from './togle';
 import { useAddpunchMutation, useVerifyTokenQuery } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
 import Loader from '../loader';
+import { FcOk, FcCancel } from "react-icons/fc";
 
 // Parse time string like "9:11:3 AM" or "2:12:11 PM"
 function parseTime(timeStr) {
   if (!timeStr) return null;
-  
+
   let time = timeStr.trim().toUpperCase();
   let isPM = time.includes('PM');
   let isAM = time.includes('AM');
-  
+
   // Remove AM/PM indicator
   time = time.replace(/(AM|PM)/gi, '').trim();
-  
+
   const parts = time.split(':').map(part => parseInt(part) || 0);
-  
+
   let hours = parts[0] || 0;
   const minutes = parts[1] || 0;
   const seconds = parts[2] || 0;
-  
+
   // Convert to 24-hour format
   if (isPM && hours < 12) hours += 12;
   if (isAM && hours === 12) hours = 0;
-  
+
   return { hours, minutes, seconds };
 }
 
@@ -644,7 +645,7 @@ function formatTimeForDisplay(totalSeconds) {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = Math.floor(totalSeconds % 60);
-  
+
   return `${hours.toString().padStart(2, '0')}:${minutes
     .toString()
     .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -660,7 +661,7 @@ function createTimeDate(hours, minutes, seconds) {
 // Calculate total working time from punches
 function calculateTotalTime(punchs) {
   if (!punchs || punchs.length === 0) return 0;
-  
+
   let totalSeconds = 0;
 
   for (let i = 0; i < punchs.length; i += 2) {
@@ -679,7 +680,7 @@ function calculateTotalTime(punchs) {
       const outTime = parseTime(outTimeStr);
       if (outTime) {
         outDate = createTimeDate(outTime.hours, outTime.minutes, outTime.seconds);
-        
+
         // If out time is earlier than in time, assume it's the next day
         if (outDate.getTime() < inDate.getTime()) {
           outDate.setTime(outDate.getTime() + (24 * 60 * 60 * 1000));
@@ -705,7 +706,7 @@ function getTodayDateString() {
   const month = today.getMonth() + 1;  // 1-12
   const day = today.getDate();         // 1-31
   const year = today.getFullYear();    // 2025
-  
+
   // Backend uses format: "M/D/YYYY" (no leading zeros)
   return `${month}/${day}/${year}`;
 }
@@ -726,9 +727,9 @@ const Punchsection = () => {
 
   useEffect(() => {
     if (user?.user?.logs && Array.isArray(user.user.logs)) {
-      const todayDate = getTodayDateString(); 
+      const todayDate = getTodayDateString();
       const todayLog = user.user.logs.find((log) => log.date === todayDate);
-      
+
       if (todayLog) {
         const punches = todayLog.punchs || [];
         setPunchs(punches);
@@ -750,14 +751,14 @@ const Punchsection = () => {
   // Calculate time and update every second if clocked in
   useEffect(() => {
     setTotalSeconds(calculateTime());
-    
+
     let interval;
     if (isClockedIn) {
       interval = setInterval(() => {
         setTotalSeconds(calculateTime());
       }, 1000);
     }
-    
+
     return () => {
       if (interval) {
         clearInterval(interval);
@@ -770,7 +771,7 @@ const Punchsection = () => {
       // Add pulse animation effect
       setIsPulsing(true);
       setTimeout(() => setIsPulsing(false), 300);
-      
+
       const res = await addpunch(id).unwrap();
       if (res?.log?.punchs) {
         setPunchs(res.log.punchs);
@@ -814,10 +815,10 @@ const Punchsection = () => {
           <div className="relative h-48 w-48 sm:h-64 sm:w-64 mx-auto">
             {/* Animated outer ring */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-200 to-purple-200 animate-pulse"></div>
-            
+
             {/* Background Circle */}
             <div className="absolute inset-2 rounded-full bg-white shadow-inner"></div>
-            
+
             {/* Progress Circle */}
             <div
               className="absolute inset-2 rounded-full transition-all duration-1000 ease-out"
@@ -830,14 +831,24 @@ const Punchsection = () => {
                 )`
               }}
             ></div>
-            
+
             {/* Inner Circle with Time Display */}
             <div className="absolute top-4 left-4 right-4 bottom-4 sm:top-5 sm:left-5 sm:right-5 sm:bottom-5 bg-white rounded-full flex flex-col justify-center items-center text-xl sm:text-2xl font-bold z-10 shadow-lg">
               <span className="text-3xl sm:text-4xl font-mono text-gray-800 font-extrabold">
                 {liveTime}
               </span>
               <span className={`text-xs sm:text-sm mt-2 text-center font-medium ${isClockedIn ? 'text-green-600' : 'text-gray-500'}`}>
-                {isClockedIn ? '🟢 Currently Clocked In' : '🔴 Clocked Out'}
+                {isClockedIn ? (
+                  <span className="flex items-center justify-center gap-1">
+                    <FcOk />
+                    <span>Clocked In</span>
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-1">
+                    <FcCancel />
+                    <span>Clocked Out</span>
+                  </span>
+                )}
               </span>
               <span className="text-xs text-gray-400 mt-1">
                 {Math.round(percentage)}% of 8 hours
@@ -866,7 +877,7 @@ const Punchsection = () => {
               <div className="text-sm">Click the switch above to start your day</div>
             </div>
           )}
-          
+
           {punchs.map((punch, index) => (
             <div
               key={index}
@@ -890,7 +901,7 @@ const Punchsection = () => {
               </div>
             </div>
           ))}
-          
+
           {/* Current Status Indicator */}
           {punchs.length > 0 && (
             <div className="mt-4 p-3 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl text-center border border-gray-200 animate-fade-in">
