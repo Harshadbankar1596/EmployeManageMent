@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useApplyleavesMutation } from '../../redux/leaveslice';
 import { useSelector } from 'react-redux';
 import { useAllleavesQuery } from '../../redux/leaveslice';
-
+import Loader from '../loader';
 const Leave = () => {
-  const [applyleave] = useApplyleavesMutation();
+  const [applyleave, { isLoading: loadingleave }] = useApplyleavesMutation();
   const id = useSelector((state) => state.user.id);
   const [allleave, setallleave] = useState([]);
   const [formData, setFormData] = useState({
@@ -15,8 +15,7 @@ const Leave = () => {
     leaveType: '',
   });
 
-  // Correct usage of useAllleavesQuery
-  const { data: allleaves, refetch, isLoading, error } = useAllleavesQuery(id);
+  const { data: allleaves, refetch, isLoading: loadingleaves, error } = useAllleavesQuery(id);
 
   const [openmodal, setopenmodal] = useState(false);
 
@@ -42,7 +41,6 @@ const Leave = () => {
       if (typeof refetch === "function") {
         refetch();
       }
-      // Reset form after successful submission
       setFormData({
         name: '',
         startDate: '',
@@ -53,11 +51,17 @@ const Leave = () => {
     } catch (err) {
       console.error("Failed to apply leave:", err);
     }
-    // console.log(formData);
   };
+
+  if (loadingleave || loadingleaves) {
+    return <Loader />;
+  }
 
   return (
     <div className="min-h-screen py-10 px-4  animate-fadeIn">
+
+      {/* {loadingleave || loadingleaves && (<Loader />)} */}
+
       <div className="flex justify-center mb-10 animate-slideDown">
         <button
           onClick={() => setopenmodal(true)}
@@ -169,7 +173,7 @@ const Leave = () => {
               </tr>
             </thead>
             <tbody>
-              {isLoading ? (
+              {loadingleaves ? (
                 <tr>
                   <td colSpan={6} className="py-6 text-center text-gray-500">
                     Loading...
@@ -205,19 +209,18 @@ const Leave = () => {
                     </td>
                     <td className="py-3 px-4 border-b border-gray-100 text-center">
                       <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 transform hover:scale-110 ${
-                          leave.status === "approved"
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 transform hover:scale-110 ${leave.status === "approved"
                             ? "bg-green-100 text-green-700 border border-green-300 hover:bg-green-200"
                             : leave.status === "pending"
-                            ? "bg-yellow-100 text-yellow-700 border border-yellow-300 hover:bg-yellow-200"
-                            : "bg-red-100 text-red-700 border border-red-300 hover:bg-red-200"
-                        }`}
+                              ? "bg-yellow-100 text-yellow-700 border border-yellow-300 hover:bg-yellow-200"
+                              : "bg-red-100 text-red-700 border border-red-300 hover:bg-red-200"
+                          }`}
                       >
                         {leave.status === "pending"
                           ? "pending"
                           : leave.status === "approved"
-                          ? "approved"
-                          : "rejected"}
+                            ? "approved"
+                            : "rejected"}
                       </span>
                     </td>
                   </tr>

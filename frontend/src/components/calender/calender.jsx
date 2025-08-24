@@ -255,6 +255,7 @@
 import { useEffect, useState } from 'react';
 import { useGetlogsMutation } from '../../redux/apislice';
 import { useSelector } from 'react-redux';
+import Loader from '../loader';
 
 function CalendarComponent() {
   const [getlogs] = useGetlogsMutation();
@@ -519,20 +520,7 @@ function CalendarComponent() {
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 my-8 border border-white/20">
-        <div className="flex items-center justify-center min-h-[300px] sm:min-h-[400px] md:min-h-[500px]">
-          <div className="flex flex-col items-center gap-6">
-            <div className="relative">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-              <div className="absolute top-1 left-1 sm:top-2 sm:left-2 w-8 h-8 sm:w-12 sm:h-12 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin animate-reverse"></div>
-            </div>
-            <div className="text-center">
-              <p className="text-lg sm:text-xl font-semibold text-gray-700 animate-pulse">Loading Calendar</p>
-              <p className="text-gray-500 mt-2 text-sm sm:text-base">Fetching your attendance data...</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Loader />
     );
   }
 
