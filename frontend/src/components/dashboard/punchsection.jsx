@@ -640,7 +640,7 @@ function parseTime(timeStr) {
   return { hours, minutes, seconds };
 }
 
-// Format seconds to HH:MM:SS display
+
 function formatTimeForDisplay(totalSeconds) {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);

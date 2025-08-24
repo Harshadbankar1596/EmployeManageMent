@@ -126,10 +126,9 @@ export const verifyToken = async (req, res) => {
 
 };
 
-
 // export const addpunch = async (req, res) => {
 //     try {
-//         const { id, currentHours } = req.body;
+//         const {id} = req.body;
 
 //         const today = new Date().toLocaleDateString();
 //         const currentTime = new Date().toLocaleTimeString();
@@ -142,40 +141,72 @@ export const verifyToken = async (req, res) => {
 
 //         const logIndex = user.logs.findIndex(log => log.date === today);
 
+//         let todaypunches = [];
 //         if (logIndex !== -1) {
-            
+//             todaypunches = user.logs[logIndex].punchs ? [...user.logs[logIndex].punchs] : [];
+//         }
+
+//         // Add the new punch
+//         todaypunches.push(currentTime);
+
+//         // Calculate total worked hours from todaypunches
+//         let totalMs = 0;
+//         for (let i = 0; i < todaypunches.length; i += 2) {
+//             const start = todaypunches[i];
+//             const end = todaypunches[i + 1];
+//             if (start && end) {
+//                 // Parse time strings to Date objects (using today's date)
+//                 const todayDate = new Date();
+//                 const [startTime, startPeriod] = start.split(' ');
+//                 const [endTime, endPeriod] = end.split(' ');
+//                 const [startH, startM, startS] = startTime.split(':').map(Number);
+//                 const [endH, endM, endS] = endTime.split(':').map(Number);
+
+//                 let startHour = startH % 12 + (startPeriod === 'PM' ? 12 : 0);
+//                 if (startPeriod === 'AM' && startH === 12) startHour = 0;
+//                 let endHour = endH % 12 + (endPeriod === 'PM' ? 12 : 0);
+//                 if (endPeriod === 'AM' && endH === 12) endHour = 0;
+
+//                 const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), startHour, startM, startS);
+//                 const endDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), endHour, endM, endS);
+
+//                 // If end is before start (shouldn't happen, but just in case), skip
+//                 if (endDate > startDate) {
+//                     totalMs += endDate - startDate;
+//                 }
+//             }
+//         }
+//         // If odd number of punches, treat last as start with no end, so don't add
+//         const totalHours = totalMs / (1000 * 60 * 60);
+
+//         // Determine status
+//         let newStatus = "pending";
+//         if (totalHours >= 8) {
+//             newStatus = "present";
+//         } else if (totalHours >= 4) {
+//             newStatus = "halfday";
+//         }
+
+//         if (logIndex !== -1) {
 //             const punchPath = `logs.${logIndex}.punchs`;
 //             const statusPath = `logs.${logIndex}.status`;
-
-//             const newStatus = currentHours >= 8
-//                 ? "present"
-//                 : currentHours >= 4
-//                     ? "halfday"
-//                     : "pending";
 
 //             await User.updateOne(
 //                 { _id: id },
 //                 {
-//                     $push: { [punchPath]: currentTime },
-//                     $set: { [statusPath]: newStatus }
+//                     $set: { [punchPath]: todaypunches, [statusPath]: newStatus }
 //                 }
 //             );
-
 //         } else {
 //             const newlog = {
 //                 date: today,
 //                 punchs: [currentTime],
-//                 status:
-//                     currentHours >= 8
-//                         ? "present"
-//                         : currentHours >= 4
-//                             ? "halfday"
-//                             : "pending"
+//                 status: "pending"
 //             };
 
 //             await User.updateOne(
 //                 { _id: id },
-//                 { $push: { logs: { $each: [newlog], $position: 0 } } } 
+//                 { $push: { logs: { $each: [newlog], $position: 0 } } }
 //             );
 //         }
 
@@ -189,97 +220,67 @@ export const verifyToken = async (req, res) => {
 
 export const addpunch = async (req, res) => {
     try {
-        const {id} = req.body;
-
-        const today = new Date().toLocaleDateString();
-        const currentTime = new Date().toLocaleTimeString();
-
-        const user = await User.findById(id);
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        const logIndex = user.logs.findIndex(log => log.date === today);
-
-        let todaypunches = [];
-        if (logIndex !== -1) {
-            todaypunches = user.logs[logIndex].punchs ? [...user.logs[logIndex].punchs] : [];
-        }
-
-        // Add the new punch
-        todaypunches.push(currentTime);
-
-        // Calculate total worked hours from todaypunches
-        let totalMs = 0;
-        for (let i = 0; i < todaypunches.length; i += 2) {
-            const start = todaypunches[i];
-            const end = todaypunches[i + 1];
-            if (start && end) {
-                // Parse time strings to Date objects (using today's date)
-                const todayDate = new Date();
-                const [startTime, startPeriod] = start.split(' ');
-                const [endTime, endPeriod] = end.split(' ');
-                const [startH, startM, startS] = startTime.split(':').map(Number);
-                const [endH, endM, endS] = endTime.split(':').map(Number);
-
-                let startHour = startH % 12 + (startPeriod === 'PM' ? 12 : 0);
-                if (startPeriod === 'AM' && startH === 12) startHour = 0;
-                let endHour = endH % 12 + (endPeriod === 'PM' ? 12 : 0);
-                if (endPeriod === 'AM' && endH === 12) endHour = 0;
-
-                const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), startHour, startM, startS);
-                const endDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), endHour, endM, endS);
-
-                // If end is before start (shouldn't happen, but just in case), skip
-                if (endDate > startDate) {
-                    totalMs += endDate - startDate;
-                }
-            }
-        }
-        // If odd number of punches, treat last as start with no end, so don't add
-        const totalHours = totalMs / (1000 * 60 * 60);
-
-        // Determine status
-        let newStatus = "pending";
-        if (totalHours >= 8) {
-            newStatus = "present";
-        } else if (totalHours >= 4) {
-            newStatus = "halfday";
-        }
-
-        if (logIndex !== -1) {
-            const punchPath = `logs.${logIndex}.punchs`;
-            const statusPath = `logs.${logIndex}.status`;
-
-            await User.updateOne(
-                { _id: id },
-                {
-                    $set: { [punchPath]: todaypunches, [statusPath]: newStatus }
-                }
-            );
-        } else {
-            const newlog = {
-                date: today,
-                punchs: [currentTime],
-                status: "pending"
-            };
-
-            await User.updateOne(
-                { _id: id },
-                { $push: { logs: { $each: [newlog], $position: 0 } } }
-            );
-        }
-
-        return res.status(200).json({ message: "Punch added successfully" });
-
+      const { id } = req.body;
+  
+      const now = new Date();
+      const today = now.toLocaleDateString();
+      const currentTime = now.toLocaleTimeString();
+  
+      // Fetch only logs (smaller doc → faster)
+      const user = await User.findById(id, { logs: 1 });
+      if (!user) return res.status(404).json({ message: "User not found" });
+  
+      // Find today's log
+      const logIndex = user.logs.findIndex(log => log.date === today);
+      let todaypunches = logIndex !== -1 ? [...user.logs[logIndex].punchs] : [];
+      todaypunches.push(currentTime);
+  
+      // Calculate worked hours
+      let totalMs = 0;
+      for (let i = 0; i < todaypunches.length - 1; i += 2) {
+        const start = new Date(`${today} ${todaypunches[i]}`);
+        const end = new Date(`${today} ${todaypunches[i + 1]}`);
+        if (end > start) totalMs += end - start;
+      }
+      const totalHours = totalMs / 36e5; // 1000*60*60
+  
+      // Status
+      let newStatus = "pending";
+      if (totalHours >= 8) newStatus = "present";
+      else if (totalHours >= 4) newStatus = "halfday";
+  
+      // Update in single DB call
+      if (logIndex !== -1) {
+        await User.updateOne(
+          { _id: id },
+          {
+            $set: {
+              [`logs.${logIndex}.punchs`]: todaypunches,
+              [`logs.${logIndex}.status`]: newStatus,
+            },
+          }
+        );
+      } else {
+        await User.updateOne(
+          { _id: id },
+          {
+            $push: {
+              logs: {
+                $each: [{ date: today, punchs: [currentTime], status: "pending" }],
+                $position: 0,
+              },
+            },
+          }
+        );
+      }
+  
+      res.status(200).json({ message: "Punch added successfully" });
     } catch (error) {
-        console.error("Error in addpunch:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
+      console.error("Error in addpunch:", error);
+      res.status(500).json({ message: "Server error", error: error.message });
     }
-};
-
-
+  };
+  
 export const works = async (req, res) => {
     try {
         const id = req.body.id;
@@ -536,8 +537,6 @@ export const screenshot = async (req, res) => {
         console.log("error in screenshot")
     }
 }
-
-
 
 export const getallmembers = async (req, res) => {
     try {
