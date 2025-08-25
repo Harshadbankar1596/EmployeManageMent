@@ -208,7 +208,7 @@ const Employees = () => {
   const EmployeeCard = ({ emp, idx }) => {
     const isPresent = isToday(emp?.log?.date);
     const [showDetails, setShowDetails] = useState(false);
-    return (
+   if(emp.isadmin !== "superadmin") return (
       <div className="bg-white rounded-xl shadow-md border border-gray-100 mb-4 overflow-hidden">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center">

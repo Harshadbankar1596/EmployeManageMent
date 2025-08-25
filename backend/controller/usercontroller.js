@@ -49,7 +49,6 @@ export const loginUser = async (req, res) => {
 
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials." });
-            // console.log("not match password : ", password)
         }
 
         let token;
@@ -61,7 +60,9 @@ export const loginUser = async (req, res) => {
 
         else {
             token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET || "secretkey", { expiresIn: '1d' });
-            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 1 * 24 * 60 * 60 * 1000 });
+            res.cookie("token", token, {
+                httpOnly: true, secure: true, sameSite: 'None', maxAge: 7 * 24 * 60 * 60 * 1000
+            });
         }
 
         let userdata = {
@@ -72,8 +73,6 @@ export const loginUser = async (req, res) => {
             id: user._id,
             isadmin: user.isadmin
         }
-
-
         res.status(200).json({ message: "Login successful.", user: userdata, token: token });
     } catch (error) {
         console.error("Login error:", error);
@@ -121,7 +120,7 @@ export const verifyToken = async (req, res) => {
 
     } catch (error) {
         console.error("Token verification error:", error);
-        res.status(500).send({ message: "Invalid token."+error.message });
+        res.status(500).send({ message: "Invalid token." + error.message });
     }
 
 };
@@ -221,66 +220,66 @@ export const verifyToken = async (req, res) => {
 export const addpunch = async (req, res) => {
     try {
         console.log(req.body)
-      const { id } = req.body;
-  
-      const now = new Date();
-      const today = now.toLocaleDateString();
-      const currentTime = now.toLocaleTimeString();
-  
-      
-      const user = await User.findById(id, { logs: 1 });
-      if (!user) return res.status(404).json({ message: "User not found" });
-  
-      
-      const logIndex = user.logs.findIndex(log => log.date === today);
-      let todaypunches = logIndex !== -1 ? [...user.logs[logIndex].punchs] : [];
-      todaypunches.push(currentTime);
-  
-    
-      let totalMs = 0;
-      for (let i = 0; i < todaypunches.length - 1; i += 2) {
-        const start = new Date(`${today} ${todaypunches[i]}`);
-        const end = new Date(`${today} ${todaypunches[i + 1]}`);
-        if (end > start) totalMs += end - start;
-      }
-      const totalHours = totalMs / 36e5; // 1000*60*60
-  
-      
-      let newStatus = "pending";
-      if (totalHours >= 8) newStatus = "present";
-      else if (totalHours >= 4) newStatus = "halfday";
-  
-      if (logIndex !== -1) {
-        await User.updateOne(
-          { _id: id },
-          {
-            $set: {
-              [`logs.${logIndex}.punchs`]: todaypunches,
-              [`logs.${logIndex}.status`]: newStatus,
-            },
-          }
-        );
-      } else {
-        await User.updateOne(
-          { _id: id },
-          {
-            $push: {
-              logs: {
-                $each: [{ date: today, punchs: [currentTime], status: "pending" }],
-                $position: 0,
-              },
-            },
-          }
-        );
-      }
-  
-      res.status(200).json({ message: "Punch added successfully" });
+        const { id } = req.body;
+
+        const now = new Date();
+        const today = now.toLocaleDateString();
+        const currentTime = now.toLocaleTimeString();
+
+
+        const user = await User.findById(id, { logs: 1 });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+
+        const logIndex = user.logs.findIndex(log => log.date === today);
+        let todaypunches = logIndex !== -1 ? [...user.logs[logIndex].punchs] : [];
+        todaypunches.push(currentTime);
+
+
+        let totalMs = 0;
+        for (let i = 0; i < todaypunches.length - 1; i += 2) {
+            const start = new Date(`${today} ${todaypunches[i]}`);
+            const end = new Date(`${today} ${todaypunches[i + 1]}`);
+            if (end > start) totalMs += end - start;
+        }
+        const totalHours = totalMs / 36e5; // 1000*60*60
+
+
+        let newStatus = "pending";
+        if (totalHours >= 8) newStatus = "present";
+        else if (totalHours >= 4) newStatus = "halfday";
+
+        if (logIndex !== -1) {
+            await User.updateOne(
+                { _id: id },
+                {
+                    $set: {
+                        [`logs.${logIndex}.punchs`]: todaypunches,
+                        [`logs.${logIndex}.status`]: newStatus,
+                    },
+                }
+            );
+        } else {
+            await User.updateOne(
+                { _id: id },
+                {
+                    $push: {
+                        logs: {
+                            $each: [{ date: today, punchs: [currentTime], status: "pending" }],
+                            $position: 0,
+                        },
+                    },
+                }
+            );
+        }
+
+        res.status(200).json({ message: "Punch added successfully" });
     } catch (error) {
-      console.error("Error in addpunch:", error);
-      res.status(500).json({ message: "Server error", error: error.message });
+        console.error("Error in addpunch:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-  };
-  
+};
+
 export const works = async (req, res) => {
     try {
         const id = req.body.id;
@@ -548,7 +547,7 @@ export const getallmembers = async (req, res) => {
         }
 
         const members = await User.find({ _id: { $in: userid } });
-        
+
 
         if (!members || members.length === 0) {
             return res.status(404).json({ message: "Users Not Found" });
@@ -562,20 +561,20 @@ export const getallmembers = async (req, res) => {
             // Debug log for project info of each user
             // console.log('Project info for user', user._id, ':', projectInfo);
             const projectdetail = {
-                task : projectInfo?.task,
+                task: projectInfo?.task,
             }
 
             return {
                 name: user.name,
                 img: user.profileimg,
                 projectinfo: projectdetail,
-                userid : user._id
+                userid: user._id
             };
         });
 
         res.status(200).json({ members: membersobj });
 
     } catch (error) {
-        res.status(500).json({ message: "Server Error in Fetch All Members"+error });
+        res.status(500).json({ message: "Server Error in Fetch All Members" + error });
     }
 }
