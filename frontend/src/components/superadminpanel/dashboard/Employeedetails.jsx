@@ -388,7 +388,6 @@ const Employeedetails = () => {
                               {day.date}
                             </span>
                             <div className="flex-1 flex items-center justify-center">
-                              {/* ✅ Show colored circle only if status exists */}
                               {day.currentMonth && displayStatus && (
                                 <div
                                   className={`${config.bgColor} ${todayBorder} rounded-full w-8 h-8 flex items-center justify-center text-white font-medium transition-all duration-200 text-xs`}

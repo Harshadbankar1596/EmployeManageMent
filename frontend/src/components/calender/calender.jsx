@@ -355,6 +355,7 @@ function CalendarComponent() {
     const today = new Date();
     setCurrentDate(today);
     setSelectedDate(today);
+    console.log(selectedDate)
     setCalendarAnimation(true);
     setTimeout(() => setCalendarAnimation(false), 300);
   };
@@ -544,7 +545,7 @@ function CalendarComponent() {
             { label: 'Half Day', value: monthlyStats.halfday, color: 'from-yellow-400 to-orange-500', icon: '⚡' },
             { label: 'Pending', value: monthlyStats.pending, color: 'from-orange-400 to-red-500', icon: '⏳' }
           ].map((stat, index) => (
-            <div 
+            <div
               key={stat.label}
               className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 sm:p-4 shadow-lg border border-white/40 transform hover:scale-105 transition-all duration-300 hover:shadow-xl"
               style={{ animationDelay: `${index * 100}ms` }}
@@ -578,11 +579,10 @@ function CalendarComponent() {
                       newDate.setMonth(index);
                       setCurrentDate(newDate);
                     }}
-                    className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg text-xs font-medium transition-all duration-300 ${
-                      isCurrentMonth
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg scale-110'
-                        : 'text-gray-600 hover:bg-gray-100 hover:scale-105'
-                    }`}
+                    className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg text-xs font-medium transition-all duration-300 ${isCurrentMonth
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg scale-110'
+                      : 'text-gray-600 hover:bg-gray-100 hover:scale-105'
+                      }`}
                   >
                     {month}
                   </button>
@@ -590,7 +590,7 @@ function CalendarComponent() {
               })}
             </div>
           </div>
-          
+
           {/* Navigation Controls */}
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <button
@@ -599,9 +599,9 @@ function CalendarComponent() {
             >
               Today
             </button>
-            
+
             <div className="flex gap-1 sm:gap-2">
-              <button 
+              <button
                 onClick={goToPreviousMonth}
                 className="p-2 sm:p-3 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-gray-600 hover:text-gray-800"
               >
@@ -609,8 +609,8 @@ function CalendarComponent() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              
-              <button 
+
+              <button
                 onClick={goToNextMonth}
                 className="p-2 sm:p-3 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-gray-600 hover:text-gray-800"
               >
@@ -620,52 +620,26 @@ function CalendarComponent() {
               </button>
             </div>
 
-            {/* View Toggle */}
-            <div className="flex bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-              <button 
-                onClick={() => setView('month')}
-                className={`px-2 sm:px-4 py-2 sm:py-3 font-medium transition-all duration-300 text-xs sm:text-base ${
-                  view === 'month' 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Month
-              </button>
-              <button 
-                onClick={() => setView('week')}
-                className={`px-2 sm:px-4 py-2 sm:py-3 font-medium transition-all duration-300 border-l border-gray-200 text-xs sm:text-base ${
-                  view === 'week' 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Week
-              </button>
-            </div>
+
           </div>
         </div>
       </div>
 
-      {/* Calendar Grid */}
       <div className={`bg-white/80 backdrop-blur-sm rounded-2xl p-2 sm:p-6 shadow-lg border border-white/40 transition-all duration-300 ${calendarAnimation ? 'scale-95 opacity-70' : 'scale-100 opacity-100'}`}>
-        {/* Week Headers */}
         <div className="grid grid-cols-7 gap-1 sm:gap-3 mb-3 sm:mb-6">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
             <div
               key={day}
-              className={`p-2 sm:p-4 text-center font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl ${
-                index === 0 
-                  ? 'bg-gradient-to-br from-blue-100 to-sky-200 text-blue-700' 
-                  : 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-700'
-              }`}
+              className={`p-2 sm:p-4 text-center font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl ${index === 0
+                ? 'bg-gradient-to-br from-blue-100 to-sky-200 text-blue-700'
+                : 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-700'
+                }`}
             >
               {day}
             </div>
           ))}
         </div>
 
-        {/* Calendar Days */}
         <div className="grid grid-cols-7 gap-1 sm:gap-3">
           {days.map((day, index) => {
             const isToday = day.date.toDateString() === new Date().toDateString();
@@ -691,41 +665,24 @@ function CalendarComponent() {
                   animationFillMode: 'both'
                 }}
               >
-                {/* Date Number */}
                 <div className="flex justify-between items-start mb-1 sm:mb-2">
                   <span className={`text-base sm:text-lg font-bold ${isToday ? 'text-blue-600' : ''}`}>
                     {day.date.getDate()}
                   </span>
-                  
-                  {/* Punch Count Badge */}
+
                   {punches.length > 0 && (
                     <div className="bg-white/80 backdrop-blur-sm px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold text-purple-600 shadow-sm">
                       {Math.ceil(punches.length / 2)}
                     </div>
                   )}
                 </div>
-                
-                {/* Status Indicator */}
+
                 <div className="space-y-1 sm:space-y-2">
                   <div className={`h-1.5 sm:h-2 w-full rounded-full ${styling.indicator} shadow-sm`}></div>
                   <p className="text-[10px] sm:text-xs font-medium truncate">{getStatusText(day.status)}</p>
-                  
-                  {/* Punch Times Preview */}
-                  {punches.length > 0 && (
-                    <div className="text-[10px] sm:text-xs space-y-0.5 sm:space-y-1">
-                      {punches.slice(0, 2).map((punch, i) => (
-                        <div key={i} className="truncate bg-white/60 rounded px-0.5 sm:px-1">
-                          {i % 2 === 0 ? 'In' : 'Out'}: {punch}
-                        </div>
-                      ))}
-                      {punches.length > 2 && (
-                        <div className="text-center font-bold">+{punches.length - 2}</div>
-                      )}
-                    </div>
-                  )}
                 </div>
 
-                {/* Today Indicator */}
+
                 {isToday && (
                   <div className="absolute -top-2 -right-2">
                     <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full animate-ping"></div>
@@ -733,7 +690,6 @@ function CalendarComponent() {
                   </div>
                 )}
 
-                {/* Hover Effect Overlay */}
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300"></div>
               </div>
             );
@@ -741,17 +697,16 @@ function CalendarComponent() {
         </div>
       </div>
 
-      {/* Selected Date Details */}
       {selectedDate && (
         <div className="mt-4 sm:mt-6 bg-white/90 backdrop-blur-sm rounded-2xl p-3 sm:p-6 shadow-lg border border-white/40 animate-slideInLeft">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
             <div>
               <h3 className="text-lg sm:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">
-                {selectedDate.toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  month: 'long', 
-                  day: 'numeric', 
-                  year: 'numeric' 
+                {selectedDate.toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
                 })}
               </h3>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
@@ -773,7 +728,7 @@ function CalendarComponent() {
               </svg>
             </button>
           </div>
-          
+
           {getPunchesForDate(selectedDate).length > 0 ? (
             <div>
               <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4 flex items-center gap-1 sm:gap-2">
@@ -784,13 +739,12 @@ function CalendarComponent() {
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 {getPunchesForDate(selectedDate).map((punch, index) => (
-                  <div 
-                    key={index} 
-                    className={`p-2 sm:p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
-                      index % 2 === 0 
-                        ? 'bg-gradient-to-br from-green-50 to-emerald-100 border-green-200 text-green-800' 
-                        : 'bg-gradient-to-br from-red-50 to-rose-100 border-red-200 text-red-800'
-                    }`}
+                  <div
+                    key={index}
+                    className={`p-2 sm:p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${index % 2 === 0
+                      ? 'bg-gradient-to-br from-green-50 to-emerald-100 border-green-200 text-green-800'
+                      : 'bg-gradient-to-br from-red-50 to-rose-100 border-red-200 text-red-800'
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 sm:gap-3">
