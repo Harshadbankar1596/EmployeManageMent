@@ -220,6 +220,7 @@ export const verifyToken = async (req, res) => {
 
 export const addpunch = async (req, res) => {
     try {
+        console.log(req.body)
       const { id } = req.body;
   
       const now = new Date();
