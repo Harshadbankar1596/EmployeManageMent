@@ -1,9 +1,12 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useLogoutUserMutation } from '../../redux/apislice';
 import { logoutuser } from '../../redux/userslice/userslice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useVerifyisadminMutation } from "../../redux/adminapislice";
+import { useSelector } from "react-redux";
+
 import {
   FaTachometerAlt,
   FaUsers,
@@ -30,6 +33,17 @@ const AdminSidebar = () => {
   const navigate = useNavigate();
   const [logoutUser] = useLogoutUserMutation();
   const dispatch = useDispatch();
+  const [leaves, setleaves] = useState(0);
+  const id = useSelector((state) => state.user.id)
+
+  const [verifyadmin] = useVerifyisadminMutation();
+  useEffect(() => {
+
+    verifyadmin(id).unwrap().then((res) => {
+      console.log("res from verify admin", res);
+      setleaves(res.pendingleaves)
+    });
+  }, [])
 
   const handleLogout = async () => {
     await logoutUser().unwrap();
@@ -40,7 +54,7 @@ const AdminSidebar = () => {
   return (
     <div className="hidden lg:block">
       <div
-      data-lenis-prevent
+        data-lenis-prevent
         className="bg-blue-950 text-white shadow-lg transition-all duration-300 z-30 flex flex-col scrollbar-hide"
         style={{
           position: 'fixed',
@@ -66,14 +80,21 @@ const AdminSidebar = () => {
                   to={to}
                   end
                   className={({ isActive }) =>
-                    `flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base font-medium ${
-                      isActive ? 'bg-yellow-500 text-blue-950' : 'hover:bg-yellow-500'
+                    `flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base font-medium ${isActive ? 'bg-yellow-500 text-blue-950' : 'hover:bg-yellow-500'
                     }`
                   }
                 >
                   <Icon className="w-5 h-5 lg:w-6 lg:h-6" />
-                  <span>{label}</span>
+                  <div>
+                    <span>{label}</span>
+                    {label === "Leaves" && leaves > 0 && (
+                      <span className="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                        {leaves}
+                      </span>
+                    )}
+                  </div>
                 </NavLink>
+
               </li>
             ))}
           </ul>
@@ -81,7 +102,7 @@ const AdminSidebar = () => {
           <div className="px-2 lg:px-4 py-4 lg:py-6 mt-auto">
             <button
               onClick={async () => {
-                try { await logoutUser().unwrap(); } catch (e) {}
+                try { await logoutUser().unwrap(); } catch (e) { }
                 dispatch(logoutuser());
                 navigate('/login');
               }}

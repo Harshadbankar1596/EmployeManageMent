@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children }) => {
   const token = useSelector((state) => state.user.token);
 
   if (!token) {
-    console.log("No token, redirecting to login...");
+    // console.log("No token, redirecting to login...");
     return <Navigate to="/login" replace />;
   }
 
@@ -15,17 +15,17 @@ const ProtectedRoute = ({ children }) => {
     const exp = user.exp * 1000; 
     const now = Date.now();
 
-    console.log("Token expiration time (ms):", exp);
-    console.log("Current time (ms):", now);
+    // console.log("Token expiration time (ms):", exp);
+    // console.log("Current time (ms):", now);
 
     if (now >= exp) {
-      console.log("Token expired, redirecting...");
+      // console.log("Token expired, redirecting...");
       return <Navigate to="/login" replace />;
     }
 
     return children;
   } catch (err) {
-    console.log("Invalid token:", err);
+    // console.log("Invalid token:", err);
     return <Navigate to="/login" replace />;
   }
 };

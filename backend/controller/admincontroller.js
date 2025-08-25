@@ -26,12 +26,13 @@ export const verifyisadmin = async (req, res) => {
         if (!id) res.status(400).json({ message: "user id require" });
 
         const user = await User.findById(id)
+        const employees = await await User.find().length
 
         if (!user) res.status(422).json({ message: "user not found" });
 
         const leave = await leaves.find({ status: "pending" })
 
-        if (user.isadmin === "admin") res.status(200).json({ message: "true", pendingleaves: leave.length })
+        if (user.isadmin === "admin") res.status(200).json({ message: "true", pendingleaves: leave.length})
 
     } catch (error) {
         res.status(500).json({ message: "error in vryfy admin" })

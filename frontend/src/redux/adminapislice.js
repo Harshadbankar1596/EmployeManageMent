@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const adminapi = createApi({
     reducerPath: "adminapi",
     baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_BACKEND_URL}/admin`, credentials: "include" }),
-    tagTypes: ["projects", "users" , "job"],
+    tagTypes: ["projects", "users" , "job" , "leave"],
 
     endpoints: (builder) => ({
 
@@ -13,7 +13,8 @@ export const adminapi = createApi({
                 url: "/verifyisadmin",
                 method: "post",
                 body: { id }
-            })
+            }),
+            invalidatesTags : ["leave"]
         }),
 
         getAllProjects: builder.query({
