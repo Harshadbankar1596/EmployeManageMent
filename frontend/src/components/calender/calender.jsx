@@ -287,7 +287,6 @@ function CalendarComponent() {
     }
   }, [getlogs, id]);
 
-  // Get status for a specific date
   const getStatusForDate = (date) => {
     const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     const log = logs.find(log => log.date === dateStr);
@@ -296,12 +295,10 @@ function CalendarComponent() {
       return log.status;
     }
 
-    // Check if it's Sunday
     if (date.getDay() === 0) {
       return 'sunday';
     }
 
-    // Check if it's a future date
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const compareDate = new Date(date);
@@ -310,26 +307,21 @@ function CalendarComponent() {
     if (compareDate > today) {
       return 'future';
     }
-
-    // It's a past working day with no data - mark as absent
     return 'absent';
   };
 
-  // Get punches for a specific date
   const getPunchesForDate = (date) => {
     const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     const log = logs.find(log => log.date === dateStr);
     return log ? (log.punchs || []) : [];
   };
 
-  // Calculate working time for a date
   const getWorkingHours = (punches) => {
     if (!punches || punches.length < 2) return '0h 0m';
 
     let totalMinutes = 0;
     for (let i = 0; i < punches.length; i += 2) {
       if (punches[i] && punches[i + 1]) {
-        // Simple time calculation (assuming format like "9:30 AM")
         const inTime = new Date(`1970-01-01 ${punches[i]}`);
         const outTime = new Date(`1970-01-01 ${punches[i + 1]}`);
         if (!isNaN(inTime) && !isNaN(outTime)) {
@@ -343,7 +335,6 @@ function CalendarComponent() {
     return `${hours}h ${minutes}m`;
   };
 
-  // Navigation functions with animation
   const goToPreviousMonth = () => {
     setCalendarAnimation(true);
     setTimeout(() => {
@@ -368,7 +359,6 @@ function CalendarComponent() {
     setTimeout(() => setCalendarAnimation(false), 300);
   };
 
-  // Generate days for the current month view
   const getDaysInMonth = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -378,7 +368,6 @@ function CalendarComponent() {
 
     const days = [];
 
-    // Add days from previous month
     const firstDayIndex = firstDay.getDay();
     for (let i = firstDayIndex - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, new Date(year, month, 0).getDate() - i);
@@ -389,7 +378,6 @@ function CalendarComponent() {
       });
     }
 
-    // Add days from current month
     for (let i = 1; i <= lastDay.getDate(); i++) {
       const date = new Date(year, month, i);
       days.push({
@@ -399,7 +387,6 @@ function CalendarComponent() {
       });
     }
 
-    // Add days from next month to complete grid
     const totalCells = Math.ceil((days.length) / 7) * 7;
     for (let i = 1; days.length < totalCells; i++) {
       const date = new Date(year, month + 1, i);
@@ -413,7 +400,6 @@ function CalendarComponent() {
     return days;
   };
 
-  // Get status styling
   const getStatusStyling = (status, isCurrentMonth = true) => {
     switch (status) {
       case 'present':

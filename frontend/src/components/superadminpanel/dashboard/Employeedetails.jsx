@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetemployeedetailMutation } from '../../../redux/superadminslice';
 import Loader from '../../loader';
-import { 
-  FaUser, 
-  FaEnvelope, 
-  FaPhone, 
-  FaCalendarAlt, 
+import {
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaCalendarAlt,
   FaClock,
   FaCheckCircle,
   FaTimesCircle,
@@ -20,6 +20,7 @@ const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const statusConfig = {
   present: {
     color: 'green',
+
     bgColor: 'bg-green-500',
     textColor: 'text-green-700',
     icon: FaCheckCircle,
@@ -40,7 +41,14 @@ const statusConfig = {
     label: 'Half Day'
   },
   absent: {
-    color: 'gray',
+    color: 'red',
+    bgColor: 'bg-red-500',
+    textColor: 'text-gray-600',
+    icon: FaTimesCircle,
+    label: 'Absent/Not Recorded'
+  },
+  holiday: {
+    color: 'black',
     bgColor: 'bg-gray-300',
     textColor: 'text-gray-600',
     icon: FaTimesCircle,
@@ -61,7 +69,9 @@ const Employeedetails = () => {
     if (employee && employee.logs) {
       generateCalendar(currentYear, currentMonth);
     }
+
   }, [employee, currentMonth, currentYear]);
+
 
   const generateCalendar = (year, month) => {
     const firstDay = new Date(year, month, 1);
@@ -69,6 +79,7 @@ const Employeedetails = () => {
     const daysInMonth = lastDay.getDate();
     const startDay = firstDay.getDay(); // Sunday = 0
 
+    // Map logs by date
     const statusMap = {};
     employee.logs.forEach(log => {
       const logDate = new Date(log.date);
@@ -80,6 +91,11 @@ const Employeedetails = () => {
       }
     });
 
+
+    const lastLogDate = employee.logs.length
+      ? new Date(Math.max(...employee.logs.map(l => new Date(l.date))))
+      : null;
+
     setMonthYear(firstDay.toLocaleString('default', { month: 'long', year: 'numeric' }));
 
     const calendarDays = [];
@@ -89,7 +105,8 @@ const Employeedetails = () => {
       calendarDays.push({
         date: prevMonthDays - startDay + i + 1,
         currentMonth: false,
-        status: 'absent'
+        status: undefined,
+        dayOfWeek: (i % 7)
       });
     }
 
@@ -99,11 +116,27 @@ const Employeedetails = () => {
         today.getFullYear() === year &&
         today.getMonth() === month &&
         today.getDate() === i;
+
+      const currentDate = new Date(year, month, i);
+      const dayOfWeek = currentDate.getDay(); // 0 = Sunday
+
+      let status;
+      if (statusMap[i]) {
+        status = statusMap[i];
+      } else {
+        status = (dayOfWeek === 0) ? 'holiday' : 'absent';
+      }
+
+      if (lastLogDate && currentDate > lastLogDate) {
+        status = undefined;
+      }
+
       calendarDays.push({
         date: i,
         currentMonth: true,
-        status: statusMap[i] || 'absent',
-        isToday
+        status: status,
+        isToday,
+        dayOfWeek
       });
     }
 
@@ -113,10 +146,12 @@ const Employeedetails = () => {
       calendarDays.push({
         date: i,
         currentMonth: false,
-        status: 'absent'
+        status: "holiday",
+        dayOfWeek: ((startDay + daysInMonth + i - 1) % 7)
       });
     }
 
+    // Split into weeks
     const weeks = [];
     for (let i = 0; i < calendarDays.length; i += 7) {
       weeks.push(calendarDays.slice(i, i + 7));
@@ -129,6 +164,7 @@ const Employeedetails = () => {
     getEmployee(id).unwrap().then((data) => {
       setEmployee(data.employee);
     });
+    // eslint-disable-next-line
   }, [id]);
 
   // Month navigation handlers
@@ -165,7 +201,7 @@ const Employeedetails = () => {
 
   const calculateStats = () => {
     if (!employee?.logs) return { present: 0, pending: 0, halfday: 0, absent: 0, total: 0 };
-    
+
     const stats = { present: 0, pending: 0, halfday: 0, absent: 0, total: employee.logs.length };
     employee.logs.forEach(log => {
       if (stats.hasOwnProperty(log.status)) {
@@ -225,7 +261,6 @@ const Employeedetails = () => {
 
         {employee && (
           <>
-            {/* Header Section */}
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg">
@@ -238,32 +273,29 @@ const Employeedetails = () => {
               </div>
             </div>
 
-            {/* Employee Profile Card */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 mb-6">
               <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
-                {/* Profile Image */}
                 <div className="relative">
                   <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-4 border-blue-200 shadow-lg overflow-hidden bg-gray-100">
-            {employee.image && employee.image.data ? (
-              <img
-              src={`data:${employee.image.contentType};base64,${bufferToBase64(employee.image.data.data)}`}
-              alt={employee.name}
-              className="w-full h-full object-cover"
-            />
-            ) : (
+                    {employee.image && employee.image.data ? (
+                      <img
+                        src={`data:${employee.image.contentType};base64,${bufferToBase64(employee.image.data.data)}`}
+                        alt={employee.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
                       <div className="w-full h-full flex items-center justify-center text-4xl text-gray-400 font-bold bg-gray-200">
-                {employee.name ? employee.name.charAt(0).toUpperCase() : "?"}
-              </div>
-            )}
-          </div>
+                        {employee.name ? employee.name.charAt(0).toUpperCase() : "?"}
+                      </div>
+                    )}
+                  </div>
                   <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-400 border-2 border-white rounded-full"></div>
                 </div>
 
-                {/* Employee Info */}
                 <div className="flex-1 text-center lg:text-left">
                   <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">{employee.name}</h2>
                   <p className="text-lg text-gray-600 mb-4">{employee.role}</p>
-                  
+
                   <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                     <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg">
                       <FaEnvelope className="text-sm" />
@@ -272,11 +304,11 @@ const Employeedetails = () => {
                     <div className="flex items-center gap-2 bg-purple-50 text-purple-700 px-3 py-2 rounded-lg">
                       <FaPhone className="text-sm" />
                       <span className="text-sm font-medium">{employee.phone}</span>
-        </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <StatsCards />
 
@@ -290,72 +322,90 @@ const Employeedetails = () => {
 
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between">
-              <button
-                onClick={handlePrevMonth}
+                  <button
+                    onClick={handlePrevMonth}
                     className="text-white hover:bg-blue-600 rounded-full p-2 transition-all duration-200"
-                aria-label="Previous Month"
-              >
+                    aria-label="Previous Month"
+                  >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M15 19l-7-7 7-7" />
                     </svg>
-              </button>
+                  </button>
                   <h3 className="text-lg font-bold text-white">{monthYear}</h3>
-              <button
-                onClick={handleNextMonth}
+                  <button
+                    onClick={handleNextMonth}
                     className="text-white hover:bg-blue-600 rounded-full p-2 transition-all duration-200"
-                aria-label="Next Month"
-              >
+                    aria-label="Next Month"
+                  >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M9 5l7 7-7 7" />
                     </svg>
-              </button>
+                  </button>
                 </div>
-            </div>
+              </div>
 
               <div className="grid grid-cols-7 bg-gray-50 rounded-t-lg border">
-              {weekDays.map(day => (
-                <div
-                  key={day}
+                {weekDays.map(day => (
+                  <div
+                    key={day}
                     className="py-3 text-center font-semibold text-gray-700 text-sm"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
+                  >
+                    {day}
+                  </div>
+                ))}
+              </div>
 
-            {/* Calendar Days */}
               <div className="border-l border-r border-b rounded-b-lg overflow-hidden">
-              {calendar.map((week, weekIndex) => (
-                <div key={weekIndex} className="grid grid-cols-7">
-                  {week.map((day, dayIndex) => {
-                      const config = statusConfig[day.status] || statusConfig.absent;
-                    const textColor = day.currentMonth ? 'text-gray-800' : 'text-gray-400';
-                      const todayBorder = day.isToday ? 'ring-2 ring-blue-500' : '';
+                {calendar.map((week, weekIndex) => (
+                  <div key={weekIndex} className="grid grid-cols-7">
+                    {week.map((day, dayIndex) => {
+                      let displayStatus = day.status;
 
-                    return (
-                      <div
-                        key={dayIndex}
-                          className={`h-16 p-1 border-r ${dayIndex === 6 ? 'border-r-0' : ''} ${day.isToday ? 'bg-blue-50' : ''}`}
-                      >
-                        <div className="h-full flex flex-col">
-                            <span className={`text-xs font-medium ${textColor} self-end px-1`}>
-                            {day.date}
-                          </span>
-                          <div className="flex-1 flex items-center justify-center">
-                            {day.currentMonth && day.status !== 'absent' && (
-                                <div className={`${config.bgColor} ${todayBorder} rounded-full w-8 h-8 flex items-center justify-center text-white font-medium transition-all duration-200 text-xs`}>
-                                {day.status.charAt(0).toUpperCase()}
-                              </div>
-                            )}
+                      // ❌ पहले वाला fallback हटा दिया
+                      // ✅ अब केवल जब status खाली string "" हो तो absent मानें
+                      if (
+                        day.currentMonth &&
+                        displayStatus === "" &&
+                        day.dayOfWeek !== 0
+                      ) {
+                        displayStatus = "absent";
+                      }
+
+                      const config = statusConfig[displayStatus] || {};
+                      const textColor = day.currentMonth ? "text-gray-800" : "text-gray-400";
+                      const todayBorder = day.isToday ? "ring-2 ring-blue-500" : "";
+
+                      return (
+                        <div
+                          key={dayIndex}
+                          className={`h-16 p-1 border-r ${dayIndex === 6 ? "border-r-0" : ""
+                            } ${day.isToday ? "bg-blue-50" : ""}`}
+                        >
+                          <div className="h-full flex flex-col">
+                            <span
+                              className={`text-xs font-medium ${textColor} self-end px-1`}
+                            >
+                              {day.date}
+                            </span>
+                            <div className="flex-1 flex items-center justify-center">
+                              {/* ✅ Show colored circle only if status exists */}
+                              {day.currentMonth && displayStatus && (
+                                <div
+                                  className={`${config.bgColor} ${todayBorder} rounded-full w-8 h-8 flex items-center justify-center text-white font-medium transition-all duration-200 text-xs`}
+                                >
+                                  {displayStatus.charAt(0).toUpperCase()}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+                      );
+                    })}
+                  </div>
+                ))}
+
+              </div>
             </div>
-          </div>
 
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
               <div className="flex items-center gap-3 mb-4">
@@ -363,7 +413,7 @@ const Employeedetails = () => {
                   <FaChartBar className="text-white text-lg" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800">Status Legend</h3>
-                </div>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {Object.entries(statusConfig).map(([status, config]) => {
                   const StatusIcon = config.icon;
@@ -372,13 +422,13 @@ const Employeedetails = () => {
                       <div className={`w-4 h-4 rounded-full ${config.bgColor}`}></div>
                       <StatusIcon className={`text-lg ${config.textColor}`} />
                       <span className="text-gray-700 text-sm font-medium">{config.label}</span>
-            </div>
+                    </div>
                   );
                 })}
-          </div>
-        </div>
+              </div>
+            </div>
           </>
-      )}
+        )}
       </div>
     </div>
   );

@@ -491,7 +491,6 @@ const EmployeProfile = () => {
           </motion.div>
         </div>
 
-        {/* Logout Confirmation Modal */}
         <AnimatePresence>
           {showLogoutModal && (
             <motion.div

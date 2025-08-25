@@ -226,16 +226,16 @@ export const addpunch = async (req, res) => {
       const today = now.toLocaleDateString();
       const currentTime = now.toLocaleTimeString();
   
-      // Fetch only logs (smaller doc → faster)
+      
       const user = await User.findById(id, { logs: 1 });
       if (!user) return res.status(404).json({ message: "User not found" });
   
-      // Find today's log
+      
       const logIndex = user.logs.findIndex(log => log.date === today);
       let todaypunches = logIndex !== -1 ? [...user.logs[logIndex].punchs] : [];
       todaypunches.push(currentTime);
   
-      // Calculate worked hours
+    
       let totalMs = 0;
       for (let i = 0; i < todaypunches.length - 1; i += 2) {
         const start = new Date(`${today} ${todaypunches[i]}`);
@@ -244,12 +244,11 @@ export const addpunch = async (req, res) => {
       }
       const totalHours = totalMs / 36e5; // 1000*60*60
   
-      // Status
+      
       let newStatus = "pending";
       if (totalHours >= 8) newStatus = "present";
       else if (totalHours >= 4) newStatus = "halfday";
   
-      // Update in single DB call
       if (logIndex !== -1) {
         await User.updateOne(
           { _id: id },
