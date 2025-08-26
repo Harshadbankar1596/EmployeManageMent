@@ -12,7 +12,7 @@
 // import Loader from '../../loader';
 
 // const ShimmerProjectHeader = () => (
-//   <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/50 mb-8 animate-pulse">
+//   <div className="bg-white/80   rounded-2xl p-8 shadow-xl border border-white/50 mb-8 animate-pulse">
 //     <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
 //       <div className="flex-1 space-y-4">
 //         <div className="h-10 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-3/4"></div>
@@ -31,7 +31,7 @@
 // );
 
 // const ShimmerEmployeeCard = () => (
-//   <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/50 mb-6 animate-pulse">
+//   <div className="bg-white/80   rounded-2xl p-6 shadow-lg border border-white/50 mb-6 animate-pulse">
 //     <div className="flex flex-col md:flex-row gap-6">
 //       <div className="w-24 h-24 rounded-full bg-gradient-to-r from-gray-200 to-gray-300"></div>
 //       <div className="flex-1 space-y-4">
@@ -158,7 +158,7 @@
 //       {loadingProject ? (
 //         <ShimmerProjectHeader />
 //       ) : (
-//         <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/70 mb-10 max-w-6xl mx-auto animate-slide-in">
+//         <div className="bg-white/90   rounded-3xl p-8 shadow-2xl border border-white/70 mb-10 max-w-6xl mx-auto animate-slide-in">
 //           <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
 //             <div className="flex-1">
 //               <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-4">
@@ -170,7 +170,7 @@
 //               </h1>
 
 //               <div className="flex flex-wrap gap-4 mb-6">
-//                 <div className="flex items-center gap-3 bg-blue-50/80 px-4 py-3 rounded-xl border border-blue-100 backdrop-blur-sm">
+//                 <div className="flex items-center gap-3 bg-blue-50/80 px-4 py-3 rounded-xl border border-blue-100  ">
 //                   <HiCalendar className="w-5 h-5 text-blue-600" />
 //                   <div>
 //                     <p className="text-sm text-gray-600 font-medium">Start Date</p>
@@ -180,7 +180,7 @@
 //                   </div>
 //                 </div>
 
-//                 <div className="flex items-center gap-3 bg-purple-50/80 px-4 py-3 rounded-xl border border-purple-100 backdrop-blur-sm">
+//                 <div className="flex items-center gap-3 bg-purple-50/80 px-4 py-3 rounded-xl border border-purple-100  ">
 //                   <HiCalendar className="w-5 h-5 text-purple-600" />
 //                   <div>
 //                     <p className="text-sm text-gray-600 font-medium">End Date</p>
@@ -190,7 +190,7 @@
 //                   </div>
 //                 </div>
 
-//                 <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-sm ${projectdetail?.status ? 'bg-green-50/80 border-green-100' : 'bg-yellow-50/80 border-yellow-100'}`}>
+//                 <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border   ${projectdetail?.status ? 'bg-green-50/80 border-green-100' : 'bg-yellow-50/80 border-yellow-100'}`}>
 //                   {projectdetail?.status ? (
 //                     <HiCheckCircle className="w-5 h-5 text-green-600" />
 //                   ) : (
@@ -206,13 +206,13 @@
 //               </div>
 //             </div>
 
-//             <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white shadow-sm">
+//             <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/70   p-4 rounded-2xl border border-white shadow-sm">
 //               <div className="relative">
 //                 <select
 //                   onChange={handleselect}
 //                   name="members"
 //                   id="members"
-//                   className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white/80 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 w-full transition-all"
+//                   className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white/80 shadow-sm focus:outline-none  -2  -blue-500 focus:border-transparent text-gray-800 w-full transition-all"
 //                 >
 //                   <option value="">Select Member</option>
 //                   {membersname?.usersname?.map((user) => (
@@ -256,7 +256,7 @@
 //             {employeeProject.map((employee, idx) => (
 //               <div
 //                 key={idx}
-//                 className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/70 hover:shadow-xl transition-all duration-300 animate-fade-in group hover:scale-[1.01]"
+//                 className="bg-white/90   rounded-3xl p-6 shadow-lg border border-white/70 hover:shadow-xl transition-all duration-300 animate-fade-in group hover:scale-[1.01]"
 //                 style={{ animationDelay: `${idx * 100}ms` }}
 //               >
 //                 <div className="flex flex-col md:flex-row gap-6">
@@ -318,7 +318,7 @@
 //                     </span>
 //                   </div>
 
-//                   <div className="bg-gray-50/50 rounded-2xl p-4 backdrop-blur-sm border border-gray-100">
+//                   <div className="bg-gray-50/50 rounded-2xl p-4   border border-gray-100">
 //                     {employee.projectinfo?.task && employee.projectinfo.task.length > 0 ? (
 //                       <div className="space-y-3">
 //                         {employee.projectinfo.task.map((task, tIdx) => (
@@ -352,7 +352,7 @@
 //           </div>
 //         ) : (
 //           !loadingMembers && (
-//             <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-12 text-center shadow-lg border border-white/50">
+//             <div className="bg-white/80   rounded-2xl p-12 text-center shadow-lg border border-white/50">
 //               <RiTeamLine className="w-16 h-16 text-gray-300 mx-auto mb-4" />
 //               <h3 className="text-xl font-semibold text-gray-700 mb-2">No team members yet</h3>
 //               <p className="text-gray-500 mb-6">Add members to get started with this project</p>
@@ -366,7 +366,7 @@
 
 //       {/* Add Task Modal */}
 //       {taskModalFor && (
-//         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fade-in">
+//         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50   animate-fade-in">
 //           <div className="relative bg-white w-full max-w-md mx-auto rounded-3xl shadow-2xl p-6 border border-white/70 animate-scale-in">
 //             <button
 //               className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
@@ -400,7 +400,7 @@
 //                   onChange={(e) => setTasktext(e.target.value)}
 //                   placeholder="Enter task description..."
 //                   rows="3"
-//                   className="w-full p-3.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
+//                   className="w-full p-3.5 rounded-xl border border-gray-200 focus:outline-none  -2  -blue-500 focus:border-transparent transition resize-none"
 //                 />
 //               </div>
 
@@ -484,7 +484,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import Loader from '../../loader';
 
 const ShimmerProjectHeader = () => (
-  <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/50 mb-8 animate-pulse">
+  <div className="bg-white/80 rounded-2xl p-8 shadow-xl border border-white/50 mb-8 animate-pulse">
     <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
       <div className="flex-1 space-y-4">
         <div className="h-10 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-3/4"></div>
@@ -503,7 +503,7 @@ const ShimmerProjectHeader = () => (
 );
 
 const ShimmerEmployeeCard = () => (
-  <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/50 mb-6 animate-pulse">
+  <div className="bg-white/80    rounded-2xl p-6 shadow-lg border border-white/50 mb-6 animate-pulse">
     <div className="flex flex-col md:flex-row gap-6">
       <div className="w-24 h-24 rounded-full bg-gradient-to-r from-gray-200 to-gray-300"></div>
       <div className="flex-1 space-y-4">
@@ -645,7 +645,7 @@ const Projectdetails = () => {
               </h1>
 
               <div className="flex flex-wrap gap-4 mb-6">
-                <div className="flex items-center gap-3 bg-blue-50/80 px-4 py-3 rounded-xl border border-blue-100 backdrop-blur-sm transform transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
+                <div className="flex items-center gap-3 bg-blue-50/80 px-4 py-3 rounded-xl border border-blue-100   transform transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
                   <HiCalendar className="w-5 h-5 text-blue-600" />
                   <div>
                     <p className="text-sm text-gray-600 font-medium">Start Date</p>
@@ -655,7 +655,7 @@ const Projectdetails = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 bg-purple-50/80 px-4 py-3 rounded-xl border border-purple-100 backdrop-blur-sm transform transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
+                <div className="flex items-center gap-3 bg-purple-50/80 px-4 py-3 rounded-xl border border-purple-100   transform transition-all duration-300 hover:scale-[1.02] hover:shadow-md">
                   <HiCalendar className="w-5 h-5 text-purple-600" />
                   <div>
                     <p className="text-sm text-gray-600 font-medium">End Date</p>
@@ -665,7 +665,7 @@ const Projectdetails = () => {
                   </div>
                 </div>
 
-                <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-sm transform transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${projectdetail?.status ? 'bg-green-50/80 border-green-100' : 'bg-yellow-50/80 border-yellow-100'}`}>
+                <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border   transform transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${projectdetail?.status ? 'bg-green-50/80 border-green-100' : 'bg-yellow-50/80 border-yellow-100'}`}>
                   {projectdetail?.status ? (
                     <HiCheckCircle className="w-5 h-5 text-green-600" />
                   ) : (
@@ -681,13 +681,13 @@ const Projectdetails = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white shadow-sm transform transition-all duration-300 hover:shadow-lg">
+            <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/70   p-4 rounded-2xl border border-white shadow-sm transform transition-all duration-300 hover:shadow-lg">
               <div className="relative">
                 <select
                   onChange={handleselect}
                   name="members"
                   id="members"
-                  className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white/80 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 w-full transition-all"
+                  className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white/80 shadow-sm focus:outline-none  -2  -blue-500 focus:border-transparent text-gray-800 w-full transition-all"
                   disabled={isAddingMember}
                 >
                   <option value="">Select Member</option>
@@ -746,7 +746,7 @@ const Projectdetails = () => {
             {employeeProject.map((employee, idx) => (
               <div
                 key={idx}
-                className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 shadow-lg border border-white/70 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.01] group relative overflow-hidden"
+                className="bg-white/90 c rounded-3xl p-6 shadow-lg border border-white/70 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.01] group relative overflow-hidden"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 {/* Subtle hover effect background */}
@@ -811,7 +811,7 @@ const Projectdetails = () => {
                     </span>
                   </div>
 
-                  <div className="bg-gray-50/50 rounded-2xl p-4 backdrop-blur-sm border border-gray-100 group-hover:border-blue-100 transition-colors">
+                  <div className="bg-gray-50/50 rounded-2xl p-4   border border-gray-100 group-hover:border-blue-100 transition-colors">
                     {employee.projectinfo?.task && employee.projectinfo.task.length > 0 ? (
                       <div className="space-y-3">
                         {employee.projectinfo.task.map((task, tIdx) => (
@@ -845,7 +845,7 @@ const Projectdetails = () => {
           </div>
         ) : (
           !loadingMembers && (
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-12 text-center shadow-lg border border-white/50 transform hover:scale-[1.01] transition-all duration-300">
+            <div className="bg-white/80  rounded-2xl p-12 text-center shadow-lg border border-white/50 transform hover:scale-[1.01] transition-all duration-300">
               <RiTeamLine className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-700 mb-2">No team members yet</h3>
               <p className="text-gray-500 mb-6">Add members to get started with this project</p>
@@ -859,7 +859,7 @@ const Projectdetails = () => {
 
       {/* Add Task Modal */}
       {taskModalFor && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50   animate-fade-in">
           <div className="relative bg-white w-full max-w-md mx-auto rounded-3xl shadow-2xl p-6 border border-white/70 animate-scale-in transform transition-all duration-300">
             <button
               className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600 transform hover:rotate-90 transition-transform"
@@ -893,7 +893,7 @@ const Projectdetails = () => {
                   onChange={(e) => setTasktext(e.target.value)}
                   placeholder="Enter task description..."
                   rows="3"
-                  className="w-full p-3.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
+                  className="w-full p-3.5 rounded-xl border border-gray-200 focus:outline-none  -2  -blue-500 focus:border-transparent transition-all duration-300 resize-none"
                 />
               </div>
 
