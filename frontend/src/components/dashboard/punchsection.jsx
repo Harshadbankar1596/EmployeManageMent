@@ -728,7 +728,7 @@ const Punchsection = () => {
   useEffect(() => {
     if (user?.user?.logs && Array.isArray(user.user.logs)) {
       const todayDate = getTodayDateString();
-      const todayLog = user.user.logs.find((log) => log.date === todayDate);
+      const todayLog = user.user.logs.find((log) => log?.date === todayDate);
 
       if (todayLog) {
         const punches = todayLog.punchs || [];
