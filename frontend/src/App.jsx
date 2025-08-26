@@ -1,11 +1,12 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 
-// Auth
+
 import Register from "./components/login/register";
 import Login from "./components/login/login";
 
-// Dashboard
+
+
 import Maindashboard from "./components/dashboard/maindashboard";
 import Works from "./components/dashboard/works";
 import Nav from "./components/dashboard/nav";
@@ -63,6 +64,7 @@ const App = () => {
   return (
     <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen scrollbar-hide bg-no-repeat bg-cover bg-fixed bg-[url('')]">
       <SmoothScroll />
+      
 
       
       <div className="w-full lg:w-1/4 xl:w-1/5 mb-4 lg:mb-0">
@@ -77,13 +79,11 @@ const App = () => {
         )}
       </div>
 
-      {/* Main Content */}
       <div className="w-full lg:w-3/4 xl:w-4/5 sm:py-4 lg:py-5 px-3 sm:px-4 lg:px-10">
         {!shouldHideNav && <Nav />}
         {!shouldHideQuickAction && <Quickaction />}
 
         <Routes>
-          {/* Employee Routes */}
           <Route
             path="/"
             element={
@@ -337,6 +337,7 @@ const App = () => {
           </Route>
         </Routes>
       </div>
+    
     </div>
   );
 };

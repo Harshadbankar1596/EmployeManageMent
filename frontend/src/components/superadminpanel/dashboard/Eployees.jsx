@@ -59,11 +59,11 @@ const Employees = () => {
 
   const handlesetadmin = () => {
     setadmin(modal.userid).unwrap().then(() => {
+      closeModal();
       refetch();
-      closeModal();
     }).catch((error) => {
-      console.log("err", error);
       closeModal();
+      console.log("err", error);
     });
   };
 
@@ -156,7 +156,6 @@ const Employees = () => {
     </div>
   );
 
-  // Stats summary
   const StatsSummary = () => {
     const presentCount = employees?.data?.filter(emp => isToday(emp?.log?.date)).length || 0;
     const totalCount = employees?.data?.length || 0;
@@ -208,7 +207,7 @@ const Employees = () => {
   const EmployeeCard = ({ emp, idx }) => {
     const isPresent = isToday(emp?.log?.date);
     const [showDetails, setShowDetails] = useState(false);
-   if(emp.isadmin !== "superadmin") return (
+    if (emp.isadmin !== "superadmin") return (
       <div className="bg-white rounded-xl shadow-md border border-gray-100 mb-4 overflow-hidden">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center">
@@ -369,6 +368,7 @@ const Employees = () => {
                     >
                       <FaEye className="text-sm" />
                     </Link>
+
                     <Link
                       to={`/superadmin/reports/${emp.userid}`}
                       className="p-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 transition-colors duration-200"
@@ -376,21 +376,31 @@ const Employees = () => {
                     >
                       <MdWork className="text-sm" />
                     </Link>
-                    {(loadingEmployees || (loadingSetAdmin && modal.userid === emp.userid && modal.open)) ?
-                      <ImSpinner7 className='animate-spin text-xl' /> :
-                      emp?.isadmin === "admin" ?
+
+                    {(loadingEmployees ||
+                      (loadingSetAdmin && modal.userid === emp.userid && modal.open)) ? (
+                      <div className="p-2 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">
+                        <ImSpinner7 className="relative self-center -bottom-2 -right-2 animate-spin text-lg" />
+                      </div>
+                    ) : emp?.isadmin === "admin" ? (
+                      <div className='p-1 rounded-md bg-green-200 hover:bg-green-300'>
                         <PiShieldCheckFill
-                          onClick={() => openModal('employee', emp.userid)}
-                          className='text-xl cursor-pointer'
-                          title='Admin'
-                        /> :
-                        <PiShieldPlus
-                          onClick={() => openModal('admin', emp.userid)}
-                          className='text-xl cursor-pointer'
-                          title='Employee'
+                          onClick={() => openModal("employee", emp.userid)}
+                          className="text-xl cursor-pointer text-green-600"
+                          title="Admin"
                         />
-                    }
+                      </div>
+                    ) : (
+                      <div className='p-1 rounded-md bg-gray-200 hover:bg-gray-300'>
+                        <PiShieldPlus
+                          onClick={() => openModal("admin", emp.userid)}
+                          className="text-xl cursor-pointer text-gray-600"
+                          title="Employee"
+                        />
+                      </div>
+                    )}
                   </div>
+
                 </td>
               </tr>
             );
@@ -423,7 +433,10 @@ const Employees = () => {
               onClick={handlesetadmin}
               className={`px-5 py-2 ${isAdmin ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"} text-white rounded-lg shadow-md transition`}
             >
-              {isAdmin ? "Yes, Give Admin" : "Yes, Give Employee"}
+              {loadingSetAdmin || loadingEmployees ? (
+                <ImSpinner7 className="relative self-center -bottom-2 -right-2 animate-spin text-lg" />
+              ) : isAdmin ? "Yes, Give Admin" : "Yes, Give Employee"}
+
             </button>
             <button
               onClick={closeModal}
