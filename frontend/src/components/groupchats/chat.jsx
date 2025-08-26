@@ -5,6 +5,7 @@ import { useGetMessagesQuery, useCreateGroupMutation } from '../../redux/apislic
 import { motion, AnimatePresence } from 'framer-motion'
 import SmoothScroll from '../../lenis'
 import { FiSend, FiImage, FiSmile } from 'react-icons/fi'
+import { FaSpinner } from "react-icons/fa6";
 
 const socket = io(import.meta.env.VITE_BACKEND_URL)
 
@@ -335,7 +336,7 @@ const Chat = () => {
               disabled={message.trim() === "" || sending}
               whileTap={{ scale: 0.95 }}
             >
-              {sending ? <DotsLoader /> : <FiSend />}
+              {sending ? <FaSpinner className="animate-spin" /> : <FiSend />}
             </motion.button>
           </form>
         </motion.div>
