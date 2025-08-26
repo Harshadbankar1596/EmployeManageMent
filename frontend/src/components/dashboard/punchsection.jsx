@@ -804,28 +804,24 @@ const Punchsection = () => {
 
   return (
     <div className="flex flex-col w-full gap-6 justify-center items-center lg:flex-row lg:flex-nowrap">
-      {/* Time Circle Section */}
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl w-full p-6 sm:p-8 flex flex-col h-96 mb-4 lg:mb-0 lg:max-w-xl border border-gray-100 transform transition-all duration-300 hover:shadow-xl">
         <div className="flex justify-between items-center text-gray-600 mb-4">
-          <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Today's Activity</p>
+          <p className="text-xl sm:text-2xl font-bold bg-blue-900 bg-clip-text text-transparent">Today's Activity</p>
           <p className="text-sm sm:text-base bg-gray-100 py-1 px-3 rounded-full">{displayDate}</p>
         </div>
 
         <div className="flex items-center justify-center m-auto relative flex-1">
           <div className="relative h-48 w-48 sm:h-64 sm:w-64 mx-auto">
-            {/* Animated outer ring */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-200 to-purple-200 animate-pulse"></div>
 
-            {/* Background Circle */}
-            <div className="absolute inset-2 rounded-full bg-white shadow-inner"></div>
+            <div className="absolute -inset-2 rounded-full bg-gray-300 animate-pulse"></div>
 
-            {/* Progress Circle */}
+
             <div
-              className="absolute inset-2 rounded-full transition-all duration-1000 ease-out"
+              className="absolute inset-1 rounded-full transition-all duration-1000 ease-out"
               style={{
                 background: `conic-gradient(
-                  #4F46E5 0%, 
-                  #7C3AED ${percentage}%, 
+                  #1E3A8A 0%, 
+                  #1E3A8A ${percentage}%, 
                   #E5E7EB ${percentage}%, 
                   #E5E7EB 100%
                 )`
@@ -858,11 +854,10 @@ const Punchsection = () => {
         </div>
       </div>
 
-      {/* Punches List Section */}
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl w-full p-6 sm:p-8 flex flex-col h-96 lg:max-w-xl border border-gray-100 transform transition-all duration-300 hover:shadow-xl">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
           <div className="flex flex-col items-center sm:items-start">
-            <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Today's Updates</p>
+            <p className="text-xl sm:text-2xl font-bold bg-blue-900 bg-clip-text text-transparent">Today's Updates</p>
             <p className="text-sm text-gray-500 mt-1 bg-gray-100 py-1 px-3 rounded-full">Total entries: {punchs.length}</p>
           </div>
           <div className={isPulsing ? 'animate-pulse' : ''}>

@@ -197,7 +197,6 @@ const Works = () => {
                                         />
                                     </button>
                                 </div>
-                                <div className={`absolute left-0 top-0 h-full w-1 sm:w-2 rounded-r-lg ${workItem.status ? "bg-green-400" : "bg-red-400"} animate-pulse`} />
                             </div>
 
                             <div
@@ -335,7 +334,7 @@ const Works = () => {
                     ))}
                 </div>
             </div>
-            {/* Animations */}
+           
             <style>
                 {`
                 @media (max-width: 400px) {
