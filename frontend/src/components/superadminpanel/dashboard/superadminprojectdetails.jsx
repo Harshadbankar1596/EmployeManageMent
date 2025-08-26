@@ -484,7 +484,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import Loader from '../../loader';
 
 const ShimmerProjectHeader = () => (
-  <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/50 mb-8 animate-pulse">
+  <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/50 mb-8 ">
     <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
       <div className="flex-1 space-y-4">
         <div className="h-10 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-3/4"></div>
@@ -503,7 +503,7 @@ const ShimmerProjectHeader = () => (
 );
 
 const ShimmerEmployeeCard = () => (
-  <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/50 mb-6 animate-pulse">
+  <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-white/50 mb-6  ">
     <div className="flex flex-col md:flex-row gap-6">
       <div className="w-24 h-24 rounded-full bg-gradient-to-r from-gray-200 to-gray-300"></div>
       <div className="flex-1 space-y-4">
