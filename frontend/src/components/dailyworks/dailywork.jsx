@@ -674,9 +674,9 @@ const Dailywork = () => {
           onClick={() => setshowmodal(true)}
         >
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 0.5, repeat: Infinity, repeatType: "loop", ease: "linear" }}
-            className="w-5 h-5 flex items-center justify-center"
+            
+            
+            className="w-5 h-5 flex items-center justify-center animate-bounce"
           >
             <FaPlus className="text-sm" />
           </motion.div>
