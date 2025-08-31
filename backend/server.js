@@ -40,8 +40,6 @@ app.use(cors({
 
 socketHandler(io);
 app.set('trust proxy', 1)
-
-
 app.use("/users", userRouter);
 app.use("/chat", chatRouter);
 // app.use("/face", faceRouter);
