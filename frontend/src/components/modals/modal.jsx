@@ -239,6 +239,7 @@ export const Addprojectmodal = () => {
 
 
 export const UploadJobFail = (props) => {
+    // console.log(props);
     return (
         <div className="fixed z-50 top-10 w-full h-full flex justify-center items-start pt-4">
             <div className="z-50 max-w-sm sm:max-w-md w-full mx-4 bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
@@ -247,7 +248,7 @@ export const UploadJobFail = (props) => {
                         <FcCancel className="w-full h-full object-contain" />
                     </div>
                     <h4 className="text-lg sm:text-xl lg:text-2xl text-gray-100 font-semibold mb-3 sm:mb-4 lg:mb-5">
-                        {props.errorMessage ? <span>{props.errorMessage}</span> : "Registration failed."}
+                        {props?.errorMessage ? <span>{props?.errorMessage}</span> : "Registration failed."}
                     </h4>
                 </div>
             </div>

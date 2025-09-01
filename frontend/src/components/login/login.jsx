@@ -210,7 +210,7 @@ const Login = () => {
           className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none"
         />
 
-        <div className="relative z-10 flex flex-col items-center justify-center gap-6 mt-8 mb-8">
+        {/* <div className="relative z-10 flex flex-col items-center justify-center gap-6 mt-8 mb-8">
           <div className="flex flex-row gap-6">
             <div className="border-4 border-blue-400 shadow-lg h-32 w-32  rounded-full overflow-hidden z-10 bg-blue-800 flex items-center justify-center">
               <video
@@ -238,7 +238,7 @@ const Login = () => {
           >
             Capture
           </button>
-        </div>
+        </div> */}
         <div className="relative z-10 p-4 sm:p-8 lg:p-12 text-center lg:text-left">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 max-w-md mx-auto lg:mx-0">
             Manage all <span className="text-yellow-400">HR Operations</span>
@@ -302,9 +302,9 @@ const Login = () => {
                 />
                 Remember me
               </label>
-              <a href="#" className="text-blue-700 text-sm hover:underline">
+              <Link to={"/resetpassword"} className="text-blue-700 text-sm hover:underline">
                 Reset Password?
-              </a>
+              </Link>
             </div>
             {submitError && (
               <div className="text-red-500 text-sm text-center">{submitError}</div>

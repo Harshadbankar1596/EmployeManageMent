@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-route
 
 import Register from "./components/login/register";
 import Login from "./components/login/login";
+import Resetpassword from "./components/login/resetpassword.jsx";
 
 
 
@@ -11,7 +12,6 @@ import Maindashboard from "./components/dashboard/maindashboard";
 import Works from "./components/dashboard/works";
 import Nav from "./components/dashboard/nav";
 import Quickaction from "./components/dashboard/quickaction";
-import Side from "./components/aside/side";
 import AdminSidebar from "./components/adminpanel/AdminSidebar.jsx";
 import SuperAdminSidebar from "./components/superadminpanel/SuperAdminSidebar.jsx";
 import CalendarComponent from "./components/calender/calender.jsx";
@@ -50,9 +50,9 @@ const App = () => {
   const shouldHideQuickAction =
     hideQuickActionPaths.includes(pathname) ||
     pathname.startsWith("/admin") ||
-    pathname.startsWith("/superadmin");
+    pathname.startsWith("/superadmin") || pathname.startsWith("/resetpassword");
 
-  const hideNavPaths = ["/login", "/register", "/superadmin"];
+  const hideNavPaths = ["/login", "/register", "/resetpassword" ,"/superadmin"];
   const shouldHideNav =
     hideNavPaths.includes(pathname) || pathname.startsWith("/superadmin");
 
@@ -60,24 +60,23 @@ const App = () => {
   const isSuperAdminRoute = pathname.startsWith("/superadmin");
   const loginRoute = pathname.startsWith("/login");
   const registerRoute = pathname.startsWith("/register");
+  const resetpasswordRoute = pathname.startsWith("/resetpassword");
 
   return (
-    <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen scrollbar-hide bg-no-repeat bg-cover bg-fixed bg-[url('')]">
+    <div className="bg-blue-50 flex flex-col lg:flex-row min-h-screen scrollbar-hide justify-center">
       <SmoothScroll />
-      
 
-      
-      <div className="w-full lg:w-1/4 xl:w-1/5 mb-4 lg:mb-0">
+
+
+      {!loginRoute && !registerRoute && !resetpasswordRoute && <div className="w-full lg:w-1/4 xl:w-1/5 mb-4 lg:mb-0">
         {isAdminRoute ? (
           <AdminSidebar />
         ) : isSuperAdminRoute ? (
           <SuperAdminSidebar />
-        ) : loginRoute || registerRoute ? (
-          <Side />
         ) : (
           <EmployeeSidebar />
         )}
-      </div>
+      </div>}
 
       <div className="w-full lg:w-3/4 xl:w-4/5 sm:py-4 lg:py-5 px-3 sm:px-4 lg:px-10">
         {!shouldHideNav && <Nav />}
@@ -92,8 +91,11 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/resetpassword" element={<Resetpassword />} />
+          
           <Route
             path="/works"
             element={
@@ -151,23 +153,36 @@ const App = () => {
             }
           />
 
+
+
+
+
+
+
+
+
+
+
+
+
+
           {/* Admin Routes */}
 
 
-          
+
           <Route
             path="/admin/*"
             element={
-                <ProtectedRoute>
-                  <MainDashboard />
-                </ProtectedRoute>
+              <ProtectedRoute>
+                <MainDashboard />
+              </ProtectedRoute>
             }
           >
 
-          <Route
-            path="employees"
-            element={
-              <ProtectedRoute>
+            <Route
+              path="employees"
+              element={
+                <ProtectedRoute>
                   <AllUsers />
                 </ProtectedRoute>
               }
@@ -246,6 +261,13 @@ const App = () => {
             />
             <Route path="*" element={<Navigate to="" />} />
           </Route>
+
+
+
+
+
+
+
 
 
 
@@ -337,7 +359,7 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-    
+
     </div>
   );
 };

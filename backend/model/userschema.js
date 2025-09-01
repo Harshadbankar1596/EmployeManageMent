@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import validator from 'validator';
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -7,29 +7,50 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     email: {
+        lowercase: true,
         type: String,
         required: true,
         unique: true,
         trim: true,
-        lowercase: true
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error('Invalid email')
+            }
+            if(!value.endsWith('.com') && !value.endsWith('.net')) {
+                throw new Error('Email must end with .com or .net')
+            }
+        }
     },
     isadmin: {
         type: String,
         default: "employee"
     },
-    // isadmin: {
-    //     type: Boolean,
-    //     default: false
-    // },
     password: {
         type: String,
         required: true,
-        minlength: 6
+        minlength: 6,
+        unique : true
     },
     phone: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        unique: true,
+        validate(value) {
+            if (!validator.isMobilePhone(value, ['en-US', 'en-GB', 'es-ES'])) {
+                throw new Error('Invalid phone number')
+            }
+            if (value.length !== 10) {
+                throw new Error('Phone number must be 10 digits')
+            }
+            if (!validator.isNumeric(value)) {
+                throw new Error('Phone number must contain only numbers')
+            }
+            if (!validator.isLength(value, { min: 10, max: 10 })) {
+                throw new Error('Phone number must be 10 digits')
+            }
+        },
+        maxlength: 10
     },
     role: {
         type: String,
@@ -89,4 +110,3 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 export default User;
-

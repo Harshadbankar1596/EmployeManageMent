@@ -3,17 +3,20 @@ import { useCreateUserMutation } from "../../redux/apislice";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/userslice/userslice";
 import { Link } from "react-router-dom";
-import { RegisterSuccess, RegisterExist, RegisterFail} from "../modals/modal";
+import { RegisterSuccess, RegisterExist, RegisterFail, UploadJobFail } from "../modals/modal";
 import { useNavigate } from "react-router-dom";
-
+import { FaSpinner } from "react-icons/fa";
 const Register = () => {
-  
+
   const dispatch = useDispatch();
-  const [createUser] = useCreateUserMutation();
+  const [createUser, { isLoading: loadingadduser }] = useCreateUserMutation();
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
   const [existuser, setExistuser] = useState(false);
   const [fail, setFail] = useState(false);
+  const [uploadfail, setUploadFail] = useState(false);
+  const [ermessage, setermessage] = useState({});
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -39,7 +42,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
 
     const userData = {
       name: form.name,
@@ -51,12 +54,12 @@ const Register = () => {
 
     try {
       const result = await createUser(userData).unwrap().then((res) => {
-        setTimeout(()=>{
+        setTimeout(() => {
           navigate("/login");
-        },1000)
+        }, 1000)
         dispatch(setUser(res.user));
       })
-      
+
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
@@ -79,20 +82,21 @@ const Register = () => {
           setExistuser(false);
         }, 3000);
       } else {
-        setFail(true);
+        setermessage(err?.data?.message);
+        setUploadFail(true);
         setTimeout(() => {
-          setFail(false);
+          setUploadFail(false);
         }, 3000);
       }
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-
+    <div className="min-h-screen flex justify-center">
       {success && <RegisterSuccess />}
       {existuser && <RegisterExist />}
       {fail && <RegisterFail />}
+      {uploadfail && <UploadJobFail errorMessage={ermessage} />}
       <div className="lg:w-1/2 w-full bg-blue-900 flex items-center justify-center text-white p-4 sm:p-6 lg:p-10 relative overflow-hidden min-h-[300px] lg:min-h-screen">
         <div className="absolute inset-0">
           <img
@@ -172,6 +176,7 @@ const Register = () => {
                 <option value="Database Administrator">Database Administrator</option>
                 <option value="HR">HR</option>
                 <option value="Admin">Admin</option>
+                <option value="Admin">Others</option>
               </select>
             </div>
 
@@ -181,6 +186,7 @@ const Register = () => {
                 type="password"
                 name="password"
                 value={form.password}
+                minLength={6}
                 onChange={handleChange}
                 required
                 className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
@@ -194,7 +200,6 @@ const Register = () => {
                 checked={form.terms}
                 onChange={handleChange}
                 className="mr-2 mt-1"
-                
               />
               <label className="text-sm text-gray-600">
                 I agree to the terms and privacy policy
@@ -203,9 +208,10 @@ const Register = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-900 text-white py-2 sm:py-3 rounded-md hover:bg-blue-800 transition-colors text-sm sm:text-base"
+              className={`w-full flex items-center justify-center bg-blue-900 text-white py-2 sm:py-3 rounded-md hover:bg-blue-800 transition-colors text-sm sm:text-base ${loadingadduser ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={loadingadduser}
             >
-              Register
+              {loadingadduser ? <FaSpinner className="animate-spin" /> : "Register"}
             </button>
           </form>
           <div className="text-center mt-4 sm:mt-6 text-gray-600 text-sm">

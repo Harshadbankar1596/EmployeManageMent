@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
+  console.log("ProtectedRoute token:");
   const token = useSelector((state) => state.user.token);
-
   if (!token) {
     // console.log("No token, redirecting to login...");
     return <Navigate to="/login" replace />;
