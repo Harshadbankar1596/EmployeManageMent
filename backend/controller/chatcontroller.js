@@ -10,13 +10,13 @@ export const socketHandler = (io) => {
       const existingGroup = await ChatSchema.findOne({ groupname });
       
       if (existingGroup) {
+        io.emit("receive-message", { message, name, groupname });
         existingGroup.message.push({
           username: name,
           text: message,
           time: new Date()
         })
         await existingGroup.save();
-        io.emit("receive-message", { message, name, groupname });
       }
 
       if (!existingGroup) {

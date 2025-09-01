@@ -1,4 +1,4 @@
-import { createUser, loginUser, logoutUser, verifyToken, addpunch, works, workstatus, taskstatus, getlogs, summary, uploadprofileimg, getimage, updateprofile, addtask , screenshot, getallmembers } from "../controller/usercontroller.js";
+import { createUser, loginUser, logoutUser, verifyToken, addpunch, works, workstatus, taskstatus, getlogs, summary, uploadprofileimg, getimage, updateprofile, addtask , screenshot, getallmembers, changepassword } from "../controller/usercontroller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import express from "express";
 const router = express.Router();
@@ -11,10 +11,11 @@ router.post("/logout", logoutUser);
 
 router.get("/verify", verifyToken);
 
+router.post("/changepassword" , changepassword)
+
 router.post('/addpunch', addpunch)
 
 router.post('/works',authMiddleware , works)
-// router.post('/works', authMiddleware, works)
 
 router.post('/workstatus', authMiddleware, workstatus)
 
