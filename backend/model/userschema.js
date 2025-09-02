@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
                 throw new Error('Invalid phone number')
             }
             if (value.length !== 10) {
-                throw new Error('Phone number must be 10 digits')
+                throw new Error('number must be 10 digits')
             }
             if (!validator.isNumeric(value)) {
                 throw new Error('Phone number must contain only numbers')

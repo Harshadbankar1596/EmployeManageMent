@@ -92,7 +92,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center">
+    <div className="min-h-screen md:flex justify-center">
       {success && <RegisterSuccess />}
       {existuser && <RegisterExist />}
       {fail && <RegisterFail />}
@@ -176,7 +176,7 @@ const Register = () => {
                 <option value="Database Administrator">Database Administrator</option>
                 <option value="HR">HR</option>
                 <option value="Admin">Admin</option>
-                <option value="Admin">Others</option>
+                <option value="Others">Others</option>
               </select>
             </div>
 
@@ -193,7 +193,7 @@ const Register = () => {
               />
             </div>
 
-            <div className="flex items-start mb-4 sm:mb-6">
+            {/* <div className="flex items-start mb-4 sm:mb-6">
               <input
                 type="checkbox"
                 name="terms"
@@ -204,11 +204,11 @@ const Register = () => {
               <label className="text-sm text-gray-600">
                 I agree to the terms and privacy policy
               </label>
-            </div>
+            </div> */}
 
             <button
               type="submit"
-              className={`w-full flex items-center justify-center bg-blue-900 text-white py-2 sm:py-3 rounded-md hover:bg-blue-800 transition-colors text-sm sm:text-base ${loadingadduser ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`w-full flex items-center justify-center bg-blue-900 text-white py-2 sm:py-3 rounded-md hover:bg-blue-800 transition-colors text-sm sm:text-base ${loadingadduser ? "opacity-50 cursor-not-allowed " : ""}`}
               disabled={loadingadduser}
             >
               {loadingadduser ? <FaSpinner className="animate-spin" /> : "Register"}
