@@ -588,7 +588,7 @@ const   Projectdetails = () => {
   }
 
   function handleadd() {
-    if (selectedMembers.length > 0) {
+    if (selectedMembers?.length > 0) {
       setIsAddingMember(true);
       const membersToAdd = selectedMembers.map(memberId => ({ memberId, projectid }));
       Addmemberinproject(membersToAdd)
@@ -702,7 +702,7 @@ const   Projectdetails = () => {
 
               <button
                 onClick={handleadd}
-                disabled={isAddingMember || selectedMembers.length === 0}
+                disabled={isAddingMember || selectedMembers?.length === 0}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:from-blue-600 hover:to-purple-700 transform hover:-translate-y-0.5 ${(isAddingMember || selectedMembers.length === 0) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 type="button"
               >
@@ -741,7 +741,7 @@ const   Projectdetails = () => {
               <ShimmerEmployeeCard key={idx} />
             ))}
           </div>
-        ) : employeeProject && employeeProject.length > 0 ? (
+        ) : employeeProject && employeeProject?.length > 0 ? (
           <div className="grid gap-6">
             {employeeProject.map((employee, idx) => (
               <div
@@ -812,7 +812,7 @@ const   Projectdetails = () => {
                   </div>
 
                   <div className="bg-gray-50/50 rounded-2xl p-4 backdrop-blur-sm border border-gray-100 group-hover:border-blue-100 transition-colors">
-                    {employee.projectinfo?.task && employee.projectinfo.task.length > 0 ? (
+                    {employee?.projectinfo?.task && employee?.projectinfo?.task.length > 0 ? (
                       <div className="space-y-3">
                         {employee.projectinfo.task.map((task, tIdx) => (
                           <div key={tIdx} className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 group/task hover:border-blue-200">

@@ -155,7 +155,7 @@ const NetworkError = ({ children }) => {
                     transition={{ duration: 0.6, ease: "easeOut" }}
                     className="bg-gradient-to-b from-gray-900/80 to-gray-800/90 backdrop-blur-md border border-gray-700/50 shadow-2xl shadow-purple-500/10 rounded-2xl p-8 max-w-lg w-full relative z-10"
                 >
-                    {/* Decorative elements */}
+                   
                     <div className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 border-purple-500"></div>
                     <div className="absolute -top-2 -right-2 w-5 h-5 border-t-2 border-r-2 border-purple-500"></div>
                     <div className="absolute -bottom-2 -left-2 w-5 h-5 border-b-2 border-l-2 border-purple-500"></div>

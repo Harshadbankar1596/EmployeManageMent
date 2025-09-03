@@ -135,7 +135,7 @@ const Projectdetails = () => {
   }
 
   const handleAddTask = async (userid) => {
-    if (tasktext.length === 0) alert("Please enter a task")
+    if (tasktext.length === 0) return
     else {
       try {
         await addtask({ userid, projectid, task: tasktext }).unwrap();

@@ -94,7 +94,7 @@ const Assinproject = () => {
                                                 <div>
                                                     <p className="text-xs text-gray-500">Team Members</p>
                                                     <p className="text-sm font-medium text-gray-800">
-                                                        {project.members?.length || 0} {project.members?.length === 1 ? 'member' : 'members'}
+                                                        {project?.members?.length || 0} {project?.members?.length === 1 ? 'member' : 'members'}
                                                     </p>
                                                 </div>
                                             </div>
