@@ -15,9 +15,9 @@ router.post("/verifyotp", verifyotp)
 
 router.post("/sendotp", sendotp)
 
-router.get("/verify", verifyToken);
-
 router.post("/changepassword" , changepassword)
+
+router.get("/verify", verifyToken);
 
 router.post('/addpunch', addpunch)
 
