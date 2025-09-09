@@ -5,6 +5,7 @@ import jwt, { decode } from "jsonwebtoken";
 import dotenv from "dotenv";
 import validator from 'validator';
 import Screenshot from "../model/screenshot.js";
+import nodemailer from "nodemailer";
 dotenv.config();
 
 
@@ -98,6 +99,7 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: "Server error.", error });
     }
 };
+
 export const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token");
@@ -107,6 +109,97 @@ export const logoutUser = async (req, res) => {
         res.status(500).json({ message: "Server error.", error: error.message });
     }
 };
+
+function generateOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+let otpStore = {}
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+});
+
+export const sendotp = async (req, res) => {
+    try {
+
+        const { email } = req.body;
+        const otp = generateOTP();
+        const expires = Date.now() + 5 * 60 * 1000;
+        if(!email) return res.status(400).json({ success: false, message: "Email is required" });
+
+        const user = await User.findOne({ email });
+
+        if (!user) return res.status(404).json({ success: false, message: "User Not Found" });
+
+        otpStore[email] = { otp, expires };
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Password Reset OTP",
+            html: `<h2>Your OTP: <b>${otp}</b></h2><p>Valid for 5 minutes.</p>`,
+        };
+
+        try {
+            await transporter.sendMail(mailOptions);
+            res.json({ success: true, message: "OTP sent to email" });
+        } catch (err) {
+            res.json({ success: false, message: "Error sending OTP" + err });
+        }
+    } catch (error) {
+        console.error("OTP sending error:", error);
+        res.status(500).json({ message: "Server error." });
+    }
+}
+
+export const verifyotp = async (req, res) => {
+
+    const { email, otp } = req.body;
+
+    if (otpStore[email] && otpStore[email].otp === otp) {
+        const { expires } = otpStore[email];
+        if (Date.now() < expires) {
+            delete otpStore[email]; // OTP used once
+            res.json({ success: true, message: "OTP verified successfully" });
+        } else {
+            res.json({ success: false, message: "OTP expired" });
+        }
+    } else {
+        res.json({ success: false, message: "Invalid or expired OTP" });
+    }
+};
+
+
+
+export const resetpassword = async (req, res) => {
+    try {
+
+        const { email, password } = req.body
+
+        if (!email || !password) res.status(400).json({ message: "Invalid Data" });
+
+        if (!validator.isStrongPassword(password)) {
+            return res.status(400).json({ message: "Weak Password" });
+        }
+        const hash = await bcrypt.hash(password , 10)
+
+        const user = await User.findOneAndUpdate({ email } , { password : hash })
+
+        if (!user) res.status(422).json({ message: "User Not Found" });
+
+        res.status(200).json({ message: "Password Reset Done" });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server Error" })
+    }
+}
 
 export const changepassword = async (req, res) => {
     try {
@@ -364,7 +457,7 @@ export const addtask = async (req, res) => {
 
         if (!user) res.status(404).json({ message: "user not found" });
 
-        user.workingOn.find(work => work._id.toString() === objid).task.unshift({ title: task, status: false })
+        user.workingOn.find(work => work?._id?.toString() === objid.toString()).task.unshift({ title: task, status: false })
 
         let cout = 0
 
@@ -386,7 +479,7 @@ export const addtask = async (req, res) => {
         res.status(200).json({ message: "task added", works: user.workingOn })
 
     } catch (error) {
-        console.log("error in addtask")
+        console.log("error in addtask" + error)
         res.status(500).json({ message: "server error" })
     }
 }

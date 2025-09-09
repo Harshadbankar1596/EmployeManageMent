@@ -1,4 +1,4 @@
-import { createUser, loginUser, logoutUser, verifyToken, addpunch, works, workstatus, taskstatus, getlogs, summary, uploadprofileimg, getimage, updateprofile, addtask , screenshot, getallmembers, changepassword } from "../controller/usercontroller.js";
+import { createUser, loginUser, logoutUser, verifyToken, addpunch, works, workstatus, taskstatus, getlogs, summary, uploadprofileimg, getimage, updateprofile, addtask , screenshot, getallmembers, changepassword , sendotp, verifyotp, resetpassword } from "../controller/usercontroller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import express from "express";
 const router = express.Router();
@@ -8,6 +8,12 @@ router.post("/register", createUser);
 router.post("/login", loginUser);
 
 router.post("/logout", logoutUser);
+
+router.post("/resetpassword", resetpassword)
+
+router.post("/verifyotp", verifyotp)
+
+router.post("/sendotp", sendotp)
 
 router.get("/verify", verifyToken);
 

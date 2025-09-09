@@ -36,6 +36,33 @@ export const apiSlice = createApi({
             invalidatesTags: ['User'],
         }),
 
+        sendotp: builder.mutation({
+            query: (email) => ({
+                url: '/users/sendotp',
+                method: 'POST',
+                body: { email }
+            }),
+
+        }),
+
+        verifyotp: builder.mutation({
+            query: ({ email, otp }) => ({
+                url: '/users/verifyotp',
+                method: 'POST',
+                body: { email, otp }
+            }),
+
+        }),
+
+        resetpassword: builder.mutation({
+            query: ({ email, password }) => ({
+                url: '/users/resetpassword',
+                method: 'POST',
+                body: { email, password }
+            }),
+
+        }),
+
         verifyToken: builder.query({
             query: () => '/users/verify',
             invalidatesTags: ['User'],
@@ -218,5 +245,8 @@ export const {
     useGetworkQuery,
     useScreenshotMutation,
     useGetallmemebersMutation,
-    useDeleteworkMutation
+    useDeleteworkMutation,
+    useSendotpMutation,
+    useVerifyotpMutation,
+    useResetpasswordMutation
 } = apiSlice;

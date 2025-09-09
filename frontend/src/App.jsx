@@ -397,7 +397,7 @@ import Assinproject from "./components/adminpanel/admindashboard/assinproject.js
 import Projectdetails from "./components/adminpanel/admindashboard/projectdetails.jsx";
 import Employeedailyreport from "./components/adminpanel/admindashboard/employeedailyreport.jsx";
 import Jobs from "./components/adminpanel/admindashboard/jobs.jsx";
-
+import Addfingerprint from "./components/adminpanel/admindashboard/addnewfingerprint.jsx";
 // Super Admin Panel
 import Superadminactions from "./components/superadminpanel/superadminactions.jsx";
 import Employees from "./components/superadminpanel/dashboard/Eployees.jsx";
@@ -450,7 +450,6 @@ const App = () => {
         {!shouldHideNav && <Nav />}
         {!shouldHideQuickAction && <Quickaction />}
 
-        {/* ✅ Wrap ALL routes in NetworkError */}
         <NetworkError>
           <Routes>
             <Route
@@ -462,12 +461,10 @@ const App = () => {
               }
             />
 
-            {/* Auth */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/resetpassword" element={<Resetpassword />} />
 
-            {/* Employee */}
             <Route
               path="/works"
               element={
@@ -526,6 +523,10 @@ const App = () => {
             />
 
             {/* Admin */}
+
+
+
+
             <Route
               path="/admin/*"
               element={
@@ -542,6 +543,7 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+
               <Route
                 path="calenderadmin"
                 element={
@@ -550,6 +552,17 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+
+              <Route
+                path="addfingerprint"
+                element={
+                  <ProtectedRoute>
+                    <Addfingerprint />
+                  </ProtectedRoute>
+                }
+              />
+
+
               <Route
                 path="chat"
                 element={
@@ -606,6 +619,7 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+
               <Route
                 path="jobs"
                 element={
@@ -614,6 +628,7 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+              
               <Route path="*" element={<Navigate to="" />} />
             </Route>
 

@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
   const token = useSelector((state) => state.user.token);
-  if (!token && token.lenght === 0) {
+  if (!token && token?.lenght === 0) {
     // console.log("No token, redirecting to login...");
     return <Navigate to="/login" replace />;
   }

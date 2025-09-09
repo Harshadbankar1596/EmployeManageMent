@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { apiSlice } from "../apislice";
 
 const initialState = {
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    role: '',
-    id: '',
-    token : ''
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        role: '',
+        id: '',
+        token : ''
 }
 
 const userSlice = createSlice({
@@ -34,6 +34,7 @@ const userSlice = createSlice({
         builder.addMatcher(
             apiSlice.endpoints.loginUser.matchFulfilled,
             (state , action)=>{
+                
                 setUser(action.payload.user)
             },
             

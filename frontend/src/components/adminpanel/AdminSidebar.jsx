@@ -16,6 +16,8 @@ import {
   FaPlusSquare,
   FaTasks,
   FaClipboardList,
+  FaFingerprint,
+  FaAddressCard
 } from "react-icons/fa";
 
 const navItems = [
@@ -26,7 +28,8 @@ const navItems = [
   { label: "Add Project", icon: FaPlusSquare, to: "/admin/addproject" },
   { label: "Assign Task", icon: FaTasks, to: "/admin/assinTask" },
   { label: "Reports", icon: FaClipboardList, to: "/admin/employeedailyreport" },
-  { label: "job requirement", icon: FaClipboardList, to: "/admin/Jobs" },
+  { label: "job requirement", icon: FaAddressCard, to: "/admin/Jobs" },
+  { label: "Add New FingerPrint", icon: FaFingerprint, to: "/admin/addfingerprint" },
 ];
 
 const AdminSidebar = () => {
