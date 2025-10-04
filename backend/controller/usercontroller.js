@@ -176,8 +176,6 @@ export const verifyotp = async (req, res) => {
     }
 };
 
-
-
 export const resetpassword = async (req, res) => {
     try {
 

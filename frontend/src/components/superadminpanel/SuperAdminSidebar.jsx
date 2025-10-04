@@ -4,7 +4,8 @@ import { useLogoutUserMutation } from '../../redux/apislice';
 import { logoutuser } from '../../redux/userslice/userslice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { MdDashboard, MdPeople, MdAssessment, MdEventNote, MdWork } from "react-icons/md";
+import { MdDashboard, MdPeople, MdAssessment, MdEventNote, MdWork , MdOutlineAccessTimeFilled} from "react-icons/md";
+import { SiRazorpay } from "react-icons/si";
 
 const navItems = [
   { label: "Dashboard", icon: MdDashboard, to: "/superadmin/dashboard" },
@@ -12,7 +13,8 @@ const navItems = [
   { label: "Projects", icon: MdWork, to: "/superadmin/projects" },
   { label: "Reports", icon: MdAssessment, to: "/superadmin/reports" },
   { label: "Leaves", icon: MdEventNote, to: "/superadmin/leaves" },
-  { label: "Job requirements", icon: MdAssessment, to: "/superadmin/jobs" },
+  { label: "PayMents", icon: SiRazorpay, to: "/superadmin/payments" },
+  { label: "Job requirements", icon: MdOutlineAccessTimeFilled, to: "/superadmin/jobs" },
 ];
 
 const SuperAdminSidebar = () => {

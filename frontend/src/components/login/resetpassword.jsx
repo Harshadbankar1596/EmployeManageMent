@@ -1,137 +1,3 @@
-// import React, { useState } from "react";
-// import { useResetpasswordMutation, useSendotpMutation, useVerifyotpMutation } from "../../redux/apislice";
-// import { UploadJobFail, Successmodal } from "../modals/modal"
-// const Resetpassword = () => {
-//   const [step, setStep] = useState(1); // 1: email, 2: otp, 3: reset
-//   const [email, setEmail] = useState("");
-//   const [otp, setOtp] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const [sendotp , {isLoading : loadingotp}] = useSendotpMutation();
-//   const [verifyotp , {isLoading : loadingveryfy}] = useVerifyotpMutation();
-//   const [resetpassword , {isLoading : loadingpassword}] = useResetpasswordMutation();
-
-
-//   const [modalOpen, setModalOpen] = useState(false);
-//   const [successMessage, setSuccessMessage] = useState("");
-//   const [errorMessage, setErrorMessage] = useState("");
-
-//   async function handlesendotp() {
-//     try {
-//       const res = await sendotp(email).unwrap();
-//       if (res.success) {
-//         setSuccessMessage("OTP sent to your email!");
-//         setModalOpen(true);
-//         setTimeout(() => { setModalOpen(false); }, 2000);
-//         setStep(2);
-//       } else {
-//         setErrorMessage(res.message);
-//         setModalOpen(true);
-//         setTimeout(() => { setModalOpen(false); }, 2000);
-//       }
-//     } catch (err) {
-//       setErrorMessage("Error sending OTP");
-//       setModalOpen(true);
-//       setTimeout(() => { setModalOpen(false); }, 2000);
-//     }
-//   }
-
-//   async function handleverifyotp() {
-//     try {
-//       const res = await verifyotp({ email, otp }).unwrap();
-//       if (res.success) {
-//         setSuccessMessage(res.message);
-//         setModalOpen(true);
-//         setTimeout(() => { setModalOpen(false); }, 2000);
-//         setStep(3);
-//       } else {
-//         setErrorMessage(res.message);
-//         setModalOpen(true);
-//         setTimeout(() => { setModalOpen(false); }, 2000);
-//       }
-//     } catch (err) {
-//       setErrorMessage("Error verifying OTP");
-//       setModalOpen(true);
-//       setTimeout(() => { setModalOpen(false); }, 2000);
-//     }
-//   }
-
-//   async function handleresetpassword() {
-//     try {
-//       const res = await resetpassword({ email, password }).unwrap();
-//       console.log(res);
-//       setSuccessMessage(res.message);
-//       setModalOpen(true);
-//       setTimeout(() => { setModalOpen(false); }, 2000);
-//       if (res.message === "Password Reset Done") {
-//         setStep(1);
-//         setEmail("");
-//         setOtp("");
-//         setPassword("");
-//       }
-//     } catch (err) {
-//       console.log(err);
-//       setErrorMessage(err?.data?.message ||"Error resetting password");
-//       setModalOpen(true);
-//       setTimeout(() => { setModalOpen(false); }, 2000);
-//     }
-//   }
-
-//   return (
-//     <div className="max-w-md mx-auto p-6 shadow-lg rounded-lg bg-white">
-//       {modalOpen && successMessage && <Successmodal successMessage={successMessage} onClose={() => setModalOpen(false)} />}
-//       {modalOpen && errorMessage && <UploadJobFail errorMessage={errorMessage} onClose={() => setModalOpen(false)} />}
-//       <h2 className="text-2xl font-bold mb-4 text-center">Reset Password</h2>
-
-//       {step === 1 && (
-//         <div>
-//           <input
-//             type="email"
-//             className="w-full border p-2 mb-4"
-//             placeholder="Enter Email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//           />
-//           <button onClick={handlesendotp} className={`w-full bg-blue-500 text-white py-2 rounded ${loadingotp ? "opacity-50 cursor-not-allowed" : ""}`} disabled={loadingotp}>
-//             {loadingotp ? "Sending..." : "Send OTP"}
-//           </button>
-//         </div>
-//       )}
-
-//       {step === 2 && (
-//         <div>
-//           <input
-//             type="text"
-//             className="w-full border p-2 mb-4"
-//             placeholder="Enter OTP"
-//             value={otp}
-//             onChange={(e) => setOtp(e.target.value)}
-//           />
-//           <button onClick={handleverifyotp} className={`w-full bg-green-500 text-white py-2 rounded ${loadingveryfy ? "opacity-50 cursor-not-allowed" : ""}`} disabled={loadingveryfy}>
-//             {loadingveryfy ? "Verifying..." : "Verify OTP"}
-//           </button>
-//         </div>
-//       )}
-
-//       {step === 3 && (
-//         <div>
-//           <input
-//             type="password"
-//             className="w-full border p-2 mb-4"
-//             placeholder="Enter New Password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//           />
-//           <button onClick={handleresetpassword} className={`w-full bg-purple-500 text-white py-2 rounded ${loadingpassword ? "opacity-50 cursor-not-allowed" : ""}`} disabled={loadingpassword}>
-//             {loadingpassword ? "Resetting..." : "Reset Password"}
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Resetpassword;
 
 
 
@@ -139,14 +5,14 @@ import React, { useState } from "react";
 import { Mail, Shield, Lock, Eye, EyeOff } from "lucide-react";
 import { useResetpasswordMutation, useSendotpMutation, useVerifyotpMutation } from "../../redux/apislice";
 import { UploadJobFail, Successmodal } from "../modals/modal";
-
+import { useNavigate } from "react-router-dom";
 const Resetpassword = () => {
   const [step, setStep] = useState(1); // 1: email, 2: otp, 3: reset
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const Navigate = useNavigate();
   // RTK Query
   const [sendotp, { isLoading: loadingotp }] = useSendotpMutation();
   const [verifyotp, { isLoading: loadingveryfy }] = useVerifyotpMutation();
@@ -209,6 +75,7 @@ const Resetpassword = () => {
         setEmail("");
         setOtp("");
         setPassword("");
+        Navigate("/login");
       } else {
         setErrorMessage(res.message);
         setModalOpen(true);
