@@ -108,7 +108,7 @@ const Works = () => {
         <div className="min-h-screen py-6 px-2 sm:px-4 md:px-6 flex flex-col items-center animate-fade-in">
             <div className="w-full max-w-4xl mx-auto">
                 <div className="relative text-center mb-10 sm:mb-14">
-                    <div className="absolute -top-10 -left-10 w-28 h-28 sm:w-40 sm:h-40 bg-gradient-to-br from-indigo-300 via-purple-200 to-pink-200 opacity-40 rounded-full blur-2xl z-0 animate-pulse-slow"></div>
+                    <div className="absolute -top-10 -left-10 w-28 h-28 sm:w-40 sm:h-40 bg-gradient-to-br from-indigo-300 via-purple-200 to-pink-200 opacity-40 rounded-full blur-2xl z-0 "></div>
 
                     <h1 className="relative z-10 text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 mb-3 sm:mb-4 tracking-tight drop-shadow-2xl animate-slide-down">
                         <span className="bg-black bg-clip-text text-transparent">

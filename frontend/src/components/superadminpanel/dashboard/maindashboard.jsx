@@ -99,7 +99,7 @@ const Maindashboard = () => {
                         <div className={`p-3 rounded-xl ${card.iconBg}`}>
                           <IconComponent className={`text-2xl ${card.iconColor}`} />
                         </div>
-                        <div className={`w-3 h-3 rounded-full bg-${card.color}-500 animate-pulse`}></div>
+                        <div className={`w-3 h-3 rounded-full bg-${card.color}-500`}></div>
                       </div>
                       
                       <div className="mb-2">

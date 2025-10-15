@@ -70,10 +70,10 @@ export const apiSlice = createApi({
 
 
         addpunch: builder.mutation({
-            query: (id) => ({
+            query: ({ id, lat, long }) => ({
                 url: '/users/addpunch',
                 method: 'post',
-                body: { id }
+                body: { id, lat, long }
             }),
             invalidatesTags: ['User'],
         }),
@@ -105,14 +105,25 @@ export const apiSlice = createApi({
             invalidatesTags: ['User'],
         }),
 
+        // getlogs: builder.mutation({
+        //     query: (id) => ({
+        //         url: '/users/getlogs',
+        //         method: 'post',
+        //         body: { id }
+        //     }),
+        //     invalidatesTags: ['User'],
+        // }),
+
+        // redux/apislice.js
         getlogs: builder.mutation({
-            query: (id) => ({
+            query: ({ id, month, year }) => ({
                 url: '/users/getlogs',
                 method: 'post',
-                body: { id }
+                body: { id, month, year }
             }),
             invalidatesTags: ['User'],
         }),
+
 
         summary: builder.mutation({
             query: (id) => ({
@@ -151,23 +162,42 @@ export const apiSlice = createApi({
         }),
 
 
+        // getMessages: builder.query({
+        //     query: (groupname) => ({
+        //         url: '/chat/getmessages',
+        //         method: 'POST',
+        //         body: { groupname }
+        //     }),
+        //     providesTags: ['Chat'],
+        // }),
+
+        // createGroup: builder.mutation({
+        //     query: (groupname) => ({
+        //         url: '/chat/creategroup',
+        //         method: 'POST',
+        //         body: { groupname }
+        //     }),
+        //     invalidatesTags: ['Chat'],
+        // }),
+
+        createGroup: builder.mutation({
+            query: ({ groupname, members }) => ({
+                url: '/chat/creategroup',
+                method: 'POST',
+                body: { groupname, members }
+            }),
+            invalidatesTags: ['Chat'],
+        }),
+
         getMessages: builder.query({
-            query: (groupname) => ({
+            query: ({ groupname, userId }) => ({
                 url: '/chat/getmessages',
                 method: 'POST',
-                body: { groupname }
+                body: { groupname, userId }
             }),
             providesTags: ['Chat'],
         }),
 
-        createGroup: builder.mutation({
-            query: (groupname) => ({
-                url: '/chat/creategroup',
-                method: 'POST',
-                body: { groupname }
-            }),
-            invalidatesTags: ['Chat'],
-        }),
 
         matchFace: builder.mutation({
             query: (image) => ({

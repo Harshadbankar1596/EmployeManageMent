@@ -38,7 +38,7 @@ const NetworkError = ({ children }) => {
                         transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
                         className="flex justify-center mb-6"
                     >
-                        <WifiOff className="w-16 h-16 text-red-500 animate-pulse" />
+                        <WifiOff className="w-16 h-16 text-red-500" />
                     </motion.div>
 
                     <h1 className="text-3xl font-bold text-gray-800 mb-2">

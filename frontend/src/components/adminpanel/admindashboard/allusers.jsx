@@ -19,7 +19,7 @@ const AllUsers = () => {
         return (
             <div className="py-6 px-2 md:px-8 min-h-screen bg-gray-50">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 animate-pulse">Loading Users</h2>
+                    <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Loading Users</h2>
                     <div className="bg-white rounded-2xl border border-gray-100 shadow-lg overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-200">
@@ -34,7 +34,7 @@ const AllUsers = () => {
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {[...Array(6)].map((_, idx) => (
-                                        <tr key={idx} className="animate-pulse">
+                                        <tr key={idx} className="">
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{idx + 1}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gray-200 to-gray-300"></div>

@@ -1,255 +1,3 @@
-// import { useEffect, useState } from 'react';
-// import { useGetlogsMutation } from '../../redux/apislice';
-// import { useSelector } from 'react-redux';
-// import { motion, AnimatePresence } from 'framer-motion';
-
-// function CalendarComponent() {
-//   const [getlogs] = useGetlogsMutation();
-//   const id = useSelector((state) => state.user.id);
-//   const [logs, setLogs] = useState([]);
-//   const [currentDate, setCurrentDate] = useState(new Date());
-//   const [selectedDate, setSelectedDate] = useState(null);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [view, setView] = useState('month');
-
-//   useEffect(() => {
-//     const fetchlogs = async () => {
-//       try {
-//         setIsLoading(true);
-//         const response = await getlogs(id);
-//         setLogs(response.data.logs || []);
-//       } catch (error) {
-//         console.error("Error fetching logs:", error);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-//     fetchlogs();
-//   }, [getlogs, id]);
-
-//   const getStatusForDate = (date) => {
-//     const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-//     const log = logs.find(log => log.date === dateStr);
-//     if (date.getDay() === 0) return 'sunday';
-//     return log ? log.status : 'absent';
-//   };
-
-//   const getPunchesForDate = (date) => {
-//     const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-//     const log = logs.find(log => log.date === dateStr);
-//     return log ? log.punchs : [];
-//   };
-
-//   const goToPreviousMonth = () => {
-//     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-//   };
-
-//   const goToNextMonth = () => {
-//     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-//   };
-
-//   const goToToday = () => {
-//     setCurrentDate(new Date());
-//     setSelectedDate(new Date());
-//   };
-
-//   const getDaysInMonth = () => {
-//     const year = currentDate.getFullYear();
-//     const month = currentDate.getMonth();
-//     const firstDay = new Date(year, month, 1);
-//     const lastDay = new Date(year, month + 1, 0);
-//     const days = [];
-
-//     const prevMonthLastDay = new Date(year, month, 0).getDate();
-//     const firstDayIndex = firstDay.getDay();
-
-//     for (let i = firstDayIndex - 1; i >= 0; i--) {
-//       const date = new Date(year, month - 1, prevMonthLastDay - i);
-//       days.push({ date, isCurrentMonth: false, status: getStatusForDate(date) });
-//     }
-
-//     for (let i = 1; i <= lastDay.getDate(); i++) {
-//       const date = new Date(year, month, i);
-//       days.push({ date, isCurrentMonth: true, status: getStatusForDate(date) });
-//     }
-
-//     const daysNeeded = 42 - days.length;
-//     for (let i = 1; i <= daysNeeded; i++) {
-//       const date = new Date(year, month + 1, i);
-//       days.push({ date, isCurrentMonth: false, status: getStatusForDate(date) });
-//     }
-
-//     return days;
-//   };
-
-//   const getStatusColor = (status) => {
-//     switch(status) {
-//       case 'present': return 'bg-green-500';
-//       case 'halfday': return 'bg-yellow-400';
-//       case 'pending': return 'bg-orange-500';
-//       case 'sunday': return 'bg-blue-300';
-//       case 'absent': return 'bg-red-500';
-//       default: return 'bg-gray-300';
-//     }
-//   };
-
-//   const getStatusText = (status) => {
-//     switch(status) {
-//       case 'present': return 'Present';
-//       case 'halfday': return 'Half Day';
-//       case 'pending': return 'Pending';
-//       case 'sunday': return 'Holiday';
-//       case 'absent': return 'Absent';
-//       default: return 'No Data';
-//     }
-//   };
-
-//   if (isLoading) {
-//     return (
-//       <div className="bg-white rounded-2xl shadow-xl p-6 my-5 animate-pulse">
-//         <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
-//         <div className="h-96 bg-gray-100 rounded-xl"></div>
-//       </div>
-//     );
-//   }
-
-//   const days = getDaysInMonth();
-//   const monthName = currentDate.toLocaleString('default', { month: 'long' });
-//   const year = currentDate.getFullYear();
-
-//   return (
-//     <motion.div 
-//       className="bg-white rounded-2xl shadow-xl p-6 my-5"
-//       initial={{ opacity: 0, scale: 0.95 }}
-//       animate={{ opacity: 1, scale: 1 }}
-//       transition={{ duration: 0.4 }}
-//     >
-//       <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-3 flex items-center">
-//         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-//         </svg>
-//         Attendance Calendar
-//       </h2>
-
-//       {/* Header */}
-//       <div className="flex justify-between items-center mb-6">
-//         <button onClick={goToToday} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow hover:scale-105 transition-transform">
-//           Today
-//         </button>
-
-//         <div className="flex items-center space-x-4">
-//           <button onClick={goToPreviousMonth} className="p-2 rounded-full hover:bg-gray-100 transition">
-//             ◀
-//           </button>
-//           <h3 className="text-xl font-bold text-gray-800">{monthName} {year}</h3>
-//           <button onClick={goToNextMonth} className="p-2 rounded-full hover:bg-gray-100 transition">
-//             ▶
-//           </button>
-//         </div>
-
-//         <div className="flex space-x-2">
-//           <button onClick={() => setView('month')} className={`px-4 py-2 rounded-lg ${view === 'month' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'}`}>Month</button>
-//           <button onClick={() => setView('week')} className={`px-4 py-2 rounded-lg ${view === 'week' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'}`}>Week</button>
-//         </div>
-//       </div>
-
-//       {/* Week Days */}
-//       <div className="grid grid-cols-7 gap-2 mb-4 text-center font-medium text-gray-500">
-//         {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(day => <div key={day}>{day}</div>)}
-//       </div>
-
-//       {/* Calendar Grid */}
-//       <div className="grid grid-cols-7 gap-2">
-//         {days.map((day, index) => {
-//           const isToday = day.date.toDateString() === new Date().toDateString();
-//           const isSelected = selectedDate && day.date.toDateString() === selectedDate.toDateString();
-//           const punches = getPunchesForDate(day.date);
-
-//           return (
-//             <motion.div
-//               key={index}
-//               whileHover={{ scale: 1.05 }}
-//               whileTap={{ scale: 0.95 }}
-//               className={`relative p-2 h-24 border rounded-xl cursor-pointer transition-all 
-//                 ${isSelected ? 'ring-2 ring-blue-500' : ''}
-//                 ${isToday ? 'bg-blue-50' : 'bg-white'}
-//                 ${day.isCurrentMonth ? '' : 'opacity-40'}`}
-//               onClick={() => setSelectedDate(day.date)}
-//             >
-//               <div className="flex justify-between items-start">
-//                 <span className={`text-sm font-medium ${isToday ? 'text-blue-600' : 'text-gray-700'}`}>
-//                   {day.date.getDate()}
-//                 </span>
-//                 {punches.length > 0 && (
-//                   <span className="text-xs bg-purple-200 text-purple-700 px-2 py-0.5 rounded-full shadow-sm">
-//                     {punches.length/2}
-//                   </span>
-//                 )}
-//               </div>
-
-//               <div className="mt-2">
-//                 <div className={`px-2 py-1 text-xs rounded-full text-white w-fit ${getStatusColor(day.status)}`}>
-//                   {getStatusText(day.status)}
-//                 </div>
-//               </div>
-//             </motion.div>
-//           );
-//         })}
-//       </div>
-
-//       {/* Selected Date Details */}
-//       <AnimatePresence>
-//         {selectedDate && (
-//           <motion.div
-//             key="details"
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             exit={{ opacity: 0, y: 20 }}
-//             transition={{ duration: 0.4 }}
-//             className="mt-6 p-4 bg-gray-50 rounded-xl shadow-inner"
-//           >
-//             <h3 className="text-lg font-semibold mb-2">
-//               {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-//             </h3>
-
-//             <div className="flex items-center mb-4">
-//               <div className={`w-4 h-4 rounded-full mr-2 ${getStatusColor(getStatusForDate(selectedDate))}`}></div>
-//               <span className="font-medium">{getStatusText(getStatusForDate(selectedDate))}</span>
-//             </div>
-
-//             {getPunchesForDate(selectedDate).length > 0 ? (
-//               <div>
-//                 <h4 className="font-medium mb-2">Punch Records:</h4>
-//                 <div className="grid grid-cols-2 gap-2">
-//                   {getPunchesForDate(selectedDate).map((punch, index) => (
-//                     <div key={index} className={`p-2 rounded ${index % 2 === 0 ? 'bg-blue-100' : 'bg-green-100'}`}>
-//                       {index % 2 === 0 ? 'In' : 'Out'}: {punch}
-//                     </div>
-//                   ))}
-//                 </div>
-//               </div>
-//             ) : (
-//               <p className="text-gray-500">No punch records for this day.</p>
-//             )}
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-
-//       {/* Legend */}
-//       <div className="flex flex-wrap gap-4 mt-8 justify-center p-4 bg-slate-50 rounded-xl shadow-inner">
-//         {[['bg-green-500','Present'],['bg-yellow-400','Half Day'],['bg-orange-500','Pending'],['bg-red-500','Absent'],['bg-blue-300','Sunday/Holiday']]
-//           .map(([color,label]) => (
-//             <div key={label} className="flex items-center">
-//               <div className={`w-4 h-4 ${color} rounded mr-2`}></div>
-//               <span className="text-sm font-medium">{label}</span>
-//             </div>
-//         ))}
-//       </div>
-//     </motion.div>
-//   );
-// }
-
-// export default CalendarComponent;
 
 
 import { useEffect, useState } from 'react';
@@ -268,11 +16,34 @@ function CalendarComponent() {
   const [calendarAnimation, setCalendarAnimation] = useState(false);
   const [statsAnimation, setStatsAnimation] = useState(false);
 
+  // useEffect(() => {
+  //   const fetchlogs = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const response = await getlogs(id);
+  //       setLogs(response.data?.logs || []);
+  //       setTimeout(() => setStatsAnimation(true), 500);
+  //     } catch (error) {
+  //       console.error("Error fetching logs:", error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   if (id) {
+  //     fetchlogs();
+  //   }
+  // }, [getlogs, id]);
+
   useEffect(() => {
     const fetchlogs = async () => {
+      if (!id) return;
+
       try {
         setIsLoading(true);
-        const response = await getlogs(id);
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
+        const response = await getlogs({ id, month, year });
         setLogs(response.data?.logs || []);
         setTimeout(() => setStatsAnimation(true), 500);
       } catch (error) {
@@ -282,10 +53,11 @@ function CalendarComponent() {
       }
     };
 
-    if (id) {
-      fetchlogs();
-    }
-  }, [getlogs, id]);
+    fetchlogs();
+  }, [getlogs, id, currentDate]);
+
+
+
 
   const getStatusForDate = (date) => {
     const dateStr = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
@@ -335,6 +107,22 @@ function CalendarComponent() {
     return `${hours}h ${minutes}m`;
   };
 
+  // const goToPreviousMonth = () => {
+  //   setCalendarAnimation(true);
+  //   setTimeout(() => {
+  //     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  //     setCalendarAnimation(false);
+  //   }, 150);
+  // };
+
+  // const goToNextMonth = () => {
+  //   setCalendarAnimation(true);
+  //   setTimeout(() => {
+  //     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  //     setCalendarAnimation(false);
+  //   }, 150);
+  // };
+
   const goToPreviousMonth = () => {
     setCalendarAnimation(true);
     setTimeout(() => {
@@ -350,6 +138,7 @@ function CalendarComponent() {
       setCalendarAnimation(false);
     }, 150);
   };
+
 
   const goToToday = () => {
     const today = new Date();
@@ -527,7 +316,7 @@ function CalendarComponent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-400 rounded-full border-2 border-white "></div>
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">

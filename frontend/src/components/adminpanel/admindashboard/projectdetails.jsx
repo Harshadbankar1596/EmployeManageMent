@@ -12,7 +12,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import Loader from '../../loader';
 
 const ShimmerProjectHeader = () => (
-  <div className="bg-white/80 rounded-2xl p-8 shadow-xl border border-white/50 mb-8 animate-pulse">
+  <div className="bg-white/80 rounded-2xl p-8 shadow-xl border border-white/50 mb-8 ">
     <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
       <div className="flex-1 space-y-4">
         <div className="h-10 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-3/4"></div>
@@ -31,7 +31,7 @@ const ShimmerProjectHeader = () => (
 );
 
 const ShimmerEmployeeCard = () => (
-  <div className="bg-white/80    rounded-2xl p-6 shadow-lg border border-white/50 mb-6 animate-pulse">
+  <div className="bg-white/80    rounded-2xl p-6 shadow-lg border border-white/50 mb-6 ">
     <div className="flex flex-col md:flex-row gap-6">
       <div className="w-24 h-24 rounded-full bg-gradient-to-r from-gray-200 to-gray-300"></div>
       <div className="flex-1 space-y-4">
@@ -390,7 +390,7 @@ const Projectdetails = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50   animate-fade-in">
           <div className="relative bg-white w-full max-w-md mx-auto rounded-3xl shadow-2xl p-6 border border-white/70 animate-scale-in transform transition-all duration-300">
             <button
-              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600 transform hover:rotate-90 transition-transform"
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100  text-gray-400 hover:text-gray-600 transform hover:rotate-90 transition-transform"
               onClick={() => {
                 setTaskModalFor(null);
                 setTasktext("");

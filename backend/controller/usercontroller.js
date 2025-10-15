@@ -132,7 +132,7 @@ export const sendotp = async (req, res) => {
         const { email } = req.body;
         const otp = generateOTP();
         const expires = Date.now() + 5 * 60 * 1000;
-        if(!email) return res.status(400).json({ success: false, message: "Email is required" });
+        if (!email) return res.status(400).json({ success: false, message: "Email is required" });
 
         const user = await User.findOne({ email });
 
@@ -186,9 +186,9 @@ export const resetpassword = async (req, res) => {
         if (!validator.isStrongPassword(password)) {
             return res.status(400).json({ message: "Weak Password" });
         }
-        const hash = await bcrypt.hash(password , 10)
+        const hash = await bcrypt.hash(password, 10)
 
-        const user = await User.findOneAndUpdate({ email } , { password : hash })
+        const user = await User.findOneAndUpdate({ email }, { password: hash })
 
         if (!user) res.status(422).json({ message: "User Not Found" });
 
@@ -351,68 +351,238 @@ export const verifyToken = async (req, res) => {
 //     }
 // };
 
+// export const addpunch = async (req, res) => {
+//     try {
+
+//         console.log(req.body)
+//         const { id } = req.body;
+
+      
+//         const now = new Date();
+//         const today = now.toLocaleDateString();
+//         const currentTime = now.toLocaleTimeString();
+
+
+//         const user = await User.findById(id, { logs: 1 });
+//         if (!user) return res.status(404).json({ message: "User not found" });
+
+
+//         const logIndex = user.logs.findIndex(log => log.date === today);
+//         let todaypunches = logIndex !== -1 ? [...user.logs[logIndex].punchs] : [];
+//         todaypunches.push(currentTime);
+
+
+//         let totalMs = 0;
+//         for (let i = 0; i < todaypunches.length - 1; i += 2) {
+//             const start = new Date(`${today} ${todaypunches[i]}`);
+//             const end = new Date(`${today} ${todaypunches[i + 1]}`);
+//             if (end > start) totalMs += end - start;
+//         }
+//         const totalHours = totalMs / 36e5; // 1000*60*60
+
+
+//         let newStatus = "pending";
+//         if (totalHours >= 8) newStatus = "present";
+//         else if (totalHours >= 4) newStatus = "halfday";
+
+//         if (logIndex !== -1) {
+//             await User.updateOne(
+//                 { _id: id },
+//                 {
+//                     $set: {
+//                         [`logs.${logIndex}.punchs`]: todaypunches,
+//                         [`logs.${logIndex}.status`]: newStatus,
+//                     },
+//                 }
+//             );
+//         } else {
+//             await User.updateOne(
+//                 { _id: id },
+//                 {
+//                     $push: {
+//                         logs: {
+//                             $each: [{ date: today, punchs: [currentTime], status: "pending" }],
+//                             $position: 0,
+//                         },
+//                     },
+//                 }
+//             );
+//         }
+
+//         res.status(200).json({ message: "Punch added successfully" });
+//     } catch (error) {
+//         console.error("Error in addpunch:", error);
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// };
+
+// export const addpunch = async (req, res) => {
+//     try {
+//         console.log(req.body);
+//         const { id, lat, long } = req.body;
+
+//         if (!id || !lat || !long) {
+//             return res.status(400).json({ message: "id, lat and long are required" });
+//         }
+
+//         // Function to calculate distance using Haversine Formula
+//         function getDistanceInMeters(lat1, lon1, lat2, lon2) {
+//             const R = 6371000; // Radius of Earth in meters
+//             const toRad = (deg) => (deg * Math.PI) / 180;
+
+//             const dLat = toRad(lat2 - lat1);
+//             const dLon = toRad(lon2 - lon1);
+
+//             const a =
+//                 Math.sin(dLat / 2) ** 2 +
+//                 Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+//                 Math.sin(dLon / 2) ** 2;
+
+//             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//             return R * c; // meters
+//         }
+
+//         // Static Lat-Long (fixed office location)
+//         const staticLat = 19.87562;
+//         const staticLon = 75.372421;
+
+//         // check distance
+//         const distance = getDistanceInMeters(staticLat, staticLon, lat, long);
+//         console.log(`Distance from static point: ${distance.toFixed(2)} meters`);
+
+//         if (distance > 500) {
+//             return res.status(403).json({ 
+//                 message: "You are not within 200 meters of office location" 
+//             });
+//         }
+
+//         const now = new Date();
+//         const today = now.toLocaleDateString();
+//         const currentTime = now.toLocaleTimeString();
+
+//         const user = await User.findById(id, { logs: 1 });
+//         if (!user) return res.status(404).json({ message: "User not found" });
+
+//         const logIndex = user.logs.findIndex(log => log.date === today);
+//         let todaypunches = logIndex !== -1 ? [...user.logs[logIndex].punchs] : [];
+//         todaypunches.push(currentTime);
+
+//         let totalMs = 0;
+//         for (let i = 0; i < todaypunches.length - 1; i += 2) {
+//             const start = new Date(`${today} ${todaypunches[i]}`);
+//             const end = new Date(`${today} ${todaypunches[i + 1]}`);
+//             if (end > start) totalMs += end - start;
+//         }
+//         const totalHours = totalMs / 36e5; // convert ms → hours
+
+//         let newStatus = "pending";
+//         if (totalHours >= 8) newStatus = "present";
+//         else if (totalHours >= 4) newStatus = "halfday";
+
+//         if (logIndex !== -1) {
+//             await User.updateOne(
+//                 { _id: id },
+//                 {
+//                     $set: {
+//                         [`logs.${logIndex}.punchs`]: todaypunches,
+//                         [`logs.${logIndex}.status`]: newStatus,
+//                     },
+//                 }
+//             );
+//         } else {
+//             await User.updateOne(
+//                 { _id: id },
+//                 {
+//                     $push: {
+//                         logs: {
+//                             $each: [{ date: today, punchs: [currentTime], status: "pending" }],
+//                             $position: 0,
+//                         },
+//                     },
+//                 }
+//             );
+//         }
+
+//         res.status(200).json({ message: "✅ Punch added successfully" });
+//     } catch (error) {
+//         console.error("Error in addpunch:", error);
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// };
+
+// Haversine function outside handler for reuse
+
+
+const R = 6371000; // meters
+const staticLat = 19.87562;
+const staticLon = 75.372421;
+
+function getDistanceInMeters(lat1, lon1, lat2, lon2) {
+    const toRad = (deg) => (deg * Math.PI) / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 export const addpunch = async (req, res) => {
     try {
         console.log(req.body)
-        const { id } = req.body;
+        const { id, lat, long } = req.body;
+        if (!id || lat == null || long == null) 
+            return res.status(400).json({ message: "id, lat, and long are required" });
+
+        const distance = getDistanceInMeters(staticLat, staticLon, lat, long);
+        if (distance > 500)
+            return res.status(403).json({ message: "You are not within 200 meters of office location" });
 
         const now = new Date();
         const today = now.toLocaleDateString();
         const currentTime = now.toLocaleTimeString();
 
-
         const user = await User.findById(id, { logs: 1 });
         if (!user) return res.status(404).json({ message: "User not found" });
 
-
         const logIndex = user.logs.findIndex(log => log.date === today);
-        let todaypunches = logIndex !== -1 ? [...user.logs[logIndex].punchs] : [];
-        todaypunches.push(currentTime);
 
-
-        let totalMs = 0;
-        for (let i = 0; i < todaypunches.length - 1; i += 2) {
-            const start = new Date(`${today} ${todaypunches[i]}`);
-            const end = new Date(`${today} ${todaypunches[i + 1]}`);
-            if (end > start) totalMs += end - start;
-        }
-        const totalHours = totalMs / 36e5; // 1000*60*60
-
-
-        let newStatus = "pending";
-        if (totalHours >= 8) newStatus = "present";
-        else if (totalHours >= 4) newStatus = "halfday";
-
+        let updatedLogs;
         if (logIndex !== -1) {
+            const punches = [...user.logs[logIndex].punchs, currentTime];
+            const totalMs = punches.reduce((acc, punch, i) => {
+                if (i % 2 === 1) {
+                    const start = new Date(`${today} ${punches[i - 1]}`);
+                    const end = new Date(`${today} ${punch}`);
+                    if (end > start) acc += end - start;
+                }
+                return acc;
+            }, 0);
+            const totalHours = totalMs / 36e5;
+
+            const status = totalHours >= 8 ? "present" : totalHours >= 4 ? "halfday" : "pending";
+
             await User.updateOne(
                 { _id: id },
-                {
-                    $set: {
-                        [`logs.${logIndex}.punchs`]: todaypunches,
-                        [`logs.${logIndex}.status`]: newStatus,
-                    },
-                }
+                { $set: { [`logs.${logIndex}.punchs`]: punches, [`logs.${logIndex}.status`]: status } }
             );
+
+            updatedLogs = punches;
         } else {
             await User.updateOne(
                 { _id: id },
-                {
-                    $push: {
-                        logs: {
-                            $each: [{ date: today, punchs: [currentTime], status: "pending" }],
-                            $position: 0,
-                        },
-                    },
-                }
+                { $push: { logs: { $each: [{ date: today, punchs: [currentTime], status: "pending" }], $position: 0 } } }
             );
+            updatedLogs = [currentTime];
         }
 
-        res.status(200).json({ message: "Punch added successfully" });
+        res.status(200).json({ message: "✅ Punch added successfully", log: { date: today, punchs: updatedLogs } });
     } catch (error) {
         console.error("Error in addpunch:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 
 export const works = async (req, res) => {
     try {
@@ -524,24 +694,53 @@ export const taskstatus = async (req, res) => {
     }
 };
 
+// export const getlogs = async (req, res) => {
+//     try {
+
+//         const { id } = req.body
+
+//         const user = await User.findById(id)
+
+//         if (!user) res.status(404).json({ message: "user not found" })
+
+//         const logs = user.logs
+
+//         res.status(200).json({ message: "logs fetched", logs: logs })
+
+//     } catch (error) {
+//         console.log("errror ni getlogs")
+//         res.status(500).json({ message: "server error" })
+//     }
+// };
+
+// controllers/userController.js
+
+
 export const getlogs = async (req, res) => {
     try {
+        const { id, month, year } = req.body; // get month & year from frontend
 
-        const { id } = req.body
+        if (!id || month === undefined || year === undefined) {
+            return res.status(400).json({ message: "id, month and year are required" });
+        }
 
-        const user = await User.findById(id)
+        const user = await User.findById(id);
 
-        if (!user) res.status(404).json({ message: "user not found" })
+        if (!user) return res.status(404).json({ message: "User not found" });
 
-        const logs = user.logs
+        // Filter logs for the requested month & year
+        const logs = user.logs.filter(log => {
+            const logDate = new Date(log.date);
+            return logDate.getMonth() === month && logDate.getFullYear() === year;
+        });
 
-        res.status(200).json({ message: "logs fetched", logs: logs })
-
+        res.status(200).json({ message: "logs fetched", logs });
     } catch (error) {
-        console.log("errror ni getlogs")
-        res.status(500).json({ message: "server error" })
+        console.error("Error in getlogs:", error);
+        res.status(500).json({ message: "server error" });
     }
 };
+
 
 export const summary = async (req, res) => {
     try {
