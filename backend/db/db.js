@@ -30,7 +30,7 @@ const connectDB = async () => {
         await mongoose.connect(process.env.MONGO_URL);
         console.log("Employee DB connected successfully to", process.env.MONGO_URL);
     } catch (error) {
-        console.error("Employee DB connection error:", error);
+        console.error("Employee DB connection error");
         process.exit(1);
     }
 }; 
