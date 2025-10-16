@@ -189,15 +189,31 @@ export const apiSlice = createApi({
             invalidatesTags: ['Chat'],
         }),
 
+        // getMessages: builder.query({
+        //     query: ({ groupname, userId }) => ({
+        //         url: '/chat/getmessages',
+        //         method: 'POST',
+        //         body: { groupname, userId }
+        //     }),
+        //     providesTags: ['Chat'],
+        // }),
+
         getMessages: builder.query({
-            query: ({ groupname, userId }) => ({
+            query: ({ groupname, userId, page = 1, limit = 20 }) => ({
                 url: '/chat/getmessages',
                 method: 'POST',
-                body: { groupname, userId }
+                body: { groupname, userId, page, limit }
             }),
             providesTags: ['Chat'],
         }),
 
+
+        getAllGroupsName: builder.query({
+            query: () => ({
+                url: '/chat/allgroups',
+                method: 'GET'
+            })
+        }),
 
         matchFace: builder.mutation({
             query: (image) => ({
@@ -278,5 +294,6 @@ export const {
     useDeleteworkMutation,
     useSendotpMutation,
     useVerifyotpMutation,
-    useResetpasswordMutation
+    useResetpasswordMutation,
+    useGetAllGroupsNameQuery
 } = apiSlice;

@@ -12,7 +12,6 @@ function parseTime(timeStr) {
   let isPM = time.includes('PM');
   let isAM = time.includes('AM');
 
-  // Remove AM/PM indicator
   time = time.replace(/(AM|PM)/gi, '').trim();
 
   const parts = time.split(':').map(part => parseInt(part) || 0);
