@@ -14,10 +14,12 @@
   .lenis-ignore::-webkit-scrollbar {
       width: 8px;
     }
+    
     .lenis-ignore::-webkit-scrollbar-thumb {
       background-color: #888;
       border-radius: 10px;
     }
+    
     .lenis-ignore::-webkit-scrollbar-track {
       background-color: #f1f1f1;
     }

@@ -77,20 +77,41 @@ const EmployeProfile = () => {
     }
   };
 
-  const handleUpload = async (e) => {
-    e.preventDefault();
-    if (!selectedFile) return setMessage("Please select an image file.");
-    if (!user?.id) return setMessage("User not found.");
+  // const handleUpload = async (e) => {
+  //   e.preventDefault();
+  //   if (!selectedFile) return setMessage("Please select an image file.");
+  //   if (!user?.id) return setMessage("User not found.");
 
-    try {
-      await uploadProfileImg({ id: user.id, img: preview }).unwrap();
-      setMessage("Profile image uploaded successfully!");
-      setSelectedFile(null);
-      setPreview(null);
-    } catch {
-      setMessage("Failed to upload image.");
-    }
-  };
+  //   try {
+  //     await uploadProfileImg({ id: user.id, img: preview }).unwrap();
+  //     setMessage("Profile image uploaded successfully!");
+  //     setSelectedFile(null);
+  //     setPreview(null);
+  //   } catch {
+  //     setMessage("Failed to upload image.");
+  //   }
+  // };
+
+  const handleUpload = async (e) => {
+  e.preventDefault();
+  if (!selectedFile) return setMessage("Please select an image file.");
+  if (!user?.id) return setMessage("User not found.");
+
+  try {
+    const formData = new FormData();
+    formData.append("profileimage", selectedFile); // multer ke field name se match hona chahiye
+    formData.append("id", user.id);
+
+    await uploadProfileImg(formData).unwrap();
+    setMessage("Profile image uploaded successfully!");
+    setSelectedFile(null);
+    setPreview(null);
+  } catch (err) {
+    console.error(err);
+    setMessage("Failed to upload image.");
+  }
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

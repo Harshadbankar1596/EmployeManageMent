@@ -7,6 +7,8 @@ import validator from 'validator';
 import Screenshot from "../model/screenshot.js";
 import nodemailer from "nodemailer";
 dotenv.config();
+import fs from "fs"
+import uploadTheImage from "../utils/cloudinary.js"
 
 
 export const createUser = async (req, res) => {
@@ -770,15 +772,15 @@ export const summary = async (req, res) => {
 
 export const uploadprofileimg = async (req, res) => {
     try {
-        const { id, img } = req.body;
-        // console.log("img ============================================== ", img)
+        // const { id, img } = req.body;
+        const { id } = req.body;
 
         if (!id) {
             return res.status(400).json({ message: "User id is required" });
         }
-        if (!img) {
-            return res.status(400).json({ message: "Image is required" });
-        }
+        // if (!img) {
+        //     return res.status(400).json({ message: "Image is required" });
+        // }
 
         // Find user
         const user = await User.findById(id);
@@ -787,21 +789,32 @@ export const uploadprofileimg = async (req, res) => {
         }
 
 
-        let matches = img.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-        if (!matches || matches.length !== 3) {
-            return res.status(400).json({ message: "Invalid image format" });
+        // let matches = img.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+        // if (!matches || matches.length !== 3) {
+        //     return res.status(400).json({ message: "Invalid image format" });
+        // }
+
+        let contentType =req.file.mimetype;
+        // let imageBuffer = Buffer.from(matches[2], 'base64');
+
+        let imageUrl = null
+        console.log("file => " , req.file)
+
+        if (req.file) {
+            const uploadResult = await uploadTheImage(req.file.path);
+            imageUrl = uploadResult?.secure_url;
+            fs.unlinkSync(req.file.path);
         }
-        let contentType = matches[1];
-        let imageBuffer = Buffer.from(matches[2], 'base64');
 
         user.profileimg = {
-            data: imageBuffer,
+            data: imageUrl,
             contentType: contentType
         };
+        console.log("image => " , imageUrl)
 
         await user.save();
 
-        res.status(200).json({ message: "Profile image uploaded successfully" });
+        res.status(200).json({ message: "Profile image uploaded successfully" , image : imageUrl});
     } catch (error) {
         console.error("Error uploading profile image:", error);
         res.status(500).json({ message: "Server error", error: error.message });
@@ -809,24 +822,26 @@ export const uploadprofileimg = async (req, res) => {
 };
 
 export const getimage = async (req, res) => {
-    try {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
 
-        const { id } = req.body
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user.profileimg || !user.profileimg.data)
+      return res.status(404).json({ message: "No image found" });
 
-        const user = await User.findById(id)
+    // Cloudinary URL return
+    res.status(200).json({
+      message: "Image fetched",
+      imageUrl: user.profileimg.data,
+    });
+    
+  } catch (error) {
+    console.error("Error in getimage", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-        if (!user) res.status(404).json({ message: "user not found" })
-
-        if (!user.profileimg) res.status(404).json({ message: "no image found" })
-
-        res.status(200).json({ message: "image fetched", image: user.profileimg.data })
-
-
-    } catch (error) {
-        console.log("error in getimage")
-        res.status(500).json({ message: "server error" })
-    }
-}
 
 export const updateprofile = async (req, res) => {
     try {

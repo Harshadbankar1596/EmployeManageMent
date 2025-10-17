@@ -97,7 +97,7 @@ export const getallprojects = async (req, res) => {
 
         if (!allproject) return (json({ message: "404" }));
 
-        res.status(200).json({ message: "all projext", allprojects: allproject })
+        res.status(200).json({ message: "all projext", allprojects: allproject.reverse() })
 
     } catch (error) {
         res.status(500).json({ message: "server error" })

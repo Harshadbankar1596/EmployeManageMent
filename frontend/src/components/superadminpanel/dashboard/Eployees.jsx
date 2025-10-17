@@ -216,7 +216,7 @@ const Employees = () => {
             </span>
             <div className="relative mr-3">
               <img
-                src={getImageSrc(emp.image) || "/dp.svg"}
+                src={emp?.image?.data || "/dp.svg"}  
                 alt={emp.name}
                 className="w-12 h-12 rounded-full border-2 border-gray-200 object-cover shadow-md"
               />
@@ -342,7 +342,7 @@ const Employees = () => {
                   <Link to={emp.userid} className="block group-hover:scale-110 transition-transform duration-300">
                     <div className="relative w-12 h-12">
                       <img
-                        src={getImageSrc(emp.image) || "/dp.svg"}
+                        src={emp?.image?.data || "/dp.svg"}
                         alt={emp.name}
                         className="w-12 h-12 rounded-full border-2 border-gray-200 object-cover shadow-md transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg"
                       />

@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const adminapi = createApi({
     reducerPath: "adminapi",
     baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_BACKEND_URL}/admin`, credentials: "include" }),
-    tagTypes: ["projects", "users" , "job" , "leave"],
+    tagTypes: ["projects", "users", "job", "leave"],
 
     endpoints: (builder) => ({
 
@@ -14,7 +14,7 @@ export const adminapi = createApi({
                 method: "post",
                 body: { id }
             }),
-            invalidatesTags : ["leave"]
+            invalidatesTags: ["leave"]
         }),
 
         getAllProjects: builder.query({
@@ -101,32 +101,33 @@ export const adminapi = createApi({
         }),
 
         uploadjob: builder.mutation({
-            query: (data) => ({
+            query: (formData) => ({
                 url: `${import.meta.env.VITE_BACKEND_URL}/jobs/uploadjob`,
                 method: "POST",
-                body: { data }
-            }),
-            invalidatesTags : ["job"]
+                body: formData, 
+                
+            })
         }),
+
 
         getjobs: builder.query({
             query: () => ({
                 url: `${import.meta.env.VITE_BACKEND_URL}/jobs/getjobs`,
                 method: "GET",
             }),
-            invalidatesTags : ["job"]
+            invalidatesTags: ["job"]
         }),
 
-        deletejobs : builder.mutation({
-            query : (jobid)=>({
-                url :  `${import.meta.env.VITE_BACKEND_URL}/jobs/deletejobs`,
-                method : "POST",
-                body : {jobid}
+        deletejobs: builder.mutation({
+            query: (jobid) => ({
+                url: `${import.meta.env.VITE_BACKEND_URL}/jobs/deletejobs`,
+                method: "POST",
+                body: { jobid }
             }),
-            invalidatesTags : ["job"]
+            invalidatesTags: ["job"]
         })
     }),
 });
 
 
-export const { useGetallmemebersadminMutation, useGetAllProjectsQuery, useAddmemberinprojectMutation, useGetallmembersnameQuery, useGetAllUsersQuery, useVerifyisadminMutation, useAddprojectMutation, useGetprojectMutation, useAddtaskMutation, useEmployeeMutation, useGetemployeedailyreportMutation, useUploadjobMutation, useGetjobsQuery , useDeletejobsMutation} = adminapi;
+export const { useGetallmemebersadminMutation, useGetAllProjectsQuery, useAddmemberinprojectMutation, useGetallmembersnameQuery, useGetAllUsersQuery, useVerifyisadminMutation, useAddprojectMutation, useGetprojectMutation, useAddtaskMutation, useEmployeeMutation, useGetemployeedailyreportMutation, useUploadjobMutation, useGetjobsQuery, useDeletejobsMutation } = adminapi;

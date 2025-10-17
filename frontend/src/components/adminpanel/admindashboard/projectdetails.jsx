@@ -85,6 +85,7 @@ const Projectdetails = () => {
         if (projectdetail && Array.isArray(projectdetail.members) && projectdetail.members.length > 0) {
           const data = await getallmembers({ userid: projectdetail.members, projectid }).unwrap();
           setEmployeeProject(data.members);
+          console.log("employee => " , employeeProject)
         } else {
           setEmployeeProject([]);
         }
@@ -151,6 +152,8 @@ const Projectdetails = () => {
       }
     };
   }
+
+  // console.log("ertyukn" , employeeProject)
 
   return (
     <div className=" py-8 px-4 relative overflow-hidden">
@@ -284,9 +287,9 @@ const Projectdetails = () => {
                   {/* Employee Avatar and Info */}
                   <div className="flex items-start gap-6">
                     <div className="relative">
-                      {getImageSrc(employee.img) ? (
+                      {employee.img ? (
                         <img
-                          src={getImageSrc(employee.img)}
+                          src={employee.img.data}
                           alt={employee.name}
                           className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg group-hover:scale-105 transition-transform duration-300 group-hover:border-blue-100"
                         />

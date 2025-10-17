@@ -2,6 +2,7 @@ import { createUser, loginUser, logoutUser, verifyToken, addpunch, works, workst
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import express from "express";
 const router = express.Router();
+import upload from "../middleware/multer.js";
 
 router.post("/register", createUser);
 
@@ -33,9 +34,9 @@ router.post('/getlogs', authMiddleware, getlogs)
 
 router.post('/summary', authMiddleware, summary)
 
-router.post('/uploadprofileimg', authMiddleware, uploadprofileimg)
+router.post('/uploadprofileimg', authMiddleware,upload.single("profileimage"), uploadprofileimg)
 
-router.post('/getimage', authMiddleware, getimage)
+router.get('/getimage/:id', authMiddleware, getimage)
 
 router.post('/updateprofile', authMiddleware, updateprofile)
 

@@ -245,6 +245,93 @@ const getUsersGroups = async (userId) => {
   return userGroups.map(g => g.groupname);
 }
 
+
+export const getmessages = async (req, res) => {
+  try {
+    const { groupname, userId, page = 1, limit = 20 } = req.body; // default 20 messages
+    
+    if (!groupname) {
+      return res.status(400).json({ message: "Group name is required" });
+    }
+    
+    const group = await ChatSchema.findOne({ groupname });
+    
+    if (!group) {
+      return res.status(200).json({ 
+        message: { message: [] }, 
+        groups: await getUsersGroups(userId) 
+      });
+    }
+    
+    // check membership
+    if (group.members?.length > 0) {
+      const isMember = group.members.some(m => m.userId === userId);
+      if (!isMember) {
+        return res.status(403).json({ message: "You are not a member of this group" });
+      }
+    }
+    
+    // pagination logic (latest messages first)
+    const totalMessages = group.message.length;
+    const start = Math.max(totalMessages - page * limit, 0);
+    const end = totalMessages - (page - 1) * limit;
+    const paginatedMessages = group.message.slice(start, end);
+    
+    res.status(200).json({
+      messages: paginatedMessages,  // send only this page
+      hasMore: start > 0,           // check if older messages exist
+      total: totalMessages
+    });
+    
+  } catch (error) {
+    console.log("error in getmessages", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+export const creategroup = async (req, res) => {
+  try {
+    const { groupname, members } = req.body;
+    
+    if (!groupname || typeof groupname !== "string" || !groupname.trim()) {
+      return res.status(400).json({ message: "Invalid group name" });
+    }
+    
+    const existingGroup = await ChatSchema.findOne({ groupname: groupname.trim() });
+    if (existingGroup) {
+      return res.status(409).json({ message: "Group already exists" });
+    }
+    
+    const newGroup = new ChatSchema({
+      groupname: groupname.trim(),
+      message: [],
+      members: Array.isArray(members) ? members.map(m => ({
+        userId: m.id,
+        Name: m.name
+      })) : []
+    });
+    
+    await newGroup.save();
+    res.status(201).json({ message: "Group created successfully", group: newGroup });
+  } catch (error) {
+    console.log("error in creategroup", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export const GetAllGroupName = async (req, res) => {
+  try {
+    const chatnames = await ChatSchema.find().select("groupname -_id");
+    res.status(200).json({
+      message: "Done",
+      GroupName: chatnames.map(c => c.groupname),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // export const getmessages = async (req, res) => {
 //   try {
 //     const { groupname, userId } = req.body;
@@ -287,89 +374,3 @@ const getUsersGroups = async (userId) => {
 //     res.status(500).json({ message: "Internal server error" });
 //   }
 // }
-
-export const getmessages = async (req, res) => {
-  try {
-    const { groupname, userId, page = 1, limit = 20 } = req.body; // default 20 messages
-
-    if (!groupname) {
-      return res.status(400).json({ message: "Group name is required" });
-    }
-
-    const group = await ChatSchema.findOne({ groupname });
-
-    if (!group) {
-      return res.status(200).json({ 
-        message: { message: [] }, 
-        groups: await getUsersGroups(userId) 
-      });
-    }
-
-    // check membership
-    if (group.members?.length > 0) {
-      const isMember = group.members.some(m => m.userId === userId);
-      if (!isMember) {
-        return res.status(403).json({ message: "You are not a member of this group" });
-      }
-    }
-
-    // pagination logic (latest messages first)
-    const totalMessages = group.message.length;
-    const start = Math.max(totalMessages - page * limit, 0);
-    const end = totalMessages - (page - 1) * limit;
-    const paginatedMessages = group.message.slice(start, end);
-
-    res.status(200).json({
-      messages: paginatedMessages,  // send only this page
-      hasMore: start > 0,           // check if older messages exist
-      total: totalMessages
-    });
-
-  } catch (error) {
-    console.log("error in getmessages", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-
-export const creategroup = async (req, res) => {
-  try {
-    const { groupname, members } = req.body;
-
-    if (!groupname || typeof groupname !== "string" || !groupname.trim()) {
-      return res.status(400).json({ message: "Invalid group name" });
-    }
-
-    const existingGroup = await ChatSchema.findOne({ groupname: groupname.trim() });
-    if (existingGroup) {
-      return res.status(409).json({ message: "Group already exists" });
-    }
-
-    const newGroup = new ChatSchema({
-      groupname: groupname.trim(),
-      message: [],
-      members: Array.isArray(members) ? members.map(m => ({
-        userId: m.id,
-        Name: m.name
-      })) : []
-    });
-
-    await newGroup.save();
-    res.status(201).json({ message: "Group created successfully", group: newGroup });
-  } catch (error) {
-    console.log("error in creategroup", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
-export const GetAllGroupName = async (req, res) => {
-  try {
-    const chatnames = await ChatSchema.find().select("groupname -_id");
-    res.status(200).json({
-      message: "Done",
-      GroupName: chatnames.map(c => c.groupname),
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};

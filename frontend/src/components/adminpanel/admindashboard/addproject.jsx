@@ -212,7 +212,7 @@ const Addproject = () => {
                                         >
                                             <div className="relative">
                                                 <img
-                                                    src={user.base64Image ? `data:image/jpeg;base64,${user.base64Image}` : '/dp.svg'}
+                                                    src={user?.img?.data || '/dp.svg'}
                                                     alt={user.name}
                                                     className="w-8 h-8 rounded-full mr-3 object-cover"
                                                     onError={(e) => {
@@ -246,7 +246,7 @@ const Addproject = () => {
                                             style={{ animationDelay: `${index * 100}ms` }}
                                         >
                                             <img
-                                                src={user.base64Image ? `data:image/jpeg;base64,${user.base64Image}` : '/dp.svg'}
+                                                src={ user?.img?.data ||'/dp.svg'}
                                                 alt={user.name}
                                                 className="w-5 h-5 rounded-full mr-2 object-cover"
                                                 onError={(e) => {

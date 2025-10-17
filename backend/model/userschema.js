@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema({
         default: Date.now
     },
     profileimg: {
-        data: mongoose.Schema.Types.Buffer,
+        data: String,
     },
 
     logs: [

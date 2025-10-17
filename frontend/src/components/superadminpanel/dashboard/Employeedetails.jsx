@@ -254,6 +254,10 @@ const Employeedetails = () => {
     </div>
   );
 
+  // if(isLoading){
+  //   return  <Loader />
+  // }
+
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
@@ -279,7 +283,7 @@ const Employeedetails = () => {
                   <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-4 border-blue-200 shadow-lg overflow-hidden bg-gray-100">
                     {employee.image && employee.image.data ? (
                       <img
-                        src={`data:${employee.image.contentType};base64,${bufferToBase64(employee.image.data.data)}`}
+                        src={employee?.image?.data || "/dp.svg"}
                         alt={employee.name}
                         className="w-full h-full object-cover"
                       />

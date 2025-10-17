@@ -134,20 +134,29 @@ export const apiSlice = createApi({
             invalidatesTags: ['User'],
         }),
 
+        // uploadprofileimg: builder.mutation({
+        //     query: ({ id, img }) => ({
+        //         url: '/users/uploadprofileimg',
+        //         method: 'POST',
+        //         body: { id, img }
+        //     }),
+        //     invalidatesTags: ['User'],
+        // }),
+
         uploadprofileimg: builder.mutation({
-            query: ({ id, img }) => ({
+            query: (formData) => ({
                 url: '/users/uploadprofileimg',
                 method: 'POST',
-                body: { id, img }
+                body: formData,
             }),
             invalidatesTags: ['User'],
         }),
 
-        getimage: builder.mutation({
+
+        getimage: builder.query({
             query: (id) => ({
-                url: '/users/getimage',
-                method: 'post',
-                body: { id }
+                url: `/users/getimage/${id}`,
+                method: 'get',
             }),
             invalidatesTags: ['User'],
         }),
@@ -180,6 +189,14 @@ export const apiSlice = createApi({
         //     invalidatesTags: ['Chat'],
         // }),
 
+        // getMessages: builder.query({
+        //     query: ({ groupname, userId }) => ({
+        //         url: '/chat/getmessages',
+        //         method: 'POST',
+        //         body: { groupname, userId }
+        //     }),
+        //     providesTags: ['Chat'],
+        // }),
         createGroup: builder.mutation({
             query: ({ groupname, members }) => ({
                 url: '/chat/creategroup',
@@ -189,14 +206,6 @@ export const apiSlice = createApi({
             invalidatesTags: ['Chat'],
         }),
 
-        // getMessages: builder.query({
-        //     query: ({ groupname, userId }) => ({
-        //         url: '/chat/getmessages',
-        //         method: 'POST',
-        //         body: { groupname, userId }
-        //     }),
-        //     providesTags: ['Chat'],
-        // }),
 
         getMessages: builder.query({
             query: ({ groupname, userId, page = 1, limit = 20 }) => ({
@@ -282,7 +291,7 @@ export const {
     useGetlogsMutation,
     useSummaryMutation,
     useUploadprofileimgMutation,
-    useGetimageMutation,
+    useGetimageQuery,
     useUpdateprofileMutation,
     useGetMessagesQuery,
     useCreateGroupMutation,

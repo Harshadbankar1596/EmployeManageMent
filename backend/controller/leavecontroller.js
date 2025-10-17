@@ -31,7 +31,7 @@ export const getallleavs = async (req , res) =>{
 
         if(!allleavs) res.status(404).json({message : "not found leavs"});
 
-        res.status(200).json({message : "all leavs" , allleavs : allleavs})
+        res.status(200).json({message : "all leavs" , allleavs : allleavs.reverse()})
         
     } catch (error) {
 
