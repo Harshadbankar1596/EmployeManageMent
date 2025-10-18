@@ -1,12 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
 process.env.TZ = 'Asia/Kolkata';
 import User from "../model/userschema.js";
 import bcrypt from "bcrypt";
 import jwt, { decode } from "jsonwebtoken";
-import dotenv from "dotenv";
 import validator from 'validator';
 import Screenshot from "../model/screenshot.js";
 import nodemailer from "nodemailer";
-dotenv.config();
 import fs from "fs"
 import uploadTheImage from "../utils/cloudinary.js"
 
@@ -58,6 +58,7 @@ export const createUser = async (req, res) => {
     }
 };
 
+
 export const loginUser = async (req, res) => {
 
     try {
@@ -102,6 +103,7 @@ export const loginUser = async (req, res) => {
     }
 };
 
+
 export const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token");
@@ -112,9 +114,11 @@ export const logoutUser = async (req, res) => {
     }
 };
 
+
 function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
 
 let otpStore = {}
 
@@ -127,6 +131,7 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS,
     },
 });
+
 
 export const sendotp = async (req, res) => {
     try {
@@ -161,6 +166,7 @@ export const sendotp = async (req, res) => {
     }
 }
 
+
 export const verifyotp = async (req, res) => {
 
     const { email, otp } = req.body;
@@ -177,6 +183,7 @@ export const verifyotp = async (req, res) => {
         res.json({ success: false, message: "Invalid or expired OTP" });
     }
 };
+
 
 export const resetpassword = async (req, res) => {
     try {
@@ -201,6 +208,7 @@ export const resetpassword = async (req, res) => {
     }
 }
 
+
 export const changepassword = async (req, res) => {
     try {
 
@@ -224,6 +232,7 @@ export const changepassword = async (req, res) => {
         res.status(500).json({ message: "Server Error" })
     }
 }
+
 
 export const verifyToken = async (req, res) => {
     try {
@@ -529,6 +538,7 @@ function getDistanceInMeters(lat1, lon1, lat2, lon2) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+
 export const addpunch = async (req, res) => {
     try {
         console.log(req.body)
@@ -600,6 +610,7 @@ export const works = async (req, res) => {
     }
 };
 
+
 export const workstatus = async (req, res) => {
     try {
         // console.log("workstatus", req.body)
@@ -617,6 +628,7 @@ export const workstatus = async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 
 export const addtask = async (req, res) => {
     try {
@@ -653,6 +665,7 @@ export const addtask = async (req, res) => {
         res.status(500).json({ message: "server error" })
     }
 }
+
 
 export const taskstatus = async (req, res) => {
     try {
@@ -770,6 +783,7 @@ export const summary = async (req, res) => {
     }
 };
 
+
 export const uploadprofileimg = async (req, res) => {
     try {
         // const { id, img } = req.body;
@@ -810,7 +824,7 @@ export const uploadprofileimg = async (req, res) => {
             data: imageUrl,
             contentType: contentType
         };
-        // console.log("image => " , imageUrl)
+        console.log("image => " , imageUrl)
 
         await user.save();
 
@@ -820,6 +834,7 @@ export const uploadprofileimg = async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 
 export const getimage = async (req, res) => {
   try {
@@ -873,6 +888,7 @@ export const updateprofile = async (req, res) => {
     }
 }
 
+
 export const screenshot = async (req, res) => {
     try {
         const { name, date, img } = req.body
@@ -884,6 +900,7 @@ export const screenshot = async (req, res) => {
         console.log("error in screenshot")
     }
 }
+
 
 export const getallmembers = async (req, res) => {
     try {

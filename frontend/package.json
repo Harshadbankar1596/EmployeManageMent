@@ -40,7 +40,7 @@
     "@studio-freight/lenis": "^1.0.42",
     "add": "^2.0.6",
     "ag-grid-react": "^34.1.1",
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "dotenv": "^17.2.0",
     "face-api.js": "^0.22.2",
     "framer-motion": "^12.23.12",

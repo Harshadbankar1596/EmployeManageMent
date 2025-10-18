@@ -96,9 +96,7 @@ const Works = () => {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">No Works Found</h2>
                     <p className="text-gray-600 mb-6">It looks like you don't have any works assigned yet. Start by creating a new work item.</p>
-                    <button className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
-                        Create New Work
-                    </button>
+                    
                 </div>
             </div>
         );

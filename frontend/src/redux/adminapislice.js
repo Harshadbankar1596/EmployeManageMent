@@ -104,8 +104,8 @@ export const adminapi = createApi({
             query: (formData) => ({
                 url: `${import.meta.env.VITE_BACKEND_URL}/jobs/uploadjob`,
                 method: "POST",
-                body: formData, 
-                
+                body: formData,
+
             })
         }),
 
@@ -125,9 +125,17 @@ export const adminapi = createApi({
                 body: { jobid }
             }),
             invalidatesTags: ["job"]
+        }),
+
+        Enroll: builder.mutation({
+            query: ({ emp_id, backend_id }) => ({
+                url: "http://192.168.1.39:8080/enroll",
+                method: "POST",
+                body: { emp_id, backend_id }
+            })
         })
     }),
 });
 
 
-export const { useGetallmemebersadminMutation, useGetAllProjectsQuery, useAddmemberinprojectMutation, useGetallmembersnameQuery, useGetAllUsersQuery, useVerifyisadminMutation, useAddprojectMutation, useGetprojectMutation, useAddtaskMutation, useEmployeeMutation, useGetemployeedailyreportMutation, useUploadjobMutation, useGetjobsQuery, useDeletejobsMutation } = adminapi;
+export const {useEnrollMutation , useGetallmemebersadminMutation, useGetAllProjectsQuery, useAddmemberinprojectMutation, useGetallmembersnameQuery, useGetAllUsersQuery, useVerifyisadminMutation, useAddprojectMutation, useGetprojectMutation, useAddtaskMutation, useEmployeeMutation, useGetemployeedailyreportMutation, useUploadjobMutation, useGetjobsQuery, useDeletejobsMutation } = adminapi;
