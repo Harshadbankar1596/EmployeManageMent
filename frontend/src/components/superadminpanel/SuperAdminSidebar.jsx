@@ -4,16 +4,18 @@ import { useLogoutUserMutation } from '../../redux/apislice';
 import { logoutuser } from '../../redux/userslice/userslice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { MdDashboard, MdPeople, MdAssessment, MdEventNote, MdWork , MdOutlineAccessTimeFilled} from "react-icons/md";
+import { MdDashboard, MdPeople, MdAssessment, MdEventNote, MdWork, MdOutlineAccessTimeFilled } from "react-icons/md";
 import { SiRazorpay } from "react-icons/si";
+import { FaComments } from "react-icons/fa";
 
 const navItems = [
   { label: "Dashboard", icon: MdDashboard, to: "/superadmin/dashboard" },
   { label: "Employees", icon: MdPeople, to: "/superadmin/employees" },
   { label: "Projects", icon: MdWork, to: "/superadmin/projects" },
+  { label: "groupchat", icon: FaComments, to: "/superadmin/groupchat" },
   { label: "Reports", icon: MdAssessment, to: "/superadmin/reports" },
   { label: "Leaves", icon: MdEventNote, to: "/superadmin/leaves" },
-  { label: "PayMents", icon: SiRazorpay, to: "/superadmin/payments" },
+  // { label: "PayMents", icon : SiRazorpay, to: "/superadmin/payments" },
   { label: "Job requirements", icon: MdOutlineAccessTimeFilled, to: "/superadmin/jobs" },
 ];
 

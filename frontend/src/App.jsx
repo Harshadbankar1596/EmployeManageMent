@@ -306,6 +306,14 @@ const App = () => {
                 }
               />
               <Route
+                path="groupchat"
+                element={
+                  <ProtectedRoute>
+                    <Chat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="projects/:id"
                 element={
                   <ProtectedRoute>
@@ -337,14 +345,14 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route
+              {/* <Route
                 path="payments"
                 element={
                   <ProtectedRoute>
                     <Payments />
                   </ProtectedRoute>
                 }
-              />
+              /> */}
               <Route
                 path="jobs"
                 element={
