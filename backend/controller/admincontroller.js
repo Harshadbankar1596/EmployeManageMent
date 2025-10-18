@@ -106,7 +106,7 @@ export const getallprojects = async (req, res) => {
 
 export const getproject = async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
 
         const { projectid } = req.body
 
@@ -127,7 +127,7 @@ export const getproject = async (req, res) => {
 export const addmember = async (req, res) => {
     try {
 
-        console.log(req.body)
+        // console.log(req.body)
         const memberId = req.body.data[0].memberId
         const projectid = req.body.data[0].projectid
 
@@ -176,7 +176,7 @@ export const getallmembersname = async (req, res) => {
 export const addtask = async (req, res) => {
     try {
 
-        console.log("add task => ", req.body)
+        // console.log("add task => ", req.body)
 
         const { userid, projectid, task } = req.body
 

@@ -798,7 +798,7 @@ export const uploadprofileimg = async (req, res) => {
         // let imageBuffer = Buffer.from(matches[2], 'base64');
 
         let imageUrl = null
-        console.log("file => " , req.file)
+        // console.log("file => " , req.file)
 
         if (req.file) {
             const uploadResult = await uploadTheImage(req.file.path);
@@ -810,7 +810,7 @@ export const uploadprofileimg = async (req, res) => {
             data: imageUrl,
             contentType: contentType
         };
-        console.log("image => " , imageUrl)
+        // console.log("image => " , imageUrl)
 
         await user.save();
 

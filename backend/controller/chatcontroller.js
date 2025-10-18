@@ -185,11 +185,11 @@ import ChatSchema from "../model/chatschema.js";
 
 export const socketHandler = (io) => {
   io.on("connection", (socket) => {
-    console.log("A user connected");
+    // console.log("A user connected");
 
     socket.on("join-room", (groupname) => {
       socket.join(groupname);
-      console.log(`User joined group: ${groupname}`);
+      // console.log(`User joined group: ${groupname}`);
     });
 
     socket.on("send-message", async ({ message, name, groupname, userId }) => {
@@ -223,7 +223,7 @@ export const socketHandler = (io) => {
     });
 
     socket.on("disconnect", () => {
-      console.log("A user disconnected");
+      // console.log("A user disconnected");
     });
   });
 }

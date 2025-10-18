@@ -95,5 +95,3 @@ const SuperAdminSidebar = () => {
 };
 
 export default SuperAdminSidebar;
-
-

@@ -3,8 +3,9 @@ import { getmessages , creategroup, GetAllGroupName } from "../controller/chatco
 const router = express.Router()
 
 router.post("/getmessages", getmessages)
-router.post("/creategroup", creategroup)
-router.get("/allgroups" , GetAllGroupName)
 
+router.post("/creategroup", creategroup)
+
+router.get("/allgroups" , GetAllGroupName)
 
 export default router
